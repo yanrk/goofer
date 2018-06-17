@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="inc">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="cfg">
+      <UniqueIdentifier>{f6a172bc-a77b-4ee2-860d-7465e77e1a4d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="test.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+    <ClInclude Include="simple_math.h">
+      <Filter>inc</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="test.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_thread.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_base64.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_directory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_exception.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_guard.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_hex.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_id_manager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_ini.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_locker.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_log.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_memory.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_multi_timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_object_pool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_single_timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_bytestream.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_singleton.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_splitter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_string.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_bcd.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_time.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_charset.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_counter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_bitmap.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_thread_local_storage.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_utility.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_xml.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_library.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_file.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_hardware.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_process.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="test_json.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="log.ini">
+      <Filter>cfg</Filter>
+    </None>
+    <None Include="test.ini">
+      <Filter>cfg</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="test.xml">
+      <Filter>cfg</Filter>
+    </Xml>
+  </ItemGroup>
+</Project>
