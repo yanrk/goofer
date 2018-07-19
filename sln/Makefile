@@ -25,12 +25,17 @@ cmarkup_includes   = -I$(cmarkup_inc_path)
 jsoncpp_inc_path   = $(gnu_home)/jsoncpp/inc
 jsoncpp_includes   = -I$(jsoncpp_inc_path)
 
+# includes of sqlite headers
+sqlite_inc_path    = $(gnu_home)/sqlite/inc
+sqlite_includes    = -I$(sqlite_inc_path)
+
 
 
 # all includes that goofer solution needs
 includes           = $(goofer_includes)
 includes          += $(cmarkup_includes)
 includes          += $(jsoncpp_includes)
+includes          += $(sqlite_includes)
 
 
 
@@ -46,12 +51,17 @@ cmarkup_source     = $(filter %.cpp, $(shell find $(cmarkup_src_path) -depth -na
 jsoncpp_src_path   = $(gnu_home)/jsoncpp/src
 jsoncpp_source     = $(filter %.cpp, $(shell find $(jsoncpp_src_path) -depth -name "*.cpp"))
 
+# source files of sqlite solution
+sqlite_src_path    = $(gnu_home)/sqlite/src
+sqlite_source      = $(filter %.cpp, $(shell find $(sqlite_src_path) -depth -name "*.cpp"))
+
 
 
 # objects of goofer solution
 goofer_objects     = $(goofer_source:$(project_home)%.cpp=$(object_dir)%.o)
 goofer_objects    += $(cmarkup_source:$(project_home)%.cpp=$(object_dir)%.o)
 goofer_objects    += $(jsoncpp_source:$(project_home)%.cpp=$(object_dir)%.o)
+goofer_objects    += $(sqlite_source:$(project_home)%.cpp=$(object_dir)%.o)
 
 
 
