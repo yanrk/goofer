@@ -13,17 +13,38 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="inc\charset">
+      <UniqueIdentifier>{45a08542-4e52-43ce-afd1-84acad47854e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="inc\common">
       <UniqueIdentifier>{cd8e7986-2e51-4979-883f-9801206d4c9f}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\config">
       <UniqueIdentifier>{79fa99ba-2f6a-4264-b31d-b97151be5635}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\database">
+      <UniqueIdentifier>{4a2afa21-22e2-42a0-930b-162f59c0f294}</UniqueIdentifier>
+    </Filter>
     <Filter Include="inc\exception">
       <UniqueIdentifier>{dbcb4f1e-8385-4f83-b18f-f62ba1860357}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\filesystem">
       <UniqueIdentifier>{384e93cf-64fa-4d7b-bec8-22a46a99d9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\gnu">
+      <UniqueIdentifier>{d534e33e-23c7-41f1-b1cc-948b33945410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\gnu\cmarkup">
+      <UniqueIdentifier>{fce723e2-786a-4c1f-9f2d-68ebfbc26a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\gnu\jsoncpp">
+      <UniqueIdentifier>{ed853e8d-f847-45bc-be1a-61f1fc926977}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\gnu\sqlite">
+      <UniqueIdentifier>{41c37c1f-6abd-4309-bb03-b6f21f1c966e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\library">
+      <UniqueIdentifier>{c0cfbc63-56d7-4915-a721-d4877630ade6}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\locker">
       <UniqueIdentifier>{b66f9fe8-b0d0-44a0-9b68-dbc4685d7a52}</UniqueIdentifier>
@@ -33,6 +54,12 @@
     </Filter>
     <Filter Include="inc\pool">
       <UniqueIdentifier>{fc2117b6-7220-415a-9142-1d92471a67a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\process">
+      <UniqueIdentifier>{5daaefcd-e596-4633-abf0-3c1016aff430}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inc\record">
+      <UniqueIdentifier>{592b6694-13a9-44a9-a94e-6b7900cd3e01}</UniqueIdentifier>
     </Filter>
     <Filter Include="inc\stream">
       <UniqueIdentifier>{3e1606f1-1cc8-436a-9518-7b2cc880cfbf}</UniqueIdentifier>
@@ -49,8 +76,17 @@
     <Filter Include="inc\utility">
       <UniqueIdentifier>{0688a4f3-e1df-4856-84f6-4ad8c7f6e2c2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\charset">
+      <UniqueIdentifier>{3d84982e-296e-4941-8531-3b824b9ce621}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\common">
       <UniqueIdentifier>{85ff2b5e-cee6-4318-a734-f67cf07e9fd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\config">
+      <UniqueIdentifier>{c2655fcf-dff8-405d-ae9e-353184276684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\database">
+      <UniqueIdentifier>{1a9f35ac-88b3-4712-8fbc-6dbc9ecb46ae}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\exception">
       <UniqueIdentifier>{763bb944-2450-4bd8-a7dc-35f5eaa35c37}</UniqueIdentifier>
@@ -58,11 +94,32 @@
     <Filter Include="src\filesystem">
       <UniqueIdentifier>{fa66f3e9-f77e-4e46-8bba-95b9f52eb569}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\gnu">
+      <UniqueIdentifier>{67ce8338-98cd-43bc-98d2-bf4030b82e84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gnu\cmarkup">
+      <UniqueIdentifier>{827ae7ab-86a5-455e-a7d7-c560e816a5e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gnu\jsoncpp">
+      <UniqueIdentifier>{fd8cf010-2757-4f5c-b7c8-d46a3cffbe9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gnu\sqlite">
+      <UniqueIdentifier>{2dc0dbe6-5281-4e90-82ec-6713cfeccc9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\library">
+      <UniqueIdentifier>{f1d29122-1d01-4c9b-849b-eb13c2c22569}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\locker">
       <UniqueIdentifier>{b2502e59-e38e-4a88-91a7-a4f49f91f886}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\log">
       <UniqueIdentifier>{d790f96d-a37c-4278-aa92-a0103b19b7bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\process">
+      <UniqueIdentifier>{1e1ea9e1-d6ee-494d-88ec-e44e1d23f78c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\record">
+      <UniqueIdentifier>{e3668238-283e-4624-bb6f-166f4db7f01d}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\stream">
       <UniqueIdentifier>{1327ca29-a90e-4f3b-8818-55f013185121}</UniqueIdentifier>
@@ -79,53 +136,8 @@
     <Filter Include="src\utility">
       <UniqueIdentifier>{c14a80bf-3b82-4674-973e-e72d26fd038e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\config">
-      <UniqueIdentifier>{c2655fcf-dff8-405d-ae9e-353184276684}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\charset">
-      <UniqueIdentifier>{45a08542-4e52-43ce-afd1-84acad47854e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\charset">
-      <UniqueIdentifier>{3d84982e-296e-4941-8531-3b824b9ce621}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\library">
-      <UniqueIdentifier>{c0cfbc63-56d7-4915-a721-d4877630ade6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\library">
-      <UniqueIdentifier>{f1d29122-1d01-4c9b-849b-eb13c2c22569}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\process">
-      <UniqueIdentifier>{5daaefcd-e596-4633-abf0-3c1016aff430}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\process">
-      <UniqueIdentifier>{1e1ea9e1-d6ee-494d-88ec-e44e1d23f78c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\record">
-      <UniqueIdentifier>{592b6694-13a9-44a9-a94e-6b7900cd3e01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\record">
-      <UniqueIdentifier>{e3668238-283e-4624-bb6f-166f4db7f01d}</UniqueIdentifier>
-    </Filter>
     <Filter Include="res">
       <UniqueIdentifier>{02b64aaa-4b95-47ef-9e2f-efb9a796bd00}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\gnu">
-      <UniqueIdentifier>{d534e33e-23c7-41f1-b1cc-948b33945410}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\gnu\cmarkup">
-      <UniqueIdentifier>{fce723e2-786a-4c1f-9f2d-68ebfbc26a09}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="inc\gnu\jsoncpp">
-      <UniqueIdentifier>{ed853e8d-f847-45bc-be1a-61f1fc926977}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\gnu">
-      <UniqueIdentifier>{67ce8338-98cd-43bc-98d2-bf4030b82e84}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\gnu\cmarkup">
-      <UniqueIdentifier>{827ae7ab-86a5-455e-a7d7-c560e816a5e9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\gnu\jsoncpp">
-      <UniqueIdentifier>{fd8cf010-2757-4f5c-b7c8-d46a3cffbe9c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +149,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\inc\charset\charset.h">
+      <Filter>inc\charset</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\common\common.h">
       <Filter>inc\common</Filter>
     </ClInclude>
@@ -167,122 +182,14 @@
     <ClInclude Include="..\inc\config\xml.h">
       <Filter>inc\config</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\database\sqlite.h">
+      <Filter>inc\database</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\exception\exception.h">
       <Filter>inc\exception</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\filesystem\directory.h">
       <Filter>inc\filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\filesystem\sys_io.h">
-      <Filter>inc\filesystem</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\locker\locker.h">
-      <Filter>inc\locker</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\locker\null_locker.h">
-      <Filter>inc\locker</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\locker\windows_locker.h">
-      <Filter>inc\locker</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\asyn_log.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\lazy_log.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\log.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\log_base.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\log_types.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\log\sync_log.h">
-      <Filter>inc\log</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\pool\memory_pool.h">
-      <Filter>inc\pool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\pool\object_pool.h">
-      <Filter>inc\pool</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\stream\bytestream.h">
-      <Filter>inc\stream</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\string\base64.h">
-      <Filter>inc\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\string\bcd.h">
-      <Filter>inc\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\string\hex.h">
-      <Filter>inc\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\string\splitter.h">
-      <Filter>inc\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\string\string.h">
-      <Filter>inc\string</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\thread.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\windows_thread.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\time\multi_timer.h">
-      <Filter>inc\time</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\time\single_timer.h">
-      <Filter>inc\time</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\time\time.h">
-      <Filter>inc\time</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\guard.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\id_manager.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\singleton.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\uncopy.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\log_switch.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\charset\charset.h">
-      <Filter>inc\charset</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\counter.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\bitmap.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\thread_local_storage.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\windows_thread_local_storage.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\utility.h">
-      <Filter>inc\utility</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\library\library.h">
-      <Filter>inc\library</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\thread_group.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\utility\exclusive.h">
-      <Filter>inc\utility</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\filesystem\file.h">
       <Filter>inc\filesystem</Filter>
@@ -290,29 +197,8 @@
     <ClInclude Include="..\inc\filesystem\hardware.h">
       <Filter>inc\filesystem</Filter>
     </ClInclude>
-    <ClInclude Include="..\inc\locker\unix_locker.h">
-      <Filter>inc\locker</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\unix_thread.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\thread\unix_thread_local_storage.h">
-      <Filter>inc\thread</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\process\process.h">
-      <Filter>inc\process</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\process\unix_process.h">
-      <Filter>inc\process</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\process\windows_process.h">
-      <Filter>inc\process</Filter>
-    </ClInclude>
-    <ClInclude Include="..\inc\record\record.h">
-      <Filter>inc\record</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>res</Filter>
+    <ClInclude Include="..\inc\filesystem\sys_io.h">
+      <Filter>inc\filesystem</Filter>
     </ClInclude>
     <ClInclude Include="..\gnu\cmarkup\inc\markup.h">
       <Filter>inc\gnu\cmarkup</Filter>
@@ -353,8 +239,146 @@
     <ClInclude Include="..\gnu\jsoncpp\inc\json\writer.h">
       <Filter>inc\gnu\jsoncpp</Filter>
     </ClInclude>
+    <ClInclude Include="..\gnu\sqlite\inc\sqlite3.h">
+      <Filter>inc\gnu\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gnu\sqlite\inc\sqlite3ext.h">
+      <Filter>inc\gnu\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\library\library.h">
+      <Filter>inc\library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\locker\locker.h">
+      <Filter>inc\locker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\locker\null_locker.h">
+      <Filter>inc\locker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\locker\unix_locker.h">
+      <Filter>inc\locker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\locker\windows_locker.h">
+      <Filter>inc\locker</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\asyn_log.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\lazy_log.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\log.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\log_base.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\log_types.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\log\sync_log.h">
+      <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pool\memory_pool.h">
+      <Filter>inc\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pool\object_pool.h">
+      <Filter>inc\pool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\process\process.h">
+      <Filter>inc\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\process\unix_process.h">
+      <Filter>inc\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\process\windows_process.h">
+      <Filter>inc\process</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\record\record.h">
+      <Filter>inc\record</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\stream\bytestream.h">
+      <Filter>inc\stream</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\string\base64.h">
+      <Filter>inc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\string\bcd.h">
+      <Filter>inc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\string\hex.h">
+      <Filter>inc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\string\splitter.h">
+      <Filter>inc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\string\string.h">
+      <Filter>inc\string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\thread.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\thread_group.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\thread_local_storage.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\unix_thread.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\unix_thread_local_storage.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\windows_thread.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\thread\windows_thread_local_storage.h">
+      <Filter>inc\thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\time\multi_timer.h">
+      <Filter>inc\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\time\single_timer.h">
+      <Filter>inc\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\time\time.h">
+      <Filter>inc\time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\bitmap.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\counter.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\exclusive.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\guard.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\id_manager.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\log_switch.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\singleton.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\uncopy.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\utility\utility.h">
+      <Filter>inc\utility</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>res</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\charset\charset.cpp">
+      <Filter>src\charset</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\common\consts.cpp">
       <Filter>src\common</Filter>
     </ClCompile>
@@ -367,11 +391,41 @@
     <ClCompile Include="..\src\config\xml.cpp">
       <Filter>src\config</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\database\sqlite.cpp">
+      <Filter>src\database</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\exception\exception.cpp">
       <Filter>src\exception</Filter>
     </ClCompile>
     <ClCompile Include="..\src\filesystem\directory.cpp">
       <Filter>src\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filesystem\file.cpp">
+      <Filter>src\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filesystem\hardware.cpp">
+      <Filter>src\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\cmarkup\src\markup.cpp">
+      <Filter>src\gnu\cmarkup</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\jsoncpp\src\json_reader.cpp">
+      <Filter>src\gnu\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\jsoncpp\src\json_value.cpp">
+      <Filter>src\gnu\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\jsoncpp\src\json_writer.cpp">
+      <Filter>src\gnu\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\sqlite\src\shell.c">
+      <Filter>src\gnu\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gnu\sqlite\src\sqlite3.c">
+      <Filter>src\gnu\sqlite</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\library\library.cpp">
+      <Filter>src\library</Filter>
     </ClCompile>
     <ClCompile Include="..\src\locker\null_locker.cpp">
       <Filter>src\locker</Filter>
@@ -394,6 +448,15 @@
     <ClCompile Include="..\src\log\sync_log.cpp">
       <Filter>src\log</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\process\unix_process.cpp">
+      <Filter>src\process</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\process\windows_process.cpp">
+      <Filter>src\process</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\record\record.cpp">
+      <Filter>src\record</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\stream\bytestream.cpp">
       <Filter>src\stream</Filter>
     </ClCompile>
@@ -412,7 +475,19 @@
     <ClCompile Include="..\src\string\string.cpp">
       <Filter>src\string</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\thread\thread_group.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thread\unix_thread.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thread\unix_thread_local_storage.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\thread\windows_thread.cpp">
+      <Filter>src\thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\thread\windows_thread_local_storage.cpp">
       <Filter>src\thread</Filter>
     </ClCompile>
     <ClCompile Include="..\src\time\multi_timer.cpp">
@@ -424,65 +499,20 @@
     <ClCompile Include="..\src\time\time.cpp">
       <Filter>src\time</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\utility\uncopy.cpp">
+    <ClCompile Include="..\src\utility\counter.cpp">
+      <Filter>src\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\utility\exclusive.cpp">
       <Filter>src\utility</Filter>
     </ClCompile>
     <ClCompile Include="..\src\utility\log_switch.cpp">
       <Filter>src\utility</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\charset\charset.cpp">
-      <Filter>src\charset</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\utility\counter.cpp">
+    <ClCompile Include="..\src\utility\uncopy.cpp">
       <Filter>src\utility</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\thread\windows_thread_local_storage.cpp">
-      <Filter>src\thread</Filter>
     </ClCompile>
     <ClCompile Include="..\src\utility\utility.cpp">
       <Filter>src\utility</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\library\library.cpp">
-      <Filter>src\library</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\thread\thread_group.cpp">
-      <Filter>src\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\utility\exclusive.cpp">
-      <Filter>src\utility</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\filesystem\file.cpp">
-      <Filter>src\filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\filesystem\hardware.cpp">
-      <Filter>src\filesystem</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\thread\unix_thread.cpp">
-      <Filter>src\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\thread\unix_thread_local_storage.cpp">
-      <Filter>src\thread</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\process\unix_process.cpp">
-      <Filter>src\process</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\process\windows_process.cpp">
-      <Filter>src\process</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\record\record.cpp">
-      <Filter>src\record</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gnu\cmarkup\src\markup.cpp">
-      <Filter>src\gnu\cmarkup</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gnu\jsoncpp\src\json_reader.cpp">
-      <Filter>src\gnu\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gnu\jsoncpp\src\json_value.cpp">
-      <Filter>src\gnu\jsoncpp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gnu\jsoncpp\src\json_writer.cpp">
-      <Filter>src\gnu\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

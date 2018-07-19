@@ -33,5 +33,6 @@ int main(int argc, char * argv[])
     test_hardware();
     test_process();
     test_json();
-    return(0);
+    test_sqlite();
+    return (0);
 }

@@ -168,7 +168,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -196,7 +196,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -224,7 +224,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;USE_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -252,7 +252,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;USE_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -282,7 +282,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -312,7 +312,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -342,7 +342,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;USE_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -372,7 +372,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;USE_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.;../inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4477;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4251;4267;4312;4477;4996;</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -423,6 +423,7 @@
     <ClCompile Include="test_singleton.cpp" />
     <ClCompile Include="test_single_timer.cpp" />
     <ClCompile Include="test_splitter.cpp" />
+    <ClCompile Include="test_sqlite.cpp" />
     <ClCompile Include="test_string.cpp" />
     <ClCompile Include="test_thread.cpp" />
     <ClCompile Include="test_thread_local_storage.cpp" />

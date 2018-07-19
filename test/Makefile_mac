@@ -8,21 +8,20 @@ project_home       = .
 build_dir          = $(project_home)
 bin_dir            = $(project_home)/bin/$(platform)
 object_dir         = $(project_home)/.objs
-stupid_home        = $(project_home)/../..
-gnu_home           = $(stupid_home)/gnu
+goofer_home        = $(project_home)/..
 
 
 
-# includes of stupid headers
-stupid_inc_path    = $(stupid_home)/inc
-stupid_includes    = -I$(stupid_inc_path)
+# includes of goofer headers
+goofer_inc_path    = $(goofer_home)/inc
+goofer_includes    = -I$(goofer_inc_path)
 
 # includes of local headers
 local_inc_path     = $(project_home)
 local_includes     = -I$(local_inc_path)
 
 # all includes that local solution needs
-includes           = $(stupid_includes)
+includes           = $(goofer_includes)
 includes          += $(local_includes)
 
 
@@ -38,20 +37,15 @@ local_objects      = $(local_source:$(project_home)%.cpp=$(object_dir)%.o)
 
 
 
-# system librarys
+# system libraries
 system_libs        = -lpthread -ldl -liconv
 
-# open source librarys
-cmarkup_lib_inc    = $(gnu_home)/cmarkup/lib/$(platform)
-gnu_libs           = -L$(cmarkup_lib_inc) -lcmarkup
+# goofer libraries
+goofer_lib_inc     = $(goofer_home)/lib/$(platform)
+goofer_libs        = -L$(goofer_lib_inc) -lgoofer
 
-# stupid librarys
-stupid_lib_inc     = $(stupid_home)/lib/$(platform)
-stupid_libs        = -L$(stupid_lib_inc) -lstupid_base
-
-# local depends librarys
-depend_libs        = $(stupid_libs)
-depend_libs       += $(gnu_libs)
+# local depends libraries
+depend_libs        = $(goofer_libs)
 depend_libs       += $(system_libs)
 
 
@@ -83,8 +77,7 @@ build    : $(local_objects)
 	@echo
 
 cpfile   :
-	@cp $(stupid_lib_inc)/* $(bin_dir)/
-	@cp $(cmarkup_lib_inc)/* $(bin_dir)/
+	@cp $(goofer_lib_inc)/* $(bin_dir)/
 
 run      : cpfile
 	@export LD_LIBRARY_PATH=$(LD_LIBRARY_PATH):$(bin_dir) && $(output_exec)

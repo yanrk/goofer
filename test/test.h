@@ -51,6 +51,7 @@ extern void test_file(void);
 extern void test_hardware(void);
 extern void test_process(void);
 extern void test_json(void);
+extern void test_sqlite(void);
 
 
 #endif // GOOFER_TEST_H
