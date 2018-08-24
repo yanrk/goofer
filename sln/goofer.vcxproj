@@ -476,6 +476,7 @@
     <ClInclude Include="..\inc\filesystem\file.h" />
     <ClInclude Include="..\inc\filesystem\hardware.h" />
     <ClInclude Include="..\inc\filesystem\sys_io.h" />
+    <ClInclude Include="..\inc\hash\hash_value.hpp" />
     <ClInclude Include="..\inc\library\library.h" />
     <ClInclude Include="..\inc\locker\locker.h" />
     <ClInclude Include="..\inc\locker\null_locker.h" />

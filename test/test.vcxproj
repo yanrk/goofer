@@ -409,6 +409,7 @@
     <ClCompile Include="test_file.cpp" />
     <ClCompile Include="test_guard.cpp" />
     <ClCompile Include="test_hardware.cpp" />
+    <ClCompile Include="test_hash.cpp" />
     <ClCompile Include="test_hex.cpp" />
     <ClCompile Include="test_id_manager.cpp" />
     <ClCompile Include="test_ini.cpp" />

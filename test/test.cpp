@@ -34,5 +34,6 @@ int main(int argc, char * argv[])
     test_process();
     test_json();
     test_sqlite();
+    test_hash();
     return (0);
 }

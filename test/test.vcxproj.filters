@@ -121,6 +121,9 @@
     <ClCompile Include="test_sqlite.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="test_hash.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="log.ini">

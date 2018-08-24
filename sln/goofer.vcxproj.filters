@@ -43,6 +43,9 @@
     <Filter Include="inc\gnu\sqlite">
       <UniqueIdentifier>{41c37c1f-6abd-4309-bb03-b6f21f1c966e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\hash">
+      <UniqueIdentifier>{bf4e7689-87ee-4507-81c4-395dc6d45bd0}</UniqueIdentifier>
+    </Filter>
     <Filter Include="inc\library">
       <UniqueIdentifier>{c0cfbc63-56d7-4915-a721-d4877630ade6}</UniqueIdentifier>
     </Filter>
@@ -244,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\gnu\sqlite\inc\sqlite3ext.h">
       <Filter>inc\gnu\sqlite</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\hash\hash_value.hpp">
+      <Filter>inc\hash</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\library\library.h">
       <Filter>inc\library</Filter>
