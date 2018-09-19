@@ -86,18 +86,15 @@ bool Ini::load(const std::string & file_name, char comment_char, bool support_mo
     }
 
     std::string app_name;
-    const int bufsiz = 4096;
-    char buffer[bufsiz];
+    std::string message;
     while (!ifs.eof())
     {
-        ifs.getline(buffer, bufsiz);
-
-        char * comment_pos = strchr(buffer, comment_char);
-        if (nullptr != comment_pos)
+        message.clear();
+        std::getline(ifs, message);
+        if (ifs.fail())
         {
-            comment_pos[0] = '\0';
+            ifs.clear();
         }
-        std::string message(buffer);
         goofer_string_trim(message);
 
         if (message.empty())
@@ -162,23 +159,13 @@ bool Ini::load(const std::string & file_name, char comment_char, bool support_mo
     return (true);
 }
 
-bool Ini::save()
+bool Ini::save(const std::string & file_name)
 {
-    if (!m_support_modify)
-    {
-        return (false);
-    }
+    const std::string tmp_file(file_name + "_tmp.ini");
 
-    if (!m_need_save)
-    {
-        return (true);
-    }
+    goofer_rename(file_name.c_str(), tmp_file.c_str());
 
-    const std::string tmp_file(m_file_name + "_tmp.ini");
-
-    goofer_rename(m_file_name.c_str(), tmp_file.c_str());
-
-    std::ofstream ofs(m_file_name.c_str(), std::ios::trunc);
+    std::ofstream ofs(file_name.c_str(), std::ios::trunc);
     if (!ofs.is_open())
     {
         return (false);
@@ -200,6 +187,26 @@ bool Ini::save()
     ofs.close();
 
     goofer_unlink(tmp_file.c_str());
+
+    return (true);
+}
+
+bool Ini::save()
+{
+    if (!m_support_modify)
+    {
+        return (false);
+    }
+
+    if (!m_need_save)
+    {
+        return (true);
+    }
+
+    if (!save(m_file_name))
+    {
+        return (false);
+    }
 
     m_need_save = false;
 

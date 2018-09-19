@@ -30,6 +30,7 @@ public:
 
 public:
     bool load(const std::string & file_name, char comment_char = ';', bool support_modify = false, bool loose = false);
+    bool save(const std::string & file_name);
     bool save();
     void clear();
 
