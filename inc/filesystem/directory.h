@@ -84,6 +84,8 @@ GOOFER_CXX_API(std::string) goofer_extract_directory(const char * pathname, bool
 GOOFER_CXX_API(bool) goofer_extract_file(const char * pathname, std::string & filename);
 GOOFER_CXX_API(std::string) goofer_extract_file(const char * pathname);
 
+GOOFER_CXX_API(bool) goofer_get_current_process_pathname(std::string & pathname);
+
 NAMESPACE_GOOFER_END
 
 

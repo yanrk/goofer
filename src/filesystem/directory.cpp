@@ -9,6 +9,12 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
+#ifdef _MSC_VER
+    #include <windows.h>
+#else
+    #include <unistd.h>
+#endif // _MSC_VER
+
 #include <cstring>
 #include <list>
 #include <string>
@@ -686,6 +692,24 @@ std::string goofer_extract_file(const char * pathname)
     std::string filename;
     goofer_extract_file(pathname, filename);
     return (filename);
+}
+
+bool goofer_get_current_process_pathname(std::string & pathname)
+{
+    char filename[1024] = { 0x0 };
+#ifdef _MSC_VER
+    if (GetModuleFileNameA(nullptr, filename, sizeof(filename)) > 0 && ERROR_SUCCESS == GetLastError())
+#else
+    char linkname[64] = { 0x0 };
+    snprintf(linkname, sizeof(linkname) - 1, "/proc/%d/exe", getpid());
+    std::size_t bytes = static_cast<std::size_t>(readlink(linkname, filename, sizeof(filename)));
+    if (bytes > 0 && bytes < sizeof(filename))
+#endif // _MSC_VER
+    {
+        pathname = filename;
+        return (true);
+    }
+    return (false);
 }
 
 NAMESPACE_GOOFER_END

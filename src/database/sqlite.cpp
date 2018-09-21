@@ -235,7 +235,7 @@ SQLiteStatement::SQLiteStatement(sqlite3 * sqlite, const char * sql)
     }
 }
 
-SQLiteStatement::SQLiteStatement(SQLiteStatement & other)
+SQLiteStatement::SQLiteStatement(SQLiteStatement && other)
     : m_sql()
     , m_sqlite(nullptr)
     , m_statement(nullptr)
@@ -245,7 +245,7 @@ SQLiteStatement::SQLiteStatement(SQLiteStatement & other)
     std::swap(m_statement, other.m_statement);
 }
 
-SQLiteStatement & SQLiteStatement::operator = (SQLiteStatement & other)
+SQLiteStatement & SQLiteStatement::operator = (SQLiteStatement && other)
 {
     if (&other != this)
     {

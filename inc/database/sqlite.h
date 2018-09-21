@@ -60,8 +60,8 @@ class GOOFER_API SQLiteStatement
 public:
     SQLiteStatement();
     SQLiteStatement(sqlite3 * sqlite, const char * sql);
-    SQLiteStatement(SQLiteStatement & other);
-    SQLiteStatement & operator = (SQLiteStatement & other);
+    SQLiteStatement(SQLiteStatement && other);
+    SQLiteStatement & operator = (SQLiteStatement && other);
     ~SQLiteStatement();
 
 public: /* field_index start from 0 */

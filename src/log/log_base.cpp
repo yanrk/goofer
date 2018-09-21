@@ -123,7 +123,7 @@ void LogBase::write(const char * data, size_t size)
     }
 
 #ifndef _MSC_VER
-    fflush(m_file);
+    m_file.flush();
 #endif // _MSC_VER
 
     m_cur_file_size += size;
