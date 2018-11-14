@@ -694,6 +694,40 @@ std::string goofer_extract_file(const char * pathname)
     return (filename);
 }
 
+bool goofer_extract_path(const char * pathname, std::string & dirname, std::string & filename, bool format)
+{
+    if (nullptr == pathname || '\0' == pathname[0])
+    {
+        dirname.clear();
+        filename.clear();
+        return (false);
+    }
+
+    const char * pos_s = pathname;
+    const char * lslash = strrchr(pos_s, '/');
+    const char * rslash = strrchr(pos_s, '\\');
+    const char * pos_e = std::max<const char *>(lslash, rslash);
+
+    if (nullptr == pos_e)
+    {
+        std::string(pos_s).swap(dirname);
+        std::string(pos_s).swap(filename);
+    }
+    else
+    {
+        std::string(pos_s, pos_e).swap(dirname);
+        std::string(pos_e + 1).swap(filename);
+    }
+
+    if (format)
+    {
+        dirname += g_directory_separator;
+        goofer_directory_format(dirname);
+    }
+
+    return (true);
+}
+
 bool goofer_get_current_process_pathname(std::string & pathname)
 {
     char filename[1024] = { 0x0 };

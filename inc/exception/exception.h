@@ -31,7 +31,6 @@ protected:
     std::string   m_message;
 };
 
-
 #define GOOFER_THROW(fmt, ...)                                                \
 do                                                                            \
 {                                                                             \
@@ -40,6 +39,8 @@ do                                                                            \
     Goofer::goofer_snprintf(message, max_message_length, fmt, ##__VA_ARGS__); \
     throw Goofer::Exception(__FILE__, __LINE__, __FUNCTION__, message);       \
 } while (false)
+
+GOOFER_CXX_API(void) goofer_set_dump_directory(const char * store_dir_root, const char * store_file_prefix);
 
 NAMESPACE_GOOFER_END
 

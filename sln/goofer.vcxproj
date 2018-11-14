@@ -229,7 +229,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -254,7 +254,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -280,14 +280,13 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EXPORT_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;</IgnoreSpecificDefaultLibraries>
@@ -305,14 +304,13 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;EXPORT_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmtd.lib;</IgnoreSpecificDefaultLibraries>
@@ -332,7 +330,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -361,7 +359,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -391,7 +389,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EXPORT_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -399,8 +397,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;</IgnoreSpecificDefaultLibraries>
@@ -420,7 +417,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;EXPORT_GOOFER_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>../inc/;../gnu/cmarkup/inc/;../gnu/jsoncpp/inc/;../gnu/sqlite/inc/;</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4251;4996;</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4091;4251;4996;</DisableSpecificWarnings>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
@@ -428,8 +425,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
+      <AdditionalDependencies>dbghelp.lib;</AdditionalDependencies>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
       <IgnoreSpecificDefaultLibraries>libcmt.lib;</IgnoreSpecificDefaultLibraries>
