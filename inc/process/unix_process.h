@@ -35,7 +35,7 @@ public:
     ~UnixJoinProcess();
 
 public:
-    bool acquire();
+    bool acquire(size_t parent_reader = static_cast<size_t>(-1), size_t parent_writer = static_cast<size_t>(-1), size_t child_reader = static_cast<size_t>(-1), size_t child_writer = static_cast<size_t>(-1));
     void release(bool process_tree = false, int exit_code = 9);
     bool wait_exit(int & exit_code);
 

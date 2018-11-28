@@ -180,7 +180,7 @@ UnixJoinProcess::~UnixJoinProcess()
     clear();
 }
 
-bool UnixJoinProcess::acquire()
+bool UnixJoinProcess::acquire(size_t parent_reader, size_t parent_writer, size_t child_reader, size_t child_writer)
 {
     Guard<ThreadLocker> thread_guard(m_locker);
     if (m_running || m_command_line_params.empty())
@@ -204,9 +204,40 @@ bool UnixJoinProcess::acquire()
         {
             argv[index] = m_command_line_params[index].c_str();
         }
-        close(STDIN_FILENO);
-        close(STDOUT_FILENO);
-        close(STDERR_FILENO);
+        if (static_cast<size_t>(-1) != parent_reader)
+        {
+            close(static_cast<int>(parent_reader));
+        }
+        if (static_cast<size_t>(-1) != parent_writer)
+        {
+            close(static_cast<int>(parent_writer));
+        }
+        if (static_cast<size_t>(-1) != child_reader)
+        {
+            dup2(static_cast<int>(child_reader), STDIN_FILENO);
+            if (STDIN_FILENO != child_reader)
+            {
+                close(child_reader);
+            }
+        }
+        else
+        {
+            close(STDIN_FILENO);
+        }
+        if (static_cast<size_t>(-1) != child_writer)
+        {
+            dup2(static_cast<int>(child_writer), STDOUT_FILENO);
+            dup2(static_cast<int>(child_writer), STDERR_FILENO);
+            if (STDOUT_FILENO != child_writer && STDERR_FILENO != child_writer)
+            {
+                close(child_writer);
+            }
+        }
+        else
+        {
+            close(STDOUT_FILENO);
+            close(STDERR_FILENO);
+        }
         /*
          * if execv() success, will not execute the next exit()
          */

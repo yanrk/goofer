@@ -1,0 +1,22 @@
+#include <cstdio>
+#include <fstream>
+
+int main()
+{
+    std::ofstream ofs("./hole.data", std::ios::trunc | std::ios::binary);
+    if (!ofs.is_open())
+    {
+        return (1);
+    }
+    while (true)
+    {
+        char buff[1024] = { 0x0 }; 
+        if (nullptr == fgets(buff, static_cast<int>(sizeof(buff)), stdin))
+        {
+            break;
+        }
+        ofs << buff;
+    }
+    ofs.close();
+    return (0);
+}

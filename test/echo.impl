@@ -1,0 +1,28 @@
+#ifdef _MSC_VER
+    #include <io.h>
+#else
+    #include <unistd.h>
+#endif // _MSC_VER
+
+int main()
+{
+    while (true)
+    {
+        char buff[1024] = { 0x0 };
+        int read_len = static_cast<int>(read(0, buff, sizeof(buff)));
+        if (read_len <= 0)
+        {
+            break;
+        }
+        while (read_len > 0)
+        {
+            int write_len = static_cast<int>(write(1, buff, read_len));
+            if (write_len <= 0)
+            {
+                break;
+            }
+            read_len -= write_len;
+        }
+    }
+    return (0);
+}

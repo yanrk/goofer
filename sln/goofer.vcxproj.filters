@@ -55,6 +55,9 @@
     <Filter Include="inc\log">
       <UniqueIdentifier>{79d92fc8-60b8-490a-b7b9-81c952909c5a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\pipe">
+      <UniqueIdentifier>{405ebdcf-b309-403a-b638-7155f2c25505}</UniqueIdentifier>
+    </Filter>
     <Filter Include="inc\pool">
       <UniqueIdentifier>{fc2117b6-7220-415a-9142-1d92471a67a3}</UniqueIdentifier>
     </Filter>
@@ -117,6 +120,9 @@
     </Filter>
     <Filter Include="src\log">
       <UniqueIdentifier>{d790f96d-a37c-4278-aa92-a0103b19b7bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\pipe">
+      <UniqueIdentifier>{eb65d42b-7fe4-46a6-b7be-e91a357c6c25}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\process">
       <UniqueIdentifier>{1e1ea9e1-d6ee-494d-88ec-e44e1d23f78c}</UniqueIdentifier>
@@ -283,6 +289,15 @@
     </ClInclude>
     <ClInclude Include="..\inc\log\sync_log.h">
       <Filter>inc\log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pipe\pipe.h">
+      <Filter>inc\pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pipe\unix_pipe.h">
+      <Filter>inc\pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pipe\windows_pipe.h">
+      <Filter>inc\pipe</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\pool\memory_pool.h">
       <Filter>inc\pool</Filter>
@@ -453,6 +468,12 @@
     </ClCompile>
     <ClCompile Include="..\src\log\sync_log.cpp">
       <Filter>src\log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pipe\unix_pipe.cpp">
+      <Filter>src\pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pipe\windows_pipe.cpp">
+      <Filter>src\pipe</Filter>
     </ClCompile>
     <ClCompile Include="..\src\process\unix_process.cpp">
       <Filter>src\process</Filter>

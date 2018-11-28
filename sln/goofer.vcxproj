@@ -484,6 +484,9 @@
     <ClInclude Include="..\inc\log\log_base.h" />
     <ClInclude Include="..\inc\log\log_types.h" />
     <ClInclude Include="..\inc\log\sync_log.h" />
+    <ClInclude Include="..\inc\pipe\pipe.h" />
+    <ClInclude Include="..\inc\pipe\unix_pipe.h" />
+    <ClInclude Include="..\inc\pipe\windows_pipe.h" />
     <ClInclude Include="..\inc\pool\memory_pool.h" />
     <ClInclude Include="..\inc\pool\object_pool.h" />
     <ClInclude Include="..\inc\process\process.h" />
@@ -542,6 +545,8 @@
     <ClCompile Include="..\src\log\log.cpp" />
     <ClCompile Include="..\src\log\log_base.cpp" />
     <ClCompile Include="..\src\log\sync_log.cpp" />
+    <ClCompile Include="..\src\pipe\unix_pipe.cpp" />
+    <ClCompile Include="..\src\pipe\windows_pipe.cpp" />
     <ClCompile Include="..\src\process\unix_process.cpp" />
     <ClCompile Include="..\src\process\windows_process.cpp" />
     <ClCompile Include="..\src\record\record.cpp" />

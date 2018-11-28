@@ -53,6 +53,7 @@ extern void test_process(void);
 extern void test_json(void);
 extern void test_sqlite(void);
 extern void test_hash(void);
+extern void test_pipe(void);
 
 
 #endif // GOOFER_TEST_H

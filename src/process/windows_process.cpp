@@ -170,7 +170,7 @@ WindowsJoinProcess::~WindowsJoinProcess()
     clear();
 }
 
-bool WindowsJoinProcess::acquire()
+bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, size_t child_reader, size_t child_writer)
 {
     Guard<ThreadLocker> thread_guard(m_locker);
     if (m_running || m_command_line_params.empty())
@@ -185,9 +185,28 @@ bool WindowsJoinProcess::acquire()
     clear();
 
     STARTUPINFOA si = { sizeof(STARTUPINFOA) };
+    if (reinterpret_cast<size_t>(INVALID_HANDLE_VALUE) != parent_reader)
+    {
+        SetHandleInformation(reinterpret_cast<HANDLE>(parent_reader), HANDLE_FLAG_INHERIT, 0);
+    }
+    if (reinterpret_cast<size_t>(INVALID_HANDLE_VALUE) != parent_writer)
+    {
+        SetHandleInformation(reinterpret_cast<HANDLE>(parent_writer), HANDLE_FLAG_INHERIT, 0);
+    }
+    if (reinterpret_cast<size_t>(INVALID_HANDLE_VALUE) != child_reader)
+    {
+        si.hStdInput = reinterpret_cast<HANDLE>(child_reader);
+        si.dwFlags |= STARTF_USESTDHANDLES;
+    }
+    if (reinterpret_cast<size_t>(INVALID_HANDLE_VALUE) != child_writer)
+    {
+        si.hStdOutput = reinterpret_cast<HANDLE>(child_writer);
+        si.hStdError = reinterpret_cast<HANDLE>(child_writer);
+        si.dwFlags |= STARTF_USESTDHANDLES;
+    }
     PROCESS_INFORMATION pi = { 0x00 };
 
-    if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, false, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
+    if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, 0 != si.dwFlags, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
     {
         m_running = false;
         return (false);
