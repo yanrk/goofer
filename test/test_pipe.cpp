@@ -3,13 +3,17 @@
 #include "filesystem/file.h"
 #include "charset/charset.h"
 #include "process/process.h"
+#include "thread/thread.h"
+#include "locker/locker.h"
 #include "pipe/pipe.h"
 #include <string>
 #include <sstream>
 
 USING_NAMESPACE_GOOFER
 
-void test_read_anonymous_pipe(void)
+static ThreadLocker   s_stdout_locker;
+
+static void test_read_anonymous_pipe(void)
 {
 #ifdef _MSC_VER
     const std::string command_line("ping -n 10 127.0.0.1");
@@ -76,7 +80,7 @@ void test_read_anonymous_pipe(void)
     r_pipe.release();
 }
 
-void test_write_anonymous_pipe(void)
+static void test_write_anonymous_pipe(void)
 {
 #ifdef _MSC_VER
     const std::string program("./hole.exe");
@@ -139,7 +143,7 @@ void test_write_anonymous_pipe(void)
     w_pipe.release();
 }
 
-void test_read_write_anonymous_pipe(void)
+static void test_read_write_anonymous_pipe(void)
 {
 #ifdef _MSC_VER
     const std::string program("./echo.exe");
@@ -213,7 +217,7 @@ void test_read_write_anonymous_pipe(void)
     rw_pipe.release();
 }
 
-void test_pipe(void)
+static void test_anonymous_pipe()
 {
     std::string pathname;
     goofer_get_current_process_pathname(pathname);
@@ -224,4 +228,384 @@ void test_pipe(void)
     test_read_anonymous_pipe();
     test_write_anonymous_pipe();
     test_read_write_anonymous_pipe();
+}
+
+static thread_return_t GOOFER_STDCALL test_read_named_pipe_client(thread_argument_t)
+{
+    NamedPipe r_pipe;
+
+    if (!r_pipe.acquire("name_r", false, false, true))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] create named pipe for read failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    char normal_data[] = "read pipe test data";
+    for (std::size_t index = 0; index < 5; ++index)
+    {
+        if (!r_pipe.write(normal_data, sizeof(normal_data) - 1))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[client] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+        if (!r_pipe.write("\n", 1))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[client] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+        s_stdout_locker.acquire();
+        std::cout << "[client]     pipe_r write data [" << normal_data << "]" << std::endl;
+        s_stdout_locker.release();
+    }
+
+    char quit_data[] = "exit";
+    if (!r_pipe.write(quit_data, sizeof(quit_data) - 1))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] named pipe write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+    if (!r_pipe.write("\n", 1))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] named pipe write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    s_stdout_locker.acquire();
+    std::cout << "[client]     pipe_r write data [" << quit_data << "]" << std::endl;
+    s_stdout_locker.release();
+
+    r_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static thread_return_t GOOFER_STDCALL test_read_named_pipe_server(thread_argument_t)
+{
+    NamedPipe r_pipe;
+
+    if (!r_pipe.acquire("name_r", true, true, false))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] create named pipe for read failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    char buff[64] = { 0x0 };
+    const std::size_t buff_size = sizeof(buff) - 1;
+
+    while (true)
+    {
+        std::size_t read_data_len = 0;
+        while (read_data_len < buff_size)
+        {
+            std::size_t read_len = 0;
+            if (!r_pipe.read(buff + read_data_len, 1, read_len))
+            {
+                s_stdout_locker.acquire();
+                std::cout << "[server] named pipe read failed" << std::endl;
+                s_stdout_locker.release();
+                return (THREAD_DEFAULT_RET);
+            }
+            read_data_len += read_len;
+            if ('\n' == buff[read_data_len - 1])
+            {
+                buff[read_data_len - 1] = '\0';
+                break;
+            }
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[server]     pipe_r read data [" << buff << "]" << std::endl;
+        s_stdout_locker.release();
+
+        if (0 == strcmp("exit", buff))
+        {
+            break;
+        }
+    }
+
+    r_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static void test_read_named_pipe(void)
+{
+    if (goofer_create_detached_thread(test_read_named_pipe_client, nullptr))
+    {
+        test_read_named_pipe_server(nullptr);
+    }
+}
+
+static thread_return_t GOOFER_STDCALL test_write_named_pipe_client(thread_argument_t)
+{
+    NamedPipe w_pipe;
+
+    if (!w_pipe.acquire("name_w", false, true, false))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] create named pipe for write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    char buff[64] = { 0x0 };
+    const std::size_t buff_size = sizeof(buff) - 1;
+
+    while (true)
+    {
+        std::size_t read_data_len = 0;
+        while (read_data_len < buff_size)
+        {
+            std::size_t read_len = 0;
+            if (!w_pipe.read(buff + read_data_len, 1, read_len))
+            {
+                s_stdout_locker.acquire();
+                std::cout << "[client] named pipe read failed" << std::endl;
+                s_stdout_locker.release();
+                return (THREAD_DEFAULT_RET);
+            }
+            read_data_len += read_len;
+            if ('\n' == buff[read_data_len - 1])
+            {
+                buff[read_data_len - 1] = '\0';
+                break;
+            }
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[client]     pipe_w read data [" << buff << "]" << std::endl;
+        s_stdout_locker.release();
+
+        if (0 == strcmp("exit", buff))
+        {
+            break;
+        }
+    }
+
+    w_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static thread_return_t GOOFER_STDCALL test_write_named_pipe_server(thread_argument_t)
+{
+    NamedPipe w_pipe;
+
+    if (!w_pipe.acquire("name_w", true, false, true))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] create named pipe for write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    char normal_data[] = "write pipe test data";
+    for (std::size_t index = 0; index < 5; ++index)
+    {
+        if (!w_pipe.write(normal_data, sizeof(normal_data) - 1))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[server] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+        if (!w_pipe.write("\n", 1))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[server] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+        s_stdout_locker.acquire();
+        std::cout << "[server]     pipe_w write data [" << normal_data << "]" << std::endl;
+        s_stdout_locker.release();
+    }
+
+    char quit_data[] = "exit";
+    if (!w_pipe.write(quit_data, sizeof(quit_data) - 1))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] named pipe write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+    if (!w_pipe.write("\n", 1))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] named pipe write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    s_stdout_locker.acquire();
+    std::cout << "[server]     pipe_w write data [" << quit_data << "]" << std::endl;
+    s_stdout_locker.release();
+
+    w_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static void test_write_named_pipe(void)
+{
+    if (goofer_create_detached_thread(test_write_named_pipe_client, nullptr))
+    {
+        test_write_named_pipe_server(nullptr);
+    }
+}
+
+static thread_return_t GOOFER_STDCALL test_read_write_named_pipe_client(thread_argument_t)
+{
+    NamedPipe rw_pipe;
+
+    if (!rw_pipe.acquire("name_rw", false, true, true))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] create named pipe for read/write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    const std::size_t test_data_len = 16; // "hello named pipe"
+    char data[test_data_len + 1] = { 0x0 };
+
+    for (std::size_t index = 0; index < 5; ++index)
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[client] round " << index + 1 << std::endl;
+        s_stdout_locker.release();
+
+        std::size_t read_data_len = 0;
+        while (read_data_len < test_data_len)
+        {
+            std::size_t read_len = 0;
+            if (!rw_pipe.read(data + read_data_len, test_data_len - read_data_len, read_len))
+            {
+                s_stdout_locker.acquire();
+                std::cout << "[client] named pipe read failed" << std::endl;
+                s_stdout_locker.release();
+                return (THREAD_DEFAULT_RET);
+            }
+            read_data_len += read_len;
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[client]     pipe_rw read data [" << data << "]" << std::endl;
+        s_stdout_locker.release();
+
+        if (!rw_pipe.write(data, test_data_len))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[client] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[client]     pipe_rw write data [" << data << "]" << std::endl;
+        s_stdout_locker.release();
+    }
+
+    rw_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static thread_return_t GOOFER_STDCALL test_read_write_named_pipe_server(thread_argument_t)
+{
+    NamedPipe rw_pipe;
+
+    if (!rw_pipe.acquire("name_rw", true, true, true))
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] create named pipe for read/write failed" << std::endl;
+        s_stdout_locker.release();
+        return (THREAD_DEFAULT_RET);
+    }
+
+    char write_data[] = "hello named pipe";
+    char read_data[sizeof(write_data)] = { 0x0 };
+
+    for (std::size_t index = 0; index < 5; ++index)
+    {
+        s_stdout_locker.acquire();
+        std::cout << "[server] round " << index + 1 << std::endl;
+        s_stdout_locker.release();
+
+        const std::size_t write_data_len = sizeof(write_data) - 1;
+        if (!rw_pipe.write(write_data, write_data_len))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[server] named pipe write failed" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[server]     pipe_rw write data [" << write_data << "]" << std::endl;
+        s_stdout_locker.release();
+
+        std::size_t read_data_len = 0;
+        while (read_data_len < write_data_len)
+        {
+            std::size_t read_len = 0;
+            if (!rw_pipe.read(read_data + read_data_len, write_data_len - read_data_len, read_len))
+            {
+                s_stdout_locker.acquire();
+                std::cout << "[server] named pipe read failed" << std::endl;
+                s_stdout_locker.release();
+                return (THREAD_DEFAULT_RET);
+            }
+            read_data_len += read_len;
+        }
+
+        s_stdout_locker.acquire();
+        std::cout << "[server]     pipe_rw read data [" << read_data << "]" << std::endl;
+        s_stdout_locker.release();
+
+        if (0 != strcmp(write_data, read_data))
+        {
+            s_stdout_locker.acquire();
+            std::cout << "[server] unexpected: pipe_rw read data not equal write data" << std::endl;
+            s_stdout_locker.release();
+            return (THREAD_DEFAULT_RET);
+        }
+    }
+
+    rw_pipe.release();
+
+    return (THREAD_DEFAULT_RET);
+}
+
+static void test_read_write_named_pipe(void)
+{
+    if (goofer_create_detached_thread(test_read_write_named_pipe_client, nullptr))
+    {
+        test_read_write_named_pipe_server(nullptr);
+    }
+}
+
+static void test_named_pipe(void)
+{
+    test_read_named_pipe();
+    test_write_named_pipe();
+    test_read_write_named_pipe();
+}
+
+void test_pipe(void)
+{
+    test_anonymous_pipe();
+    test_named_pipe();
 }

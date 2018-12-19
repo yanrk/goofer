@@ -293,7 +293,13 @@
     <ClInclude Include="..\inc\pipe\pipe.h">
       <Filter>inc\pipe</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\pipe\unix_fifo.h">
+      <Filter>inc\pipe</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\pipe\unix_pipe.h">
+      <Filter>inc\pipe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\pipe\windows_fifo.h">
       <Filter>inc\pipe</Filter>
     </ClInclude>
     <ClInclude Include="..\inc\pipe\windows_pipe.h">
@@ -469,7 +475,13 @@
     <ClCompile Include="..\src\log\sync_log.cpp">
       <Filter>src\log</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\pipe\unix_fifo.cpp">
+      <Filter>src\pipe</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\pipe\unix_pipe.cpp">
+      <Filter>src\pipe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\pipe\windows_fifo.cpp">
       <Filter>src\pipe</Filter>
     </ClCompile>
     <ClCompile Include="..\src\pipe\windows_pipe.cpp">
