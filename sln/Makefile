@@ -53,7 +53,7 @@ jsoncpp_source     = $(filter %.cpp, $(shell find $(jsoncpp_src_path) -depth -na
 
 # source files of sqlite solution
 sqlite_src_path    = $(gnu_home)/sqlite/src
-sqlite_source      = $(filter %.cpp, $(shell find $(sqlite_src_path) -depth -name "*.cpp"))
+sqlite_source      = $(filter %.c, $(shell find $(sqlite_src_path) -depth -name "*.c"))
 
 
 
@@ -61,7 +61,7 @@ sqlite_source      = $(filter %.cpp, $(shell find $(sqlite_src_path) -depth -nam
 goofer_objects     = $(goofer_source:$(project_home)%.cpp=$(object_dir)%.o)
 goofer_objects    += $(cmarkup_source:$(project_home)%.cpp=$(object_dir)%.o)
 goofer_objects    += $(jsoncpp_source:$(project_home)%.cpp=$(object_dir)%.o)
-goofer_objects    += $(sqlite_source:$(project_home)%.cpp=$(object_dir)%.o)
+goofer_objects    += $(sqlite_source:$(project_home)%.c=$(object_dir)%.o)
 
 
 
@@ -110,6 +110,13 @@ $(object_dir)/%.o:$(project_home)/%.cpp
 		mkdir -p $$dir;		\
 	fi
 	g++ -c -std=c++11 -g -Wall -O1 -pipe -fPIC $(includes) -o $@ $<
+
+$(object_dir)/%.o:$(project_home)/%.c
+	@dir=`dirname $@`;		\
+	if [ ! -d $$dir ]; then	\
+		mkdir -p $$dir;		\
+	fi
+	gcc -c -g -O1 -pipe -fPIC $(includes) -o $@ $<
 
 clean    :
 	rm -rf $(object_dir) $(bin_dir)/libgoofer.*

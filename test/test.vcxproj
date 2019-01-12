@@ -422,6 +422,7 @@
     <ClCompile Include="test_object_pool.cpp" />
     <ClCompile Include="test_pipe.cpp" />
     <ClCompile Include="test_process.cpp" />
+    <ClCompile Include="test_service.cpp" />
     <ClCompile Include="test_singleton.cpp" />
     <ClCompile Include="test_single_timer.cpp" />
     <ClCompile Include="test_splitter.cpp" />

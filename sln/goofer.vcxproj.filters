@@ -206,6 +206,9 @@
     <ClInclude Include="..\inc\filesystem\hardware.h">
       <Filter>inc\filesystem</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\filesystem\service.h">
+      <Filter>inc\filesystem</Filter>
+    </ClInclude>
     <ClInclude Include="..\inc\filesystem\sys_io.h">
       <Filter>inc\filesystem</Filter>
     </ClInclude>
@@ -431,6 +434,9 @@
       <Filter>src\filesystem</Filter>
     </ClCompile>
     <ClCompile Include="..\src\filesystem\hardware.cpp">
+      <Filter>src\filesystem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\filesystem\service.cpp">
       <Filter>src\filesystem</Filter>
     </ClCompile>
     <ClCompile Include="..\gnu\cmarkup\src\markup.cpp">

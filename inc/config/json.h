@@ -55,6 +55,7 @@ public: /* read */
     bool load(const char * file_name);
     bool set_document(const char * document);
     bool find_element(const char * element_name);
+    bool get_element_type(const char * element_name, json_value_t::v_t & element_type);
     bool get_element(const char * element_name, std::string & element_value);
     bool get_element(const char * element_name, char * element_value, size_t element_value_size);
     bool get_element(const char * element_name, std::list<std::string> & element_value_list);

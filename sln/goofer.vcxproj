@@ -471,6 +471,7 @@
     <ClInclude Include="..\inc\filesystem\directory.h" />
     <ClInclude Include="..\inc\filesystem\file.h" />
     <ClInclude Include="..\inc\filesystem\hardware.h" />
+    <ClInclude Include="..\inc\filesystem\service.h" />
     <ClInclude Include="..\inc\filesystem\sys_io.h" />
     <ClInclude Include="..\inc\hash\hash_value.hpp" />
     <ClInclude Include="..\inc\library\library.h" />
@@ -539,6 +540,7 @@
     <ClCompile Include="..\src\filesystem\directory.cpp" />
     <ClCompile Include="..\src\filesystem\file.cpp" />
     <ClCompile Include="..\src\filesystem\hardware.cpp" />
+    <ClCompile Include="..\src\filesystem\service.cpp" />
     <ClCompile Include="..\src\library\library.cpp" />
     <ClCompile Include="..\src\locker\null_locker.cpp" />
     <ClCompile Include="..\src\locker\windows_locker.cpp" />

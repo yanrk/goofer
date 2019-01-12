@@ -40,6 +40,7 @@ public: /* read */
     bool load(const char * file_name);
     bool set_document(const char * document);
     bool find_element(const char * element_name);
+    bool get_element_type(const char * element_name, Goofer::json_value_t::v_t & element_type);
     bool get_element(const char * element_name, std::string & element_value);
     bool get_element(const char * element_name, char * element_value, size_t element_value_size);
     bool get_element(const char * element_name, std::list<std::string> & element_value_list);
@@ -266,6 +267,33 @@ bool JsonImpl::find_element(const char * element_name)
     }
     const Json::Value & json_value = (m_child_values.empty() ? m_root_value : *m_child_values.back());
     return (json_value.isMember(element_name));
+}
+
+bool JsonImpl::get_element_type(const char * element_name, Goofer::json_value_t::v_t & element_type)
+{
+    if (nullptr == element_name)
+    {
+        return (false);
+    }
+    const Json::Value & json_parent = (m_child_values.empty() ? m_root_value : *m_child_values.back());
+    if (!json_parent.isMember(element_name))
+    {
+        return (false);
+    }
+    const Json::Value & json_child = json_parent[element_name];
+    if (json_child.isArray())
+    {
+        element_type = Goofer::json_value_t::json_array;
+    }
+    else if (json_child.isObject())
+    {
+        element_type = Goofer::json_value_t::json_object;
+    }
+    else
+    {
+        element_type = Goofer::json_value_t::json_scalar;
+    }
+    return (true);
 }
 
 bool JsonImpl::get_element(const char * element_name, std::string & element_value)
@@ -507,6 +535,7 @@ bool JsonImpl::add_element(size_t element_index)
         return (false);
     }
     const Json::Value & json_child = json_parent[static_cast<Json::Value::ArrayIndex>(element_index)];
+    json_child.isNull();
     return (true);
 }
 
@@ -518,6 +547,7 @@ bool JsonImpl::add_element(const char * element_name)
     }
     Json::Value & json_parent = (m_child_values.empty() ? m_root_value : *m_child_values.back());
     const Json::Value & json_child = json_parent[element_name];
+    json_child.isNull();
     return (true);
 }
 
@@ -1431,6 +1461,11 @@ bool Json::set_document(const char * document)
 bool Json::find_element(const char * element_name)
 {
     return (nullptr != m_json_impl && m_json_impl->find_element(element_name));
+}
+
+bool Json::get_element_type(const char * element_name, Goofer::json_value_t::v_t & element_type)
+{
+    return (nullptr != m_json_impl && m_json_impl->get_element_type(element_name, element_type));
 }
 
 bool Json::get_element(const char * element_name, std::string & element_value)
