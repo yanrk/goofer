@@ -336,44 +336,28 @@ static void WINAPI service_main(DWORD, LPSTR *)
 
 #else
 
-static bool                         s_log_has_open = false;
-
 static void open_event_log()
 {
-    if (!s_log_has_open)
-    {
-        s_log_has_open = true;
-        openlog(s_service_name.c_str(), LOG_PID, LOG_DAEMON);
-    }
+    openlog(s_service_name.c_str(), LOG_PID, LOG_DAEMON);
 }
 
 static void close_event_log()
 {
-    if (s_log_has_open)
-    {
-        closelog();
-        s_log_has_open = false;
-    }
+    closelog();
 }
 
 static void write_info_event(const char * message)
 {
-    open_event_log();
-
     syslog(LOG_INFO, "%s", message);
 }
 
 static void write_error_event(const char * message)
 {
-    open_event_log();
-
     syslog(LOG_ERR, "%s", message);
 }
 
 static void write_error_event(const char * message, int error_code)
 {
-    open_event_log();
-
     syslog(LOG_ERR, "%s, errno (%u)", message, error_code);
 }
 
@@ -530,6 +514,8 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
     s_service = this;
 
     s_service_name = service_name;
+
+    open_event_log();
 
     do
     {
