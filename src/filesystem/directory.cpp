@@ -520,8 +520,6 @@ bool goofer_absolute_pathname_format_strictly(const std::string & src_pathname, 
         return (false);
     }
 
-    dst_pathname = "/";
-
 #endif // _MSC_VER
 
     std::list<std::string> dst_path_node_list;
