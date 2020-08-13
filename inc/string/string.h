@@ -154,7 +154,7 @@ bool goofer_split_command_line(const char * command_line, StringSequence & resul
 
     while ('\0' != *first)
     {
-        while (' ' == *first)
+        while (' ' == *first || '\t' == *first)
         {
             ++first;
         }
@@ -172,8 +172,22 @@ bool goofer_split_command_line(const char * command_line, StringSequence & resul
 
         last = first + 1;
 
-        while (delimiter != *last && '\0' != *last)
+        while ('\0' != *last)
         {
+            if (' ' == delimiter)
+            {
+                if (' ' == *last || '\t' == *last)
+                {
+                    break;
+                }
+            }
+            else
+            {
+                if (delimiter == *last)
+                {
+                    break;
+                }
+            }
             ++last;
         }
 

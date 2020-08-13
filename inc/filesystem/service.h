@@ -17,10 +17,20 @@
 
 NAMESPACE_GOOFER_BEGIN
 
+struct ServiceRunAccount
+{
+    enum v_t
+    {
+        local_system,
+        local_service,
+        network_service
+    };
+};
+
 class GOOFER_API SystemServiceBase
 {
 public:
-    SystemServiceBase();
+    SystemServiceBase(ServiceRunAccount::v_t service_run_account);
     virtual ~SystemServiceBase();
 
 public:

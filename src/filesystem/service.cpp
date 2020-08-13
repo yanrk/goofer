@@ -23,14 +23,22 @@
 
 #include "filesystem/service.h"
 
-static Goofer::SystemServiceBase  * s_service = nullptr;
-static std::string                  s_service_name;
+static Goofer::SystemServiceBase      * s_service = nullptr;
+static std::string                      s_service_name;
+
+static const char * s_service_run_account = nullptr;
+static const char * s_service_run_account_name[] =
+{
+    nullptr,
+    "NT AUTHORITY\\LocalService",
+    "NT AUTHORITY\\NetworkService"
+};
 
 #ifdef _MSC_VER
 
-static bool install_system_service(const char * service_path, const char * service_name, const char * display_name, const char * dependencies = "", const char * start_name = "NT AUTHORITY\\LocalService", const char * password = nullptr)
+static bool install_system_service(const char * service_name, const char * display_name, const char * start_name = nullptr, const char * password = nullptr, const char * dependencies = "")
 {
-    if (nullptr == service_path || nullptr == service_name || nullptr == display_name)
+    if (nullptr == service_name || nullptr == display_name)
     {
         return (false);
     }
@@ -41,6 +49,12 @@ static bool install_system_service(const char * service_path, const char * servi
 
     do
     {
+        char service_path[1024] = { 0x0 };
+        if (0 == GetModuleFileNameA(nullptr, service_path, sizeof(service_path)))
+        {
+            break;
+        }
+
         service_control_manager = OpenSCManagerA(nullptr, nullptr, SC_MANAGER_CONNECT | SC_MANAGER_CREATE_SERVICE);
         if (nullptr == service_control_manager)
         {
@@ -443,9 +457,12 @@ step2) install/uninstall system_service_testd
 
 NAMESPACE_GOOFER_BEGIN
 
-SystemServiceBase::SystemServiceBase()
+SystemServiceBase::SystemServiceBase(ServiceRunAccount::v_t service_run_account)
 {
-
+    if (service_run_account < sizeof(s_service_run_account_name) / sizeof(s_service_run_account_name[0]))
+    {
+        s_service_run_account = s_service_run_account_name[service_run_account];
+    }
 }
 
 SystemServiceBase::~SystemServiceBase()
@@ -468,11 +485,11 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
 #ifdef _MSC_VER
     if (argc > 1)
     {
-        if (0 == strcmp("-install", argv[1]) || 0 == strcmp("/install", argv[1]))
+        if (0 == strcmp("install", argv[1]) || 0 == strcmp("-install", argv[1]) || 0 == strcmp("/install", argv[1]))
         {
-            return (install_system_service(argv[0], service_name, service_name));
+            return (install_system_service(service_name, service_name, s_service_run_account));
         }
-        else if (0 == strcmp("-remove", argv[1]) || 0 == strcmp("/remove", argv[1]))
+        else if (0 == strcmp("remove", argv[1]) || 0 == strcmp("-remove", argv[1]) || 0 == strcmp("/remove", argv[1]))
         {
             return (uninstall_system_service(service_name));
         }
