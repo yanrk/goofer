@@ -38,7 +38,8 @@ static thread_return_t GOOFER_STDCALL record_thread(thread_argument_t argument)
 }
 
 TestService::TestService()
-    : m_running(false)
+    : SystemServiceBase(ServiceRunAccount::local_service)
+    , m_running(false)
     , m_fstream()
     , m_record_thread()
 {
