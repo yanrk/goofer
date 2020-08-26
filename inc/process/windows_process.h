@@ -35,6 +35,7 @@ public:
     ~WindowsJoinProcess();
 
 public:
+    bool monitor(size_t pid);
     bool acquire(size_t parent_reader = reinterpret_cast<size_t>(INVALID_HANDLE_VALUE), size_t parent_writer = reinterpret_cast<size_t>(INVALID_HANDLE_VALUE), size_t child_reader = reinterpret_cast<size_t>(INVALID_HANDLE_VALUE), size_t child_writer = reinterpret_cast<size_t>(INVALID_HANDLE_VALUE));
     void release(bool process_tree = false, int exit_code = 9);
     bool wait_exit(int & exit_code);

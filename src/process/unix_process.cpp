@@ -18,6 +18,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
+#include <sys/inotify.h>
 #include <cstdio>
 #include <cstdlib>
 #include "process/unix_process.h"
@@ -142,6 +143,105 @@ static void kill_process_tree(size_t process_id, int exit_code)
     }
 }
 
+static int wait_for_pid(int pid)
+{
+    int ret = -1;
+    int in_fd = -1;
+    int iw = -1;
+    int dir_fd = -1;
+
+    do
+    {
+        in_fd = inotify_init();
+        if (in_fd < 0)
+        {
+            break;
+        }
+
+        char path[32] = { 0x0 };
+        snprintf(path, sizeof(path), "/proc/%i/exe", pid);
+        iw = inotify_add_watch(in_fd, path, IN_CLOSE_NOWRITE);
+        if (iw < 0)
+        {
+            break;
+        }
+
+        snprintf(path, sizeof(path), "/proc/%i", pid);
+        dir_fd = open(path, 0);
+        if (dir_fd < 0)
+        {
+            break;
+        }
+
+        while (true)
+        {
+            struct inotify_event event;
+            if (read(in_fd, &event, sizeof(event)) < 0)
+            {
+                break;
+            }
+            int f = openat(dir_fd, "fd", 0);
+            if (f < 0)
+            {
+                ret = 0;
+                break;
+            }
+            close(f);
+        }
+    } while (false);
+
+    if (dir_fd >= 0)
+    {
+        close(dir_fd);
+    }
+    if (in_fd >= 0)
+    {
+        if (iw >= 0)
+        {
+            inotify_rm_watch(in_fd, iw);
+        }
+        close(in_fd);
+    }
+
+    return (ret);
+}
+
+static int wait_for_child(pid_t pid, int & exit_code)
+{
+    exit_code = -1;
+
+    int exit_status = -1;
+    if (waitpid(pid, &exit_status, 0) != pid)
+    {
+        return (-1);
+    }
+
+    if (WIFEXITED(exit_status))
+    {
+        exit_code = WEXITSTATUS(exit_status);
+    }
+    else if (WIFSIGNALED(exit_status))
+    {
+        exit_code = WTERMSIG(exit_status);
+    }
+    else if (WIFSTOPPED(exit_status))
+    {
+        exit_code = WSTOPSIG(exit_status);
+    }
+    else
+    {
+        /*
+        if (WIFCONTINUED(exit_status))
+        {
+            return (-1);
+        }
+        */
+        return (-1);
+    }
+
+    return (0);
+}
+
 NAMESPACE_GOOFER_BEGIN
 
 UnixJoinProcess::UnixJoinProcess(const char * name)
@@ -178,6 +278,34 @@ UnixJoinProcess::~UnixJoinProcess()
 {
     release();
     clear();
+}
+
+bool UnixJoinProcess::monitor(size_t pid)
+{
+    if (0 == pid || getpid() == pid)
+    {
+        return (false);
+    }
+
+    Guard<ThreadLocker> thread_guard(m_locker);
+    if (m_running)
+    {
+        return (false);
+    }
+    m_running = true;
+
+    char path[32] = { 0x0 };
+    snprintf(path, sizeof(path), "/proc/%i/exe", static_cast<int>(pid));
+    if (0 != access(path, F_OK))
+    {
+        m_running = false;
+        return (false);
+    }
+
+    m_command_line_params.clear();
+    m_pid = static_cast<pid_t>(pid);
+
+    return (true);
 }
 
 bool UnixJoinProcess::acquire(size_t parent_reader, size_t parent_writer, size_t child_reader, size_t child_writer)
@@ -272,6 +400,8 @@ void UnixJoinProcess::release(bool process_tree, int exit_code)
 
 bool UnixJoinProcess::wait_exit(int & exit_code)
 {
+    exit_code = -1;
+
     if (!m_running || 0 == m_pid)
     {
         return (false);
@@ -281,46 +411,18 @@ bool UnixJoinProcess::wait_exit(int & exit_code)
 
     const pid_t pid = m_pid;
 
-    do
+    if (m_command_line_params.empty())
     {
-        exit_code = -1;
-
-        int exit_status = -1;
-        if (waitpid(m_pid, &exit_status, 0) != m_pid)
-        {
-            break;
-        }
-
-        if (WIFEXITED(exit_status))
-        {
-            exit_code = WEXITSTATUS(exit_status);
-        }
-        else if (WIFSIGNALED(exit_status))
-        {
-            exit_code = WTERMSIG(exit_status);
-        }
-        else if (WIFSTOPPED(exit_status))
-        {
-            exit_code = WSTOPSIG(exit_status);
-        }
-        else
-        {
-            /*
-            if (WIFCONTINUED(exit_status))
-            {
-                break;
-            }
-            */
-            break;
-        }
-
-        ret = true;
-    } while (false);
+        ret = (wait_for_pid(static_cast<size_t>(pid)) >= 0);
+    }
+    else
+    {
+        ret = (wait_for_child(pid, exit_code) >= 0);
+    }
 
     if (pid == m_pid)
     {
         clear();
-
         m_running = false;
     }
     else

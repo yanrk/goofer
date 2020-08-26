@@ -170,6 +170,34 @@ WindowsJoinProcess::~WindowsJoinProcess()
     clear();
 }
 
+bool WindowsJoinProcess::monitor(size_t pid)
+{
+    if (0 == pid || GetCurrentProcessId() == pid)
+    {
+        return (false);
+    }
+
+    Guard<ThreadLocker> thread_guard(m_locker);
+    if (m_running)
+    {
+        return (false);
+    }
+    m_running = true;
+
+    HANDLE handle = OpenProcess(PROCESS_ALL_ACCESS, FALSE, static_cast<DWORD>(pid));
+    if (nullptr == handle)
+    {
+        m_running = false;
+        return (false);
+    }
+
+    m_command_line_params.clear();
+    m_pid = static_cast<DWORD>(pid);
+    m_handle = handle;
+
+    return (true);
+}
+
 bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, size_t child_reader, size_t child_writer)
 {
     Guard<ThreadLocker> thread_guard(m_locker);
