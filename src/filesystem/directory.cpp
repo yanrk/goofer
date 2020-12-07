@@ -420,7 +420,7 @@ bool goofer_absolute_pathname_format_strictly(const std::string & src_pathname, 
     bool start_with_directory_separator = ('/' == src_pathname[start_pos] || '\\' == src_pathname[start_pos]);
 
     std::list<std::string> src_path_node_list;
-    goofer_split_piece(src_pathname, "\\/", false, src_path_node_list);
+    goofer_split_piece(src_pathname, "\\/", false, true, src_path_node_list);
 
 #ifdef _MSC_VER
 

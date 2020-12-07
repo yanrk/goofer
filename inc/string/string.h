@@ -116,7 +116,7 @@ void goofer_piece_together(StringIterator first, StringIterator last, const std:
 }
 
 template <typename StringSequence>
-void goofer_split_piece(const std::string & values, const std::string & delimiter, bool trim_space, StringSequence & result)
+void goofer_split_piece(const std::string & values, const std::string & delimiter, bool trim_space, bool ignore_empty, StringSequence & result)
 {
     std::string filter(trim_space ? g_blank_character_set : "");
     StringSplitter splitter(values, filter, delimiter);
@@ -124,7 +124,7 @@ void goofer_split_piece(const std::string & values, const std::string & delimite
     {
         std::string element;
         splitter >> element;
-        if (!element.empty())
+        if (!ignore_empty || !element.empty())
         {
             result.push_back(element);
         }
