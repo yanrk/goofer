@@ -36,5 +36,6 @@ int main(int argc, char * argv[])
     test_sqlite();
     test_hash();
     test_pipe();
+    test_mmap();
     return (0);
 }

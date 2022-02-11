@@ -71,19 +71,25 @@ public: /* field_index start from 0 */
     bool bind(int field_index, int64_t field_value);
     bool bind(int field_index, double field_value);
     bool bind(int field_index, const std::string & field_value);
+    bool bind(int field_value);
+    bool bind(int64_t field_value);
+    bool bind(double field_value);
+    bool bind(const std::string & field_value);
     void clear();
 
 protected:
     std::string                             m_sql;
     sqlite3                               * m_sqlite;
     sqlite3_stmt                          * m_statement;
+    int                                     m_field_index;
+    int                                     m_column_index;
 };
 
 class GOOFER_API SQLiteReader : public SQLiteStatement
 {
 public:
     SQLiteReader();
-    SQLiteReader(sqlite3 * db, const char * sql);
+    SQLiteReader(sqlite3 * sqlite, const char * sql);
 
 public: /* column_index start from 0 */
     bool read();
@@ -91,13 +97,17 @@ public: /* column_index start from 0 */
     bool column(int column_index, int64_t & column_value);
     bool column(int column_index, double & column_value);
     bool column(int column_index, std::string & column_value);
+    bool column(int & column_value);
+    bool column(int64_t & column_value);
+    bool column(double & column_value);
+    bool column(std::string & column_value);
 };
 
 class GOOFER_API SQLiteWriter : public SQLiteStatement
 {
 public:
     SQLiteWriter();
-    SQLiteWriter(sqlite3 * db, const char * sql);
+    SQLiteWriter(sqlite3 * sqlite, const char * sql);
 
 public:
     bool write();

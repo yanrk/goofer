@@ -54,6 +54,7 @@ extern void test_json(void);
 extern void test_sqlite(void);
 extern void test_hash(void);
 extern void test_pipe(void);
+extern void test_mmap(void);
 extern void test_service(int argc, char * argv[]);
 
 

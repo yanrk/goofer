@@ -148,6 +148,12 @@
     <Filter Include="res">
       <UniqueIdentifier>{02b64aaa-4b95-47ef-9e2f-efb9a796bd00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\mmap">
+      <UniqueIdentifier>{40f8db30-86ce-4095-8448-ed4ac93068bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mmap">
+      <UniqueIdentifier>{6583f551-aed9-4693-9715-033c15f1d678}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\cfg\log.ini">
@@ -404,6 +410,15 @@
     <ClInclude Include="resource.h">
       <Filter>res</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\mmap\mmap.h">
+      <Filter>inc\mmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\mmap\unix_mmap.h">
+      <Filter>inc\mmap</Filter>
+    </ClInclude>
+    <ClInclude Include="..\inc\mmap\windows_mmap.h">
+      <Filter>inc\mmap</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\charset\charset.cpp">
@@ -558,6 +573,12 @@
     </ClCompile>
     <ClCompile Include="..\src\utility\utility.cpp">
       <Filter>src\utility</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mmap\unix_mmap.cpp">
+      <Filter>src\mmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mmap\windows_mmap.cpp">
+      <Filter>src\mmap</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

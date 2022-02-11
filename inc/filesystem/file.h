@@ -84,6 +84,7 @@ GOOFER_CXX_API(bool) goofer_stat_safe(const char * path_name, goofer_stat_t & pa
 GOOFER_CXX_API(bool) goofer_rename_safe(const char * src_path_name, const char * dst_path_name);
 GOOFER_CXX_API(bool) goofer_unlink_safe(const char * file_name);
 GOOFER_CXX_API(bool) goofer_chmod_safe(const char * file_name);
+GOOFER_CXX_API(bool) goofer_truncate_safe(const char * file_name, std::size_t file_size);
 
 NAMESPACE_GOOFER_END
 

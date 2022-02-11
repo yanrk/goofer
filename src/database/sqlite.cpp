@@ -203,6 +203,8 @@ SQLiteStatement::SQLiteStatement()
     : m_sql()
     , m_sqlite(nullptr)
     , m_statement(nullptr)
+    , m_field_index(0)
+    , m_column_index(0)
 {
 
 }
@@ -211,6 +213,8 @@ SQLiteStatement::SQLiteStatement(sqlite3 * sqlite, const char * sql)
     : m_sql()
     , m_sqlite(nullptr)
     , m_statement(nullptr)
+    , m_field_index(0)
+    , m_column_index(0)
 {
     if (nullptr == sqlite)
     {
@@ -239,10 +243,14 @@ SQLiteStatement::SQLiteStatement(SQLiteStatement && other)
     : m_sql()
     , m_sqlite(nullptr)
     , m_statement(nullptr)
+    , m_field_index(0)
+    , m_column_index(0)
 {
     std::swap(m_sql, other.m_sql);
     std::swap(m_sqlite, other.m_sqlite);
     std::swap(m_statement, other.m_statement);
+    std::swap(m_field_index, other.m_field_index);
+    std::swap(m_column_index, other.m_column_index);
 }
 
 SQLiteStatement & SQLiteStatement::operator = (SQLiteStatement && other)
@@ -253,6 +261,8 @@ SQLiteStatement & SQLiteStatement::operator = (SQLiteStatement && other)
         std::swap(m_sql, other.m_sql);
         std::swap(m_sqlite, other.m_sqlite);
         std::swap(m_statement, other.m_statement);
+        std::swap(m_field_index, other.m_field_index);
+        std::swap(m_column_index, other.m_column_index);
     }
     return (*this);
 }
@@ -274,6 +284,8 @@ void SQLiteStatement::clear()
         m_sql.clear();
         m_sqlite = nullptr;
         m_statement = nullptr;
+        m_field_index = 0;
+        m_column_index = 0;
     }
 }
 
@@ -289,6 +301,8 @@ bool SQLiteStatement::reset()
         RUN_LOG_ERR("reset failed while statement is nullptr");
         return (false);
     }
+
+    m_field_index = 0;
 
     int result = sqlite3_reset(m_statement);
     if (SQLITE_OK != result)
@@ -372,14 +386,34 @@ bool SQLiteStatement::bind(int field_index, const std::string & field_value)
     return (true);
 }
 
+bool SQLiteStatement::bind(int field_value)
+{
+    return (bind(m_field_index++, field_value));
+}
+
+bool SQLiteStatement::bind(int64_t field_value)
+{
+    return (bind(m_field_index++, field_value));
+}
+
+bool SQLiteStatement::bind(double field_value)
+{
+    return (bind(m_field_index++, field_value));
+}
+
+bool SQLiteStatement::bind(const std::string & field_value)
+{
+    return (bind(m_field_index++, field_value));
+}
+
 SQLiteReader::SQLiteReader()
     : SQLiteStatement()
 {
 
 }
 
-SQLiteReader::SQLiteReader(sqlite3 * db, const char * sql)
-    : SQLiteStatement(db, sql)
+SQLiteReader::SQLiteReader(sqlite3 * sqlite, const char * sql)
+    : SQLiteStatement(sqlite, sql)
 {
 
 }
@@ -391,6 +425,8 @@ bool SQLiteReader::read()
         RUN_LOG_ERR("read failed while statement is nullptr");
         return (false);
     }
+
+    m_column_index = 0;
 
     int result = sqlite3_step(m_statement);
     if (SQLITE_ROW != result && SQLITE_DONE != result)
@@ -474,14 +510,34 @@ bool SQLiteReader::column(int column_index, std::string & column_value)
     return (true);
 }
 
+bool SQLiteReader::column(int & column_value)
+{
+    return (column(m_column_index++, column_value));
+}
+
+bool SQLiteReader::column(int64_t & column_value)
+{
+    return (column(m_column_index++, column_value));
+}
+
+bool SQLiteReader::column(double & column_value)
+{
+    return (column(m_column_index++, column_value));
+}
+
+bool SQLiteReader::column(std::string & column_value)
+{
+    return (column(m_column_index++, column_value));
+}
+
 SQLiteWriter::SQLiteWriter()
     : SQLiteStatement()
 {
 
 }
 
-SQLiteWriter::SQLiteWriter(sqlite3 * db, const char * sql)
-    : SQLiteStatement(db, sql)
+SQLiteWriter::SQLiteWriter(sqlite3 * sqlite, const char * sql)
+    : SQLiteStatement(sqlite, sql)
 {
 
 }

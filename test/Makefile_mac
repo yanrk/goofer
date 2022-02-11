@@ -38,7 +38,7 @@ local_objects      = $(local_source:$(project_home)%.cpp=$(object_dir)%.o)
 
 
 # system libraries
-system_libs        = -lpthread -ldl -liconv
+system_libs        = -lpthread -ldl -lrt -liconv
 
 # goofer libraries
 goofer_lib_inc     = $(goofer_home)/lib/$(platform)

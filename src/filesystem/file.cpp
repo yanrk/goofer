@@ -628,6 +628,24 @@ bool goofer_chmod_safe(const char * file_name)
 #endif // _MSC_VER
 }
 
+bool goofer_truncate_safe(const char * file_name, std::size_t file_size)
+{
+#ifdef _MSC_VER
+    HANDLE handle = CreateFileW(utf8_to_unicode(file_name).c_str(), GENERIC_WRITE, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (INVALID_HANDLE_VALUE == handle)
+    {
+        return (false);
+    }
+    LARGE_INTEGER file_length;
+    file_length.QuadPart = static_cast<LONGLONG>(file_size);
+    bool ret = (SetFilePointerEx(handle, file_length, nullptr, FILE_BEGIN) && SetEndOfFile(handle));
+    ::CloseHandle(handle);
+    return (ret);
+#else
+    return (0 == truncate(utf8_to_ansi(file_name).c_str(), static_cast<off_t>(file_size)));
+#endif // _MSC_VER
+}
+
 bool file_get_size(const char * filename, int64_t & filesize)
 {
     goofer_stat_t fileinfo = { 0x00 };
