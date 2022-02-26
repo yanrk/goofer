@@ -29,6 +29,7 @@
 NAMESPACE_GOOFER_BEGIN
 
 GOOFER_CXX_API(uint64_t) goofer_time();
+GOOFER_CXX_API(uint64_t) goofer_ns_time();
 GOOFER_CXX_API(struct tm) goofer_localtime();
 GOOFER_CXX_API(struct tm) goofer_gmtime();
 GOOFER_CXX_API(struct tm) goofer_make_localtime(uint64_t time_second);

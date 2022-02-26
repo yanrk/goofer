@@ -13,6 +13,8 @@
 #define GOOFER_HEX_H
 
 
+#include <string>
+#include <vector>
 #include "common/common.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -26,15 +28,25 @@ GOOFER_CXX_API(bool) hex_to_binary(const char src[2], unsigned char * dst);
 
 GOOFER_CXX_API(bool) hex_encode(const unsigned char * src, size_t src_len, char * dst, size_t dst_len, bool lower = true);
 
-GOOFER_CXX_API(bool) hex_decode(const char * src, unsigned char * dst, size_t dst_len);
-
-GOOFER_CXX_API(bool) hex_encode(const void * src, size_t src_len, char * dst, size_t dst_len, bool lower = true);
-
-GOOFER_CXX_API(bool) hex_decode(const char * src, void * dst, size_t dst_len);
+GOOFER_CXX_API(bool) hex_decode(const char * src, size_t src_len, unsigned char * dst, size_t dst_len);
 
 GOOFER_CXX_API(bool) hex_encode(const char * src, char * dst, size_t dst_len, bool lower = true);
 
+GOOFER_CXX_API(bool) hex_decode(const char * src, unsigned char * dst, size_t dst_len);
+
 GOOFER_CXX_API(bool) hex_decode(const char * src, char * dst, size_t dst_len);
+
+GOOFER_CXX_API(bool) hex_encode(const void * src, size_t src_len, std::string & dst, bool lower = true);
+
+GOOFER_CXX_API(bool) hex_encode(const char * src, std::string & dst, bool lower = true);
+
+GOOFER_CXX_API(bool) hex_decode(const std::string & src, std::vector<unsigned char> & dst);
+
+GOOFER_CXX_API(bool) hex_encode(const void * src, size_t src_len, std::vector<char> & dst, bool lower = true);
+
+GOOFER_CXX_API(bool) hex_encode(const char * src, std::vector<char> & dst, bool lower = true);
+
+GOOFER_CXX_API(bool) hex_decode(const std::vector<char> & src, std::vector<unsigned char> & dst);
 
 NAMESPACE_GOOFER_END
 

@@ -149,7 +149,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
 
 bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
 {
-    MEMORYSTATUSEX memory_status_ex = { 0x00 };
+    MEMORYSTATUSEX memory_status_ex = { 0x0 };
     memory_status_ex.dwLength = sizeof(memory_status_ex);
     if (GlobalMemoryStatusEx(&memory_status_ex))
     {
@@ -210,7 +210,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
         return (false);
     }
 
-    SYSTEM_INFO system_info = { 0x00 };
+    SYSTEM_INFO system_info = { 0x0 };
     GetSystemInfo(&system_info);
 
     DWORD query_core_count = (system_info.dwNumberOfProcessors < max_core_count ? system_info.dwNumberOfProcessors : max_core_count);
@@ -220,7 +220,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
     while (true)
     {
         unsigned long bytes_returned = 0;
-        memset(new_sppi_array, 0x00, sizeof(new_sppi_array));
+        memset(new_sppi_array, 0x0, sizeof(new_sppi_array));
 
         if (0 != nt_query_system_information(SystemProcessorPerformanceInformation, new_sppi_array, (sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION) * query_core_count), &bytes_returned))
         {
@@ -286,7 +286,7 @@ bool get_system_cpu_core_count(size_t & core_count)
         }
     }
 #else
-    SYSTEM_INFO system_info = { 0x00 };
+    SYSTEM_INFO system_info = { 0x0 };
 
 #if _WIN32_WINNT >= _WIN32_WINNT_WINXP
     GetNativeSystemInfo(&system_info);
@@ -666,10 +666,10 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
     int got_count = 0;
     while (!ifs.eof())
     {
-        char buffer[4096] = { 0x00 };
+        char buffer[4096] = { 0x0 };
         ifs.getline(buffer, sizeof(buffer));
         mem_occupy_t mem_occupy;
-        memset(&mem_occupy, 0x00, sizeof(mem_occupy));
+        memset(&mem_occupy, 0x0, sizeof(mem_occupy));
         sscanf(buffer, "%s %llu %s", mem_occupy.name, &mem_occupy.size, mem_occupy.unit);
         if (0 == strncasecmp(mem_occupy.name, "MemTotal:", 9))
         {
@@ -752,13 +752,13 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
             return (false);
         }
         size_t index = 0;
-        char buffer[4096] = { 0x00 };
+        char buffer[4096] = { 0x0 };
         while (!ifs.eof() && index < max_core_count)
         {
-            memset(buffer, 0x00, sizeof(buffer));
+            memset(buffer, 0x0, sizeof(buffer));
             ifs.getline(buffer, sizeof(buffer));
             cpu_occupy_t cpu_occupy;
-            memset(&cpu_occupy, 0x00, sizeof(cpu_occupy));
+            memset(&cpu_occupy, 0x0, sizeof(cpu_occupy));
             sscanf(buffer, "%s %u %u %u %u", cpu_occupy.name, &cpu_occupy.user, &cpu_occupy.nice, &cpu_occupy.system, &cpu_occupy.idle);
             if (0 != strncasecmp(cpu_occupy.name, "cpu", 3))
             {
@@ -832,7 +832,7 @@ bool get_system_cpu_core_count(size_t & core_count)
 
 bool get_system_uptime(uint64_t & uptime)
 {
-    struct sysinfo sys_info = { 0x00 };
+    struct sysinfo sys_info = { 0x0 };
     if (0 != sysinfo(&sys_info))
     {
         uptime = 0;

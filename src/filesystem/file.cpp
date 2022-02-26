@@ -81,7 +81,7 @@ bool File::open(const char * filename, bool is_write, bool is_truncate)
 
     if (is_write && !m_is_truncate && INVALID_HANDLE_VALUE != m_file)
     {
-        LARGE_INTEGER distance = { 0x00 };
+        LARGE_INTEGER distance = { 0x0 };
         ::SetFilePointerEx(m_file, distance, nullptr, FILE_END);
     }
 
@@ -205,7 +205,7 @@ bool File::seek(int64_t offset, int whence)
     {
         return (false);
     }
-    LARGE_INTEGER distance = { 0x00 };
+    LARGE_INTEGER distance = { 0x0 };
     distance.QuadPart = static_cast<LONGLONG>(offset);
     return (0 != ::SetFilePointerEx(m_file, distance, nullptr, whence));
 #else
@@ -243,7 +243,7 @@ bool File::tell(int64_t & file_pos)
     {
         ::FlushFileBuffers(m_file);
     }
-    LARGE_INTEGER distance = { 0x00 };
+    LARGE_INTEGER distance = { 0x0 };
     bool ret = (0 != ::SetFilePointerEx(m_file, distance, &distance, FILE_CURRENT));
     file_pos = static_cast<int64_t>(distance.QuadPart);
     return (ret);
@@ -423,13 +423,13 @@ bool file_flush(FILE * file)
 #ifdef _MSC_VER
 static bool file_time_to_utc_time(const FILETIME & file_time, time_t & utc_time)
 {
-    SYSTEMTIME sys_time = { 0x00 };
+    SYSTEMTIME sys_time = { 0x0 };
     if (!FileTimeToSystemTime(&file_time, &sys_time))
     {
         return (false);
     }
 
-    struct tm tm_time = { 0x00 };
+    struct tm tm_time = { 0x0 };
     tm_time.tm_isdst = 0;
     tm_time.tm_year = sys_time.wYear - 1900;
     tm_time.tm_mon = sys_time.wMonth - 1;
@@ -479,7 +479,7 @@ bool goofer_access_safe(const char * path_name)
 
 bool goofer_stat_safe(const char * path_name, goofer_stat_t & path_stat)
 {
-    memset(&path_stat, 0x00, sizeof(path_stat));
+    memset(&path_stat, 0x0, sizeof(path_stat));
 
     if (!goofer_access_safe(path_name))
     {
@@ -492,7 +492,7 @@ bool goofer_stat_safe(const char * path_name, goofer_stat_t & path_stat)
     const std::string long_path_prefix("\\\\?\\");
     if (0 == strncmp(path_name, long_path_prefix.c_str(), long_path_prefix.size()))
     {
-        WIN32_FILE_ATTRIBUTE_DATA path_attr = { 0x00 };
+        WIN32_FILE_ATTRIBUTE_DATA path_attr = { 0x0 };
         if (GetFileAttributesExW(utf8_to_unicode(path_name).c_str(), GetFileExInfoStandard, &path_attr))
         {
             if (FILE_ATTRIBUTE_DIRECTORY == (FILE_ATTRIBUTE_DIRECTORY & path_attr.dwFileAttributes))
@@ -562,7 +562,7 @@ bool goofer_path_is_directory(const char * path_name, bool & path_is_directory)
         return (false);
     }
 
-    goofer_stat_t path_info = { 0x00 };
+    goofer_stat_t path_info = { 0x0 };
     if (!goofer_stat_safe(path_name, path_info))
     {
         return (false);
@@ -648,14 +648,14 @@ bool goofer_truncate_safe(const char * file_name, std::size_t file_size)
 
 bool file_get_size(const char * filename, int64_t & filesize)
 {
-    goofer_stat_t fileinfo = { 0x00 };
+    goofer_stat_t fileinfo = { 0x0 };
     filesize = (goofer_stat_safe(filename, fileinfo) ? fileinfo.st_size : -1);
     return (-1 != filesize);
 }
 
 bool file_get_time(const char * filename, int64_t & filetime)
 {
-    goofer_stat_t fileinfo = { 0x00 };
+    goofer_stat_t fileinfo = { 0x0 };
     filetime = (goofer_stat_safe(filename, fileinfo) ? fileinfo.st_mtime : -1);
     return (-1 != filetime);
 }

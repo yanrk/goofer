@@ -232,7 +232,7 @@ bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, siz
         si.hStdError = reinterpret_cast<HANDLE>(child_writer);
         si.dwFlags |= STARTF_USESTDHANDLES;
     }
-    PROCESS_INFORMATION pi = { 0x00 };
+    PROCESS_INFORMATION pi = { 0x0 };
 
     if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, 0 != si.dwFlags, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
     {
@@ -367,7 +367,7 @@ size_t WindowsJoinProcess::process_id() const
 bool goofer_create_detached_process(const std::string & command_line)
 {
     STARTUPINFOA si = { sizeof(STARTUPINFOA) };
-    PROCESS_INFORMATION pi = { 0x00 };
+    PROCESS_INFORMATION pi = { 0x0 };
 
     if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, false, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
     {

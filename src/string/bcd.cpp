@@ -33,11 +33,11 @@ struct legit_bcd_decode_element
 
 NAMESPACE_GOOFER_BEGIN
 
-bool bcd_encode(const char * src, size_t src_len, unsigned char * dst, size_t dst_siz, size_t & dst_len)
+bool bcd_encode(const char * src, size_t src_len, unsigned char * dst, size_t dst_len, size_t & out_len)
 {
-    dst_len = 0;
+    out_len = 0;
 
-    if (nullptr == src || nullptr == dst || BCD_ENCODE_SIZE(src_len) > dst_siz)
+    if (nullptr == src || nullptr == dst || BCD_ENCODE_SIZE(src_len) > dst_len)
     {
         return (false);
     }
@@ -58,7 +58,7 @@ bool bcd_encode(const char * src, size_t src_len, unsigned char * dst, size_t ds
         src += 1;
         src_len -= 1;
         dst += 1;
-        dst_len += 1;
+        out_len += 1;
     }
 
     while (0 != src_len)
@@ -67,32 +67,32 @@ bool bcd_encode(const char * src, size_t src_len, unsigned char * dst, size_t ds
         src += 2;
         src_len -= 2;
         dst += 1;
-        dst_len += 1;
+        out_len += 1;
     }
 
     return (true);
 }
 
-bool bcd_encode(const char * src, unsigned char * dst, size_t dst_siz, size_t & dst_len)
+bool bcd_encode(const char * src, unsigned char * dst, size_t dst_len, size_t & out_len)
 {
     if (nullptr == src)
     {
-        dst_len = 0;
+        out_len = 0;
         return (false);
     }
-    return (bcd_encode(src, strlen(src), dst, dst_siz, dst_len));
+    return (bcd_encode(src, strlen(src), dst, dst_len, out_len));
 }
 
-bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t dst_siz, size_t & dst_len)
+bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t dst_len, size_t & out_len)
 {
-    dst_len = 0;
+    out_len = 0;
 
     if (nullptr == src || nullptr == dst)
     {
         return (false);
     }
 
-    if ((BCD_DECODE_SIZE(src_len) - 1 > dst_siz) || (src[0] >= 0x10 && BCD_DECODE_SIZE(src_len) > dst_siz))
+    if ((BCD_DECODE_SIZE(src_len) - 1 > dst_len) || (src[0] >= 0x10 && BCD_DECODE_SIZE(src_len) > dst_len))
     {
         return (false);
     }
@@ -114,7 +114,7 @@ bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t ds
         src += 1;
         src_len -= 1;
         dst += 1;
-        dst_len += 1;
+        out_len += 1;
     }
 
     while (0 != src_len)
@@ -124,7 +124,7 @@ bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t ds
         src += 1;
         src_len -= 1;
         dst += 2;
-        dst_len += 2;
+        out_len += 2;
     }
 
     dst[0] = '\0';
@@ -132,10 +132,70 @@ bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t ds
     return (true);
 }
 
-bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t dst_siz)
+bool bcd_decode(const unsigned char * src, size_t src_len, char * dst, size_t dst_len)
 {
-    size_t dst_len = 0;
-    return (bcd_decode(src, src_len, dst, dst_siz, dst_len));
+    size_t out_len = 0;
+    return (bcd_decode(src, src_len, dst, dst_len, out_len));
+}
+
+bool bcd_encode(const char * src, size_t src_len, std::vector<unsigned char> & dst)
+{
+    dst.resize(BCD_ENCODE_SIZE(src_len));
+    size_t out_len = 0;
+    if (bcd_encode(src, src_len, &dst[0], dst.size(), out_len))
+    {
+        dst.resize(out_len);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
+}
+
+bool bcd_encode(const char * src, std::vector<unsigned char> & dst)
+{
+    if (nullptr == src)
+    {
+        dst.clear();
+        return (false);
+    }
+    return (bcd_encode(src, strlen(src), dst));
+}
+
+bool bcd_decode(const std::vector<unsigned char> & src, std::string & dst)
+{
+    size_t src_len = src.size();
+    dst.resize(BCD_DECODE_SIZE(src_len));
+    size_t out_len = 0;
+    if (bcd_decode(src.data(), src_len, &dst[0], dst.size(), out_len))
+    {
+        dst.resize(out_len);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
+}
+
+bool bcd_decode(const std::vector<unsigned char> & src, std::vector<char> & dst)
+{
+    size_t src_len = src.size();
+    dst.resize(BCD_DECODE_SIZE(src_len));
+    size_t out_len = 0;
+    if (bcd_decode(src.data(), src_len, &dst[0], dst.size(), out_len))
+    {
+        dst.resize(out_len);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
 }
 
 NAMESPACE_GOOFER_END

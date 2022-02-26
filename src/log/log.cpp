@@ -132,7 +132,7 @@ bool goofer_log_load_config(const std::string & file, GOOFER_LOG_CONFIG & log_co
 }
 
 static LogBase * s_log[LOG_TYPE_MAX] = { nullptr };
-static unsigned char s_log_type_open[LOG_TYPE_MAX] = { 0x00 };
+static unsigned char s_log_type_open[LOG_TYPE_MAX] = { 0x0 };
 static bool s_need_aysn_write_thread = false;
 
 bool goofer_log_init(const GOOFER_LOG_CONFIG & log_config)
@@ -233,12 +233,12 @@ void goofer_log_exit()
 
 void goofer_log_enable(GOOFER_LOG_TYPE log_type)
 {
-    s_log_type_open[log_type] = 0x01;
+    s_log_type_open[log_type] = 0x1;
 }
 
 void goofer_log_disable(GOOFER_LOG_TYPE log_type)
 {
-    s_log_type_open[log_type] = 0x00;
+    s_log_type_open[log_type] = 0x0;
 }
 
 void goofer_log_enable_all()
@@ -248,7 +248,7 @@ void goofer_log_enable_all()
 
 void goofer_log_disable_all()
 {
-    memset(s_log_type_open, 0x00, sizeof(s_log_type_open));
+    memset(s_log_type_open, 0x0, sizeof(s_log_type_open));
 }
 
 void goofer_log_set_level(GOOFER_LOG_TYPE log_type, GOOFER_LOG_LEVEL log_level)
@@ -284,7 +284,7 @@ void goofer_run_log(GOOFER_LOG_LEVEL level, const char * file, const char * func
 
         va_start(args, format);
 
-        if (0x00 != s_log_type_open[LOG_TYPE_RUN] && nullptr != s_log[LOG_TYPE_RUN])
+        if (0x0 != s_log_type_open[LOG_TYPE_RUN] && nullptr != s_log[LOG_TYPE_RUN])
         {
             s_log[LOG_TYPE_RUN]->push_record(level, file, func, line, format, args);
         }
@@ -297,7 +297,7 @@ void goofer_run_log(GOOFER_LOG_LEVEL level, const char * file, const char * func
 
         va_start(args, format);
 
-        if (0x00 != s_log_type_open[LOG_TYPE_DBG] && nullptr != s_log[LOG_TYPE_DBG])
+        if (0x0 != s_log_type_open[LOG_TYPE_DBG] && nullptr != s_log[LOG_TYPE_DBG])
         {
             s_log[LOG_TYPE_DBG]->push_record(level, file, func, line, format, args);
         }
@@ -308,7 +308,7 @@ void goofer_run_log(GOOFER_LOG_LEVEL level, const char * file, const char * func
 
 void goofer_debug_log(GOOFER_LOG_LEVEL level, const char * file, const char * func, size_t line, const char * format, ...)
 {
-    if (0x00 == s_log_type_open[LOG_TYPE_DBG] || nullptr == s_log[LOG_TYPE_DBG])
+    if (0x0 == s_log_type_open[LOG_TYPE_DBG] || nullptr == s_log[LOG_TYPE_DBG])
     {
         return;
     }

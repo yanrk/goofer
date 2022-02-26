@@ -61,7 +61,7 @@ bool BitMap<T>::reset()
     {
         return (false);
     }
-    memset(m_bit, 0x00, m_siz);
+    memset(m_bit, 0x0, m_siz);
     return (true);
 }
 

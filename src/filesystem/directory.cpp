@@ -167,7 +167,7 @@ bool Directory::read()
             return (true);
         }
 #else
-        goofer_stat_t stat_buf = { 0x00 };
+        goofer_stat_t stat_buf = { 0x0 };
         const std::string file_name(utf8_to_ansi(m_dir_name) + d_name);
         if (0 != goofer_stat(file_name.c_str(), &stat_buf))
         {

@@ -110,14 +110,12 @@ bool hex_encode(const unsigned char * src, size_t src_len, char * dst, size_t ds
     return (true);
 }
 
-bool hex_decode(const char * src, unsigned char * dst, size_t dst_len)
+bool hex_decode(const char * src, size_t src_len, unsigned char * dst, size_t dst_len)
 {
     if (nullptr == src || nullptr == dst)
     {
         return (false);
     }
-
-    size_t src_len = strlen(src);
 
     if (0 != src_len % 2)
     {
@@ -148,16 +146,6 @@ bool hex_decode(const char * src, unsigned char * dst, size_t dst_len)
     return (true);
 }
 
-bool hex_encode(const void * src, size_t src_len, char * dst, size_t dst_len, bool lower)
-{
-    return (hex_encode(reinterpret_cast<const unsigned char *>(src), src_len, dst, dst_len, lower));
-}
-
-bool hex_decode(const char * src, void * dst, size_t dst_len)
-{
-    return (hex_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len));
-}
-
 bool hex_encode(const char * src, char * dst, size_t dst_len, bool lower)
 {
     if (nullptr == src)
@@ -167,7 +155,19 @@ bool hex_encode(const char * src, char * dst, size_t dst_len, bool lower)
 
     size_t src_len = strlen(src);
 
-    return (hex_encode(src, src_len, dst, dst_len, lower));
+    return (hex_encode(reinterpret_cast<const unsigned char *>(src), src_len, dst, dst_len, lower));
+}
+
+bool hex_decode(const char * src, unsigned char * dst, size_t dst_len)
+{
+    if (nullptr == src)
+    {
+        return (false);
+    }
+
+    size_t src_len = strlen(src);
+
+    return (hex_decode(src, src_len, dst, dst_len));
 }
 
 bool hex_decode(const char * src, char * dst, size_t dst_len)
@@ -177,9 +177,91 @@ bool hex_decode(const char * src, char * dst, size_t dst_len)
         return (false);
     }
 
-    memset(dst, 0x00, dst_len);
+    memset(dst, 0x0, dst_len);
 
     return (hex_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len - 1));
+}
+
+bool hex_encode(const void * src, size_t src_len, std::string & dst, bool lower)
+{
+    dst.resize(HEX_ENCODE_SIZE(src_len));
+    if (hex_encode(reinterpret_cast<const unsigned char *>(src), src_len, &dst[0], dst.size(), lower))
+    {
+        dst.resize(src_len * 2);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
+}
+
+bool hex_encode(const char * src, std::string & dst, bool lower)
+{
+    if (nullptr == src)
+    {
+        dst.clear();
+        return (false);
+    }
+    return (hex_encode(src, strlen(src), dst, lower));
+}
+
+bool hex_decode(const std::string & src, std::vector<unsigned char> & dst)
+{
+    size_t src_len = src.size();
+    dst.resize(HEX_DECODE_SIZE(src_len));
+    if (hex_decode(src.c_str(), src_len, &dst[0], dst.size()))
+    {
+        dst.resize(src_len / 2);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
+}
+
+bool hex_encode(const void * src, size_t src_len, std::vector<char> & dst, bool lower)
+{
+    dst.resize(HEX_ENCODE_SIZE(src_len));
+    if (hex_encode(reinterpret_cast<const unsigned char *>(src), src_len, &dst[0], dst.size(), lower))
+    {
+        dst.resize(src_len * 2);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
+}
+
+bool hex_encode(const char * src, std::vector<char> & dst, bool lower)
+{
+    if (nullptr == src)
+    {
+        dst.clear();
+        return (false);
+    }
+    return (hex_encode(src, strlen(src), dst, lower));
+}
+
+bool hex_decode(const std::vector<char> & src, std::vector<unsigned char> & dst)
+{
+    size_t src_len = src.size();
+    dst.resize(HEX_DECODE_SIZE(src_len));
+    if (hex_decode(src.data(), src_len, &dst[0], dst.size()))
+    {
+        dst.resize(src_len / 2);
+        return (true);
+    }
+    else
+    {
+        dst.clear();
+        return (false);
+    }
 }
 
 NAMESPACE_GOOFER_END

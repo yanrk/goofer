@@ -10,6 +10,7 @@
  ********************************************************/
 
 #ifdef _MSC_VER
+    #include <windows.h>
     #include <sys/timeb.h>
 #endif // _MSC_VER
 
@@ -23,6 +24,31 @@ NAMESPACE_GOOFER_BEGIN
 uint64_t goofer_time()
 {
     return (static_cast<uint64_t>(time(nullptr)));
+}
+
+uint64_t goofer_ns_time()
+{
+#ifdef _MSC_VER
+    static bool s_got_clock_frequency = false;
+    static LARGE_INTEGER s_clock_frequency;
+    if (!s_got_clock_frequency)
+    {
+        QueryPerformanceFrequency(&s_clock_frequency);
+        s_got_clock_frequency = true;
+    }
+    LARGE_INTEGER clock_count;
+    QueryPerformanceCounter(&clock_count);
+    double current_time = static_cast<double>(clock_count.QuadPart);
+    current_time *= 1000000000.0;
+    current_time /= static_cast<double>(s_clock_frequency.QuadPart);
+    return (static_cast<uint64_t>(current_time));
+#elif defined(_MAC_OS)
+    return (static_cast<uint64_t>(clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW)));
+#else
+    struct timespec ts = { 0x0 };
+    clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+    return (static_cast<uint64_t>(ts.tv_sec) * GOOFER_U64_VAL(1000000000) + static_cast<uint64_t>(ts.tv_nsec));
+#endif // _MSC_VER
 }
 
 struct tm goofer_make_localtime(uint64_t time_second)
@@ -171,7 +197,7 @@ std::string goofer_get_time(const char * time_delimiter)
 std::string goofer_datetime()
 {
     time_t t_now = time(nullptr);
-    struct tm tm_now = { 0x00 };
+    struct tm tm_now = { 0x0 };
 
 #ifdef _MSC_VER
     localtime_s(&tm_now, &t_now);
@@ -179,7 +205,7 @@ std::string goofer_datetime()
     localtime_r(&t_now, &tm_now);
 #endif // _MSC_VER
 
-    char str_time[32] = { 0x00 };
+    char str_time[32] = { 0x0 };
     strftime(str_time, sizeof(str_time), "%Y-%m-%d %H:%M:%S", &tm_now);
 
     return (str_time);
