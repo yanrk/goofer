@@ -20,6 +20,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include "common/common.h"
 #include "utility/uncopy.h"
 #include "locker/locker.h"
@@ -29,9 +30,9 @@ NAMESPACE_GOOFER_BEGIN
 class GOOFER_API WindowsJoinProcess : private Uncopy
 {
 public:
-    explicit WindowsJoinProcess(const char * name = nullptr);
-    explicit WindowsJoinProcess(const std::string & command_line, const char * name = nullptr);
-    explicit WindowsJoinProcess(const std::vector<std::string> & command_line_params, const char * name = nullptr);
+    explicit WindowsJoinProcess(const char * name = nullptr, bool destroy = true);
+    explicit WindowsJoinProcess(const std::string & command_line, const char * name = nullptr, bool destroy = true);
+    explicit WindowsJoinProcess(const std::vector<std::string> & command_line_params, const char * name = nullptr, bool destroy = true);
     ~WindowsJoinProcess();
 
 public:
@@ -57,12 +58,15 @@ private:
     DWORD                       m_pid;
     HANDLE                      m_handle;
     volatile bool               m_running;
+    const bool                  m_destroy;
     ThreadLocker                m_locker;
     std::vector<std::string>    m_command_line_params;
 };
 
 GOOFER_CXX_API(bool) goofer_create_detached_process(const std::string & command_line);
 GOOFER_CXX_API(bool) goofer_create_detached_process(const std::vector<std::string> & command_line_params);
+GOOFER_CXX_API(bool) goofer_get_process_tree(size_t pid, std::list<size_t> & pid_list);
+GOOFER_CXX_API(void) goofer_kill_process(size_t pid, int exit_code = 9, bool whole_tree = false);
 
 NAMESPACE_GOOFER_END
 

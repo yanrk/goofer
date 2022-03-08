@@ -47,35 +47,19 @@ static void get_all_process(std::list<process_info_t> & process_info_list)
     CloseHandle(snapshot);
 }
 
-static void kill_process(DWORD process_id, int exit_code)
+static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_tree)
 {
+    process_id_tree.clear();
+
     if (0 == process_id)
     {
-        return;
-    }
-
-    HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, process_id);
-    if (nullptr == process)
-    {
-        return;
-    }
-
-    UINT exit_status = static_cast<UINT>(exit_code);
-    TerminateProcess(process, exit_status);
-}
-
-static void kill_process_tree(DWORD process_id, int exit_code)
-{
-    if (0 == process_id)
-    {
-        return;
+        return (false);
     }
 
     std::list<process_info_t> process_info_list;
     get_all_process(process_info_list);
 
-    std::list<DWORD> process_tree;
-    process_tree.push_back(process_id);
+    process_id_tree.push_back(process_id);
 
     while (true)
     {
@@ -84,9 +68,9 @@ static void kill_process_tree(DWORD process_id, int exit_code)
         std::list<process_info_t>::iterator iter = process_info_list.begin();
         while (process_info_list.end() != iter)
         {
-            if (process_tree.end() != std::find(process_tree.begin(), process_tree.end(), iter->ppid))
+            if (process_id_tree.end() != std::find(process_id_tree.begin(), process_id_tree.end(), iter->ppid))
             {
-                process_tree.push_back(iter->pid);
+                process_id_tree.push_back(iter->pid);
                 iter = process_info_list.erase(iter);
                 find_child_process = true;
             }
@@ -102,7 +86,38 @@ static void kill_process_tree(DWORD process_id, int exit_code)
         }
     }
 
-    for (std::list<DWORD>::reverse_iterator iter = process_tree.rbegin(); process_tree.rend() != iter; ++iter)
+    return (true);
+}
+
+static void kill_process(size_t process_id, int exit_code)
+{
+    if (0 == process_id)
+    {
+        return;
+    }
+
+    HANDLE process = OpenProcess(PROCESS_ALL_ACCESS, FALSE, static_cast<DWORD>(process_id));
+    if (nullptr == process)
+    {
+        return;
+    }
+
+    UINT exit_status = static_cast<UINT>(exit_code);
+    TerminateProcess(process, exit_status);
+    CloseHandle(process);
+}
+
+static void kill_process_tree(size_t process_id, int exit_code)
+{
+    if (0 == process_id)
+    {
+        return;
+    }
+
+    std::list<size_t> process_id_tree;
+    get_process_tree(process_id, process_id_tree);
+
+    for (std::list<size_t>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
     {
         kill_process(*iter, exit_code);
     }
@@ -131,33 +146,36 @@ static void command_params_to_command_line(const std::vector<std::string> & comm
 
 NAMESPACE_GOOFER_BEGIN
 
-WindowsJoinProcess::WindowsJoinProcess(const char * name)
+WindowsJoinProcess::WindowsJoinProcess(const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_handle(nullptr)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params()
 {
 
 }
 
-WindowsJoinProcess::WindowsJoinProcess(const std::string & command_line, const char * name)
+WindowsJoinProcess::WindowsJoinProcess(const std::string & command_line, const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_handle(nullptr)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params()
 {
     goofer_split_command_line(command_line.c_str(), m_command_line_params);
 }
 
-WindowsJoinProcess::WindowsJoinProcess(const std::vector<std::string> & command_line_params, const char * name)
+WindowsJoinProcess::WindowsJoinProcess(const std::vector<std::string> & command_line_params, const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_handle(nullptr)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params(command_line_params)
 {
@@ -256,13 +274,9 @@ void WindowsJoinProcess::release(bool process_tree, int exit_code)
     }
     m_running = false;
 
-    if (process_tree)
+    if (m_destroy)
     {
-        kill_process_tree(m_pid, exit_code);
-    }
-    else
-    {
-        kill_process(m_pid, exit_code);
+        goofer_kill_process(m_pid, exit_code, process_tree);
     }
 }
 
@@ -384,6 +398,28 @@ bool goofer_create_detached_process(const std::vector<std::string> & command_lin
     std::string command_line;
     command_params_to_command_line(command_line_params, command_line);
     return (goofer_create_detached_process(command_line));
+}
+
+bool goofer_get_process_tree(size_t pid, std::list<size_t> & pid_list)
+{
+    return (0 != pid && get_process_tree(pid, pid_list));
+}
+
+void goofer_kill_process(size_t pid, int exit_code, bool whole_tree)
+{
+    if (0 == pid)
+    {
+        return;
+    }
+
+    if (whole_tree)
+    {
+        kill_process_tree(pid, exit_code);
+    }
+    else
+    {
+        kill_process(pid, exit_code);
+    }
 }
 
 NAMESPACE_GOOFER_END

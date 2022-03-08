@@ -89,6 +89,48 @@ static void get_all_process(std::list<process_info_t> & process_info_list)
     pclose(file);
 }
 
+static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_tree)
+{
+    process_id_tree.clear();
+
+    if (0 == process_id)
+    {
+        return (false);
+    }
+
+    std::list<process_info_t> process_info_list;
+    get_all_process(process_info_list);
+
+    process_id_tree.push_back(process_id);
+
+    while (true)
+    {
+        bool find_child_process = false;
+
+        std::list<process_info_t>::iterator iter = process_info_list.begin();
+        while (process_info_list.end() != iter)
+        {
+            if (process_id_tree.end() != std::find(process_id_tree.begin(), process_id_tree.end(), iter->ppid))
+            {
+                process_id_tree.push_back(iter->pid);
+                iter = process_info_list.erase(iter);
+                find_child_process = true;
+            }
+            else
+            {
+                ++iter;
+            }
+        }
+
+        if (!find_child_process)
+        {
+            break;
+        }
+    }
+
+    return (true);
+}
+
 static void kill_process(size_t process_id, int exit_code)
 {
     if (0 == process_id)
@@ -106,38 +148,10 @@ static void kill_process_tree(size_t process_id, int exit_code)
         return;
     }
 
-    std::list<process_info_t> process_info_list;
-    get_all_process(process_info_list);
+    std::list<size_t> process_id_tree;
+    get_process_tree(process_id, process_id_tree);
 
-    std::list<size_t> process_tree;
-    process_tree.push_back(process_id);
-
-    while (true)
-    {
-        bool find_child_process = false;
-
-        std::list<process_info_t>::iterator iter = process_info_list.begin();
-        while (process_info_list.end() != iter)
-        {
-            if (process_tree.end() != std::find(process_tree.begin(), process_tree.end(), iter->ppid))
-            {
-                process_tree.push_back(iter->pid);
-                iter = process_info_list.erase(iter);
-                find_child_process = true;
-            }
-            else
-            {
-                ++iter;
-            }
-        }
-
-        if (!find_child_process)
-        {
-            break;
-        }
-    }
-
-    for (std::list<size_t>::reverse_iterator iter = process_tree.rbegin(); process_tree.rend() != iter; ++iter)
+    for (std::list<size_t>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
     {
         kill_process(*iter, exit_code);
     }
@@ -244,30 +258,33 @@ static int wait_for_child(pid_t pid, int & exit_code)
 
 NAMESPACE_GOOFER_BEGIN
 
-UnixJoinProcess::UnixJoinProcess(const char * name)
+UnixJoinProcess::UnixJoinProcess(const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params()
 {
 
 }
 
-UnixJoinProcess::UnixJoinProcess(const std::string & command_line, const char * name)
+UnixJoinProcess::UnixJoinProcess(const std::string & command_line, const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params()
 {
     goofer_split_command_line(command_line.c_str(), m_command_line_params);
 }
 
-UnixJoinProcess::UnixJoinProcess(const std::vector<std::string> & command_line_params, const char * name)
+UnixJoinProcess::UnixJoinProcess(const std::vector<std::string> & command_line_params, const char * name, bool destroy)
     : m_name(nullptr != name ? name : "")
     , m_pid(0)
     , m_running(false)
+    , m_destroy(destroy)
     , m_locker("thread locker of sub process")
     , m_command_line_params(command_line_params)
 {
@@ -388,13 +405,9 @@ void UnixJoinProcess::release(bool process_tree, int exit_code)
     }
     m_running = false;
 
-    if (process_tree)
+    if (m_destroy)
     {
-        kill_process_tree(static_cast<size_t>(m_pid), exit_code);
-    }
-    else
-    {
-        kill_process(static_cast<size_t>(m_pid), exit_code);
+        goofer_kill_process(m_pid, exit_code, process_tree);
     }
 }
 
@@ -526,6 +539,28 @@ bool goofer_create_detached_process(const std::vector<std::string> & command_lin
     }
 
     return (true);
+}
+
+bool goofer_get_process_tree(size_t pid, std::list<size_t> & pid_list)
+{
+    return (0 != pid && get_process_tree(pid, pid_list));
+}
+
+void goofer_kill_process(size_t pid, int exit_code, bool whole_tree)
+{
+    if (0 == pid)
+    {
+        return;
+    }
+
+    if (whole_tree)
+    {
+        kill_process_tree(pid, exit_code);
+    }
+    else
+    {
+        kill_process(pid, exit_code);
+    }
 }
 
 NAMESPACE_GOOFER_END
