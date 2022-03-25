@@ -51,6 +51,16 @@ uint64_t goofer_ns_time()
 #endif // _MSC_VER
 }
 
+uint64_t goofer_monotonic_time()
+{
+    return (goofer_make_monotonic_time(goofer_ns_time()));
+}
+
+uint64_t goofer_make_monotonic_time(uint64_t monotonic_time_nanosecond)
+{
+    return (monotonic_time_nanosecond / 1000000000);
+}
+
 struct tm goofer_make_localtime(uint64_t time_second)
 {
     time_t time_value = static_cast<time_t>(time_second);
