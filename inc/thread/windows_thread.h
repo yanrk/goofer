@@ -1,6 +1,6 @@
 /********************************************************
  * Description : thread class in windows
- * Data        : 2013-05-23 15:30:53
+ * Date        : 2013-05-23 15:30:53
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

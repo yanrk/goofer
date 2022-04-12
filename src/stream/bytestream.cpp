@@ -1,6 +1,6 @@
 /********************************************************
  * Description : byte stream operator classes
- * Data        : 2013-05-19 14:04:57
+ * Date        : 2013-05-19 14:04:57
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

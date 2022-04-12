@@ -1,6 +1,6 @@
 /********************************************************
  * Description : xml parse class which base on cmarkup
- * Data        : 2015-03-10 16:14:00
+ * Date        : 2015-03-10 16:14:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : string operator functions
- * Data        : 2013-05-18 20:41:33
+ * Date        : 2013-05-18 20:41:33
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

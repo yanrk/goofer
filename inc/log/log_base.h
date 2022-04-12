@@ -1,6 +1,6 @@
 /********************************************************
  * Description : base class of log classes
- * Data        : 2013-05-23 09:24:56
+ * Date        : 2013-05-23 09:24:56
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

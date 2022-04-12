@@ -1,6 +1,6 @@
 /********************************************************
  * Description : utility of base
- * Data        : 2015-02-28 10:38:00
+ * Date        : 2015-02-28 10:38:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

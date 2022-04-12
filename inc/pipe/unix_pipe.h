@@ -1,6 +1,6 @@
 /********************************************************
  * Description : anonymous pipe class in unix
- * Data        : 2018-11-26 14:09:00
+ * Date        : 2018-11-26 14:09:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

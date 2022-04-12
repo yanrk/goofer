@@ -1,6 +1,6 @@
 /********************************************************
  * Description : macros of system standard I/O
- * Data        : 2013-05-23 11:46:45
+ * Date        : 2013-05-23 11:46:45
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

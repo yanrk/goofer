@@ -1,6 +1,6 @@
 /********************************************************
  * Description : sqlite db class which base on sqlite3
- * Data        : 2018-04-27 14:17:00
+ * Date        : 2018-04-27 14:17:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

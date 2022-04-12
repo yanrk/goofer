@@ -1,6 +1,6 @@
 /********************************************************
  * Description : splitter of string
- * Data        : 2014-01-03 18:50:41
+ * Date        : 2014-01-03 18:50:41
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

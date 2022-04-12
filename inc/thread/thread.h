@@ -1,6 +1,6 @@
 /********************************************************
  * Description : thread class
- * Data        : 2013-05-23 18:02:15
+ * Date        : 2013-05-23 18:02:15
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

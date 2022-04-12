@@ -1,6 +1,6 @@
 /********************************************************
  * Description : multi timer
- * Data        : 2013-08-09 00:28:45
+ * Date        : 2013-08-09 00:28:45
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

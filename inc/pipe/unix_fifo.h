@@ -1,6 +1,6 @@
 /********************************************************
  * Description : named pipe class in unix
- * Data        : 2018-12-18 19:45:00
+ * Date        : 2018-12-18 19:45:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

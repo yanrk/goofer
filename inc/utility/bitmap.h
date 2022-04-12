@@ -1,6 +1,6 @@
 /********************************************************
  * Description : bit-map
- * Data        : 2014-12-26 18:06:00
+ * Date        : 2014-12-26 18:06:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

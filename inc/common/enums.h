@@ -1,6 +1,6 @@
 /********************************************************
  * Description : enumerates of goofer
- * Data        : 2013-05-17 17:05:55
+ * Date        : 2013-05-17 17:05:55
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

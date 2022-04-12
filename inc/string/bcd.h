@@ -1,6 +1,6 @@
 /********************************************************
  * Description : encode and decode of bcd
- * Data        : 2014-03-22 17:03:12
+ * Date        : 2014-03-22 17:03:12
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : hardware information of system
- * Data        : 2016-04-06 16:56:00
+ * Date        : 2016-04-06 16:56:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

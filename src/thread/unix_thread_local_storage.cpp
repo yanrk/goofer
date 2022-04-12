@@ -1,6 +1,6 @@
 /********************************************************
  * Description : thread local storage class in unix
- * Data        : 2015-02-27 15:23:00
+ * Date        : 2015-02-27 15:23:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

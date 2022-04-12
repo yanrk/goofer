@@ -1,6 +1,6 @@
 /********************************************************
  * Description : make sure program only runs an entity
- * Data        : 2015-07-02 10:55:00
+ * Date        : 2015-07-02 10:55:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

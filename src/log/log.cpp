@@ -1,6 +1,6 @@
 /********************************************************
  * Description : interface of log module
- * Data        : 2013-05-22 22:34:24
+ * Date        : 2013-05-22 22:34:24
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : typedefs of goofer
- * Data        : 2013-05-18 17:43:12
+ * Date        : 2013-05-18 17:43:12
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

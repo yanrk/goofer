@@ -1,6 +1,6 @@
 /********************************************************
  * Description : process class in unix
- * Data        : 2016-09-09 15:20:14
+ * Date        : 2016-09-09 15:20:14
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

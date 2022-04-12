@@ -1,6 +1,6 @@
 /********************************************************
  * Description : type definition of log module
- * Data        : 2013-05-22 22:06:21
+ * Date        : 2013-05-22 22:06:21
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

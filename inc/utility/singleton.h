@@ -1,6 +1,6 @@
 /********************************************************
  * Description : singleton template of boost
- * Data        : 2013-10-19 09:14:45
+ * Date        : 2013-10-19 09:14:45
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

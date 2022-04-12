@@ -1,6 +1,6 @@
 /********************************************************
  * Description : exception class
- * Data        : 2013-05-20 06:56:52
+ * Date        : 2013-05-20 06:56:52
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

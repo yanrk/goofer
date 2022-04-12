@@ -1,6 +1,6 @@
 /********************************************************
  * Description : thread class in unix
- * Data        : 2013-05-23 17:03:46
+ * Date        : 2013-05-23 17:03:46
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

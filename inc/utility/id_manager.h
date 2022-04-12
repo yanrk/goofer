@@ -1,6 +1,6 @@
 /********************************************************
  * Description : manager of unique identification
- * Data        : 2013-08-10 20:08:15
+ * Date        : 2013-08-10 20:08:15
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

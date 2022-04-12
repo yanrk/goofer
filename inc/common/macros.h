@@ -1,6 +1,6 @@
 /********************************************************
  * Description : macros of goofer
- * Data        : 2013-05-18 17:10:05
+ * Date        : 2013-05-18 17:10:05
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

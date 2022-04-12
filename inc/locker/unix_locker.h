@@ -1,6 +1,6 @@
 /********************************************************
  * Description : locker classes in unix
- * Data        : 2013-05-20 10:46:27
+ * Date        : 2013-05-20 10:46:27
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

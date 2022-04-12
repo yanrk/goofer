@@ -1,6 +1,6 @@
 /********************************************************
  * Description : named pipe class in windows
- * Data        : 2018-12-18 17:48:00
+ * Date        : 2018-12-18 17:48:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

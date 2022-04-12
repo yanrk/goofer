@@ -1,6 +1,6 @@
 /********************************************************
  * Description : log class of lazy mode
- * Data        : 2013-05-23 13:56:44
+ * Date        : 2013-05-23 13:56:44
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : ini parse class
- * Data        : 2013-07-27 16:11:54
+ * Date        : 2013-07-27 16:11:54
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

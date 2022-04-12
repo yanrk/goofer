@@ -1,6 +1,6 @@
 /********************************************************
  * Description : conversions of binary and hexadecimal
- * Data        : 2013-05-19 11:53:27
+ * Date        : 2013-05-19 11:53:27
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

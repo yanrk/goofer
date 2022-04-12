@@ -1,6 +1,6 @@
 /********************************************************
  * Description : constants of goofer
- * Data        : 2014-01-06 10:29:46
+ * Date        : 2014-01-06 10:29:46
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : log class of sync mode
- * Data        : 2013-05-23 14:02:13
+ * Date        : 2013-05-23 14:02:13
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

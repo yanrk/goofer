@@ -1,6 +1,6 @@
 /********************************************************
  * Description : log class of asyn mode
- * Data        : 2013-05-23 20:12:41
+ * Date        : 2013-05-23 20:12:41
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

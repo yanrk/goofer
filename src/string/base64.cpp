@@ -1,6 +1,6 @@
 /********************************************************
  * Description : encode and decode of base64
- * Data        : 2013-05-19 10:20:25
+ * Date        : 2013-05-19 10:20:25
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

@@ -1,6 +1,6 @@
 /********************************************************
  * Description : directory traversal class
- * Data        : 2013-06-06 14:46:16
+ * Date        : 2013-06-06 14:46:16
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

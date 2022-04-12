@@ -1,6 +1,6 @@
 /********************************************************
  * Description : log switch (assistant of log module)
- * Data        : 2013-10-19 10:56:24
+ * Date        : 2013-10-19 10:56:24
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

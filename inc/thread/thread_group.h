@@ -1,6 +1,6 @@
 /********************************************************
  * Description : thread group class
- * Data        : 2015-07-02 09:57:00
+ * Date        : 2015-07-02 09:57:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

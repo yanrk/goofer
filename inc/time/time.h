@@ -1,6 +1,6 @@
 /********************************************************
  * Description : time functions
- * Data        : 2013-05-24 12:15:59
+ * Date        : 2013-05-24 12:15:59
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

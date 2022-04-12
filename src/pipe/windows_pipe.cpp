@@ -1,6 +1,6 @@
 /********************************************************
  * Description : anonymous pipe class in windows
- * Data        : 2018-11-26 11:36:00
+ * Date        : 2018-11-26 11:36:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker

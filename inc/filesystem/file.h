@@ -1,6 +1,6 @@
 /********************************************************
  * Description : file operate class
- * Data        : 2015-08-24 17:21:00
+ * Date        : 2015-08-24 17:21:00
  * Author      : yanrk
  * Email       : yanrkchina@163.com
  * Blog        : blog.csdn.net/cxxmaker
