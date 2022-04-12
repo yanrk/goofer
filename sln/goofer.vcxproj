@@ -466,6 +466,7 @@
     <ClInclude Include="..\inc\config\ini.h" />
     <ClInclude Include="..\inc\config\json.h" />
     <ClInclude Include="..\inc\config\xml.h" />
+    <ClInclude Include="..\inc\console\color.h" />
     <ClInclude Include="..\inc\database\sqlite.h" />
     <ClInclude Include="..\inc\exception\exception.h" />
     <ClInclude Include="..\inc\filesystem\directory.h" />
@@ -538,6 +539,7 @@
     <ClCompile Include="..\src\config\ini.cpp" />
     <ClCompile Include="..\src\config\json.cpp" />
     <ClCompile Include="..\src\config\xml.cpp" />
+    <ClCompile Include="..\src\console\color.cpp" />
     <ClCompile Include="..\src\database\sqlite.cpp" />
     <ClCompile Include="..\src\exception\exception.cpp" />
     <ClCompile Include="..\src\filesystem\directory.cpp" />

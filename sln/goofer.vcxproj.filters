@@ -154,6 +154,12 @@
     <Filter Include="src\mmap">
       <UniqueIdentifier>{6583f551-aed9-4693-9715-033c15f1d678}</UniqueIdentifier>
     </Filter>
+    <Filter Include="inc\console">
+      <UniqueIdentifier>{08581ed2-24e9-446c-91f6-1bd311878707}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\console">
+      <UniqueIdentifier>{007d28d1-6e58-477e-95bd-a327db7eeea6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\cfg\log.ini">
@@ -419,6 +425,9 @@
     <ClInclude Include="..\inc\mmap\windows_mmap.h">
       <Filter>inc\mmap</Filter>
     </ClInclude>
+    <ClInclude Include="..\inc\console\color.h">
+      <Filter>inc\console</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\charset\charset.cpp">
@@ -579,6 +588,9 @@
     </ClCompile>
     <ClCompile Include="..\src\mmap\windows_mmap.cpp">
       <Filter>src\mmap</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\console\color.cpp">
+      <Filter>src\console</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
