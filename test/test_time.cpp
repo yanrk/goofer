@@ -24,7 +24,7 @@ void test_time(void)
     tm tm_now = goofer_localtime();
     struct timeval tv_now = goofer_gettimeofday();
     int millisecond = static_cast<int>(tv_now.tv_usec / 1000);
-    int time_zone = goofer_get_timezone();
+    int time_zone = goofer_get_timezone() / -3600;
     int day_of_week = goofer_get_day_of_week();
 
     printf

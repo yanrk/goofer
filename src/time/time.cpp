@@ -122,17 +122,15 @@ struct timeval goofer_gettimeofday()
 
 int goofer_get_timezone()
 {
-    long time_diff = 0;
+    long time_zone = 0;
 
 #ifdef _MSC_VER
-    _get_timezone(&time_diff);
+    _get_timezone(&time_zone);
 #else
-    time_diff = timezone;
+    time_zone = timezone;
 #endif // _MSC_VER
 
-    time_diff /= -3600;
-
-    return (time_diff);
+    return (static_cast<int>(time_zone));
 }
 
 int goofer_get_day_of_week(const struct tm & tm_value)
@@ -251,7 +249,7 @@ std::string goofer_get_comprehensive_datetime(
     goofer_snprintf
     (
         buff, sizeof(buff), ".%03u GMT%+03d:00 ", 
-        time_ms, goofer_get_timezone()
+        time_ms, goofer_get_timezone() / -3600
     );
 
     return (goofer_get_datetime(tm_now, date_delimiter, time_delimiter, date_time_delimiter) + buff + goofer_get_week(tm_now));
