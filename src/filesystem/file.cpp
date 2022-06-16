@@ -296,6 +296,10 @@ FILE * file_open_for_read(const char * filename)
 
 FILE * file_open_for_write(const char * filename, bool is_truncate)
 {
+    if (nullptr == filename || '\0' == filename[0])
+    {
+        return (nullptr);
+    }
 #ifdef _MSC_VER
     const wchar_t * mode = (is_truncate ? L"wb" : L"ab");
     return (_wfopen(utf8_to_unicode(filename).c_str(), mode));
