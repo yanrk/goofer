@@ -81,8 +81,10 @@
 
 #ifdef _MSC_VER
     #define goofer_system_error()                (::GetLastError())
+    #define __FILENAME__                         (strrchr("\\" __FILE__, '\\') + 1)
 #else
     #define goofer_system_error()                (errno + 0)
+    #define __FILENAME__                         (strrchr("/" __FILE__, '/') + 1)
 #endif // _MSC_VER
 
 
