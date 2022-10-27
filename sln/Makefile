@@ -81,6 +81,17 @@ endif
 
 
 
+# ignore warnings
+c_no_warnings      = -Wno-error=deprecated-declarations -Wno-deprecated-declarations -Wno-unused-result
+
+ifeq ($(platform), mac)
+cxx_no_warnings    = $(c_no_warnings)
+else
+cxx_no_warnings    = $(c_no_warnings) -Wno-class-memaccess
+endif
+
+
+
 # build output command line
 ifeq ($(runlink), static)
 	build_command  = ar -rv $(goofer_outputs) $^
@@ -91,10 +102,13 @@ endif
 
 
 # build targets
-targets            = goofer
+targets = mkbin goofer
 
 # let 'build' be default target, build all targets
 build    : $(targets)
+
+mkbin    :
+	mkdir -p $(bin_dir)
 
 goofer   : $(goofer_objects)
 	@echo
@@ -109,14 +123,14 @@ $(object_dir)/%.o:$(project_home)/%.cpp
 	if [ ! -d $$dir ]; then	\
 		mkdir -p $$dir;		\
 	fi
-	g++ -c -std=c++11 -g -Wall -O1 -pipe -fPIC $(includes) -o $@ $<
+	g++ -c -std=c++11 -g -Wall -O1 -pipe -fPIC $(cxx_no_warnings) $(includes) -o $@ $<
 
 $(object_dir)/%.o:$(project_home)/%.c
 	@dir=`dirname $@`;		\
 	if [ ! -d $$dir ]; then	\
 		mkdir -p $$dir;		\
 	fi
-	gcc -c -g -O1 -pipe -fPIC $(includes) -o $@ $<
+	gcc -c -g -O1 -pipe -fPIC $(c_no_warnings) $(includes) -o $@ $<
 
 clean    :
 	rm -rf $(object_dir) $(bin_dir)/libgoofer.*

@@ -341,7 +341,8 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
             continue;
         }
 
-        ifconfig_t ifconfig = { 0x0 };
+        ifconfig_t ifconfig;
+        memset(&ifconfig, 0x0, sizeof(ifconfig));
 
         struct sockaddr_in * ip_addr = reinterpret_cast<struct sockaddr_in *>(ifap_inet->ifa_addr);
         inet_ntop(AF_INET, &ip_addr->sin_addr, ifconfig.ip, sizeof(ifconfig.ip) - 1);
@@ -670,7 +671,7 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
         ifs.getline(buffer, sizeof(buffer));
         mem_occupy_t mem_occupy;
         memset(&mem_occupy, 0x0, sizeof(mem_occupy));
-        sscanf(buffer, "%s %llu %s", mem_occupy.name, &mem_occupy.size, mem_occupy.unit);
+        sscanf(buffer, "%s %lu %s", mem_occupy.name, &mem_occupy.size, mem_occupy.unit);
         if (0 == strncasecmp(mem_occupy.name, "MemTotal:", 9))
         {
             total_size = mem_occupy.size * memory_unit_bytes(mem_occupy.unit);

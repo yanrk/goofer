@@ -28,12 +28,12 @@
 
 NAMESPACE_GOOFER_BEGIN
 
-size_t get_pid()
+unsigned int get_pid()
 {
 #ifdef _MSC_VER
-    return (static_cast<size_t>(GetCurrentProcessId()));
+    return (static_cast<unsigned int>(GetCurrentProcessId()));
 #else
-    return (static_cast<size_t>(getpid()));
+    return (static_cast<unsigned int>(getpid()));
 #endif // _MSC_VER
 }
 

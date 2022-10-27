@@ -15,8 +15,6 @@
     #include <dlfcn.h>
 #endif // _MSC_VER
 
-#include <cstdio>
-
 #include "library/library.h"
 #include "string/string.h"
 
@@ -26,7 +24,6 @@ void * goofer_library_acquire(const char * filename)
 {
     if (nullptr == filename)
     {
-        printf("filename is nullptr\n");
         return (nullptr);
     }
 
@@ -41,7 +38,6 @@ int goofer_library_release(void * library)
 {
     if (nullptr == library)
     {
-        printf("library is nullptr\n");
         return (0);
     }
 
@@ -56,13 +52,11 @@ void * goofer_library_symbol(void * library, const char * symbol)
 {
     if (nullptr == library)
     {
-        printf("library is nullptr\n");
         return (nullptr);
     }
 
     if (nullptr == symbol)
     {
-        printf("symbol is nullptr\n");
         return (nullptr);
     }
 

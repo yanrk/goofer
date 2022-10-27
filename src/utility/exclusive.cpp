@@ -121,7 +121,7 @@ static bool exclusive_init(const char * exclusive_unique_name, size_t & unique_i
     std::string pid;
     {
         std::ostringstream oss;
-        oss << static_cast<size_t>(getpid());
+        oss << static_cast<unsigned int>(getpid());
         pid = oss.str();
     }
 

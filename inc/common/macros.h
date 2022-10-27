@@ -81,11 +81,17 @@
 
 #ifdef _MSC_VER
     #define goofer_system_error()                (::GetLastError())
-    #define __FILENAME__                         (strrchr("\\" __FILE__, '\\') + 1)
 #else
     #define goofer_system_error()                (errno + 0)
-    #define __FILENAME__                         (strrchr("/" __FILE__, '/') + 1)
 #endif // _MSC_VER
+
+#ifndef __FILENAME__
+    #ifdef _MSC_VER
+        #define __FILENAME__                     (strrchr("\\" __FILE__, '\\') + 1)
+    #else
+        #define __FILENAME__                     (strrchr("/" __FILE__, '/') + 1)
+    #endif // _MSC_VER
+#endif // __FILENAME__
 
 
 #endif // GOOFER_MACROS_H

@@ -19,7 +19,7 @@
 
 NAMESPACE_GOOFER_BEGIN
 
-GOOFER_CXX_API(size_t) get_pid();
+GOOFER_CXX_API(unsigned int) get_pid();
 GOOFER_CXX_API(size_t) get_tid();
 GOOFER_CXX_API(bool) get_env(const char * name, std::string & value);
 GOOFER_CXX_API(bool) set_env(const char * name, const std::string & value, bool overwrite = true);

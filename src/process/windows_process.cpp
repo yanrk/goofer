@@ -47,7 +47,7 @@ static void get_all_process(std::list<process_info_t> & process_info_list)
     CloseHandle(snapshot);
 }
 
-static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_tree)
+static bool get_process_tree(unsigned int process_id, std::list<unsigned int> & process_id_tree)
 {
     process_id_tree.clear();
 
@@ -89,7 +89,7 @@ static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_t
     return (true);
 }
 
-static void kill_process(size_t process_id, int exit_code)
+static void kill_process(unsigned int process_id, int exit_code)
 {
     if (0 == process_id)
     {
@@ -107,17 +107,17 @@ static void kill_process(size_t process_id, int exit_code)
     CloseHandle(process);
 }
 
-static void kill_process_tree(size_t process_id, int exit_code)
+static void kill_process_tree(unsigned int process_id, int exit_code)
 {
     if (0 == process_id)
     {
         return;
     }
 
-    std::list<size_t> process_id_tree;
+    std::list<unsigned int> process_id_tree;
     get_process_tree(process_id, process_id_tree);
 
-    for (std::list<size_t>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
+    for (std::list<unsigned int>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
     {
         kill_process(*iter, exit_code);
     }
@@ -188,7 +188,7 @@ WindowsJoinProcess::~WindowsJoinProcess()
     clear();
 }
 
-bool WindowsJoinProcess::monitor(size_t pid)
+bool WindowsJoinProcess::monitor(unsigned int pid)
 {
     if (0 == pid || GetCurrentProcessId() == pid)
     {
@@ -373,13 +373,18 @@ std::string WindowsJoinProcess::process_name()
     return (m_name);
 }
 
-size_t WindowsJoinProcess::process_id() const
+unsigned int WindowsJoinProcess::process_id() const
 {
-    return (static_cast<size_t>(m_pid));
+    return (static_cast<unsigned int>(m_pid));
 }
 
-bool goofer_create_detached_process(const std::string & command_line)
+static bool goofer_create_detached_process(const std::string & command_line, unsigned int * process_id)
 {
+    if (nullptr != process_id)
+    {
+        *process_id = 0;
+    }
+
     STARTUPINFOA si = { sizeof(STARTUPINFOA) };
     PROCESS_INFORMATION pi = { 0x0 };
 
@@ -390,22 +395,47 @@ bool goofer_create_detached_process(const std::string & command_line)
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
 
+    if (nullptr != process_id)
+    {
+        *process_id = pi.dwProcessId;
+    }
+
     return (true);
+}
+
+bool goofer_create_detached_process(const std::string & command_line)
+{
+    return (goofer_create_detached_process(command_line, nullptr));
+}
+
+bool goofer_create_detached_process(const std::string & command_line, unsigned int & process_id)
+{
+    return (goofer_create_detached_process(command_line, &process_id));
+}
+
+static bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int * process_id)
+{
+    std::string command_line;
+    command_params_to_command_line(command_line_params, command_line);
+    return (goofer_create_detached_process(command_line, process_id));
 }
 
 bool goofer_create_detached_process(const std::vector<std::string> & command_line_params)
 {
-    std::string command_line;
-    command_params_to_command_line(command_line_params, command_line);
-    return (goofer_create_detached_process(command_line));
+    return (goofer_create_detached_process(command_line_params, nullptr));
 }
 
-bool goofer_get_process_tree(size_t pid, std::list<size_t> & pid_list)
+bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int & process_id)
+{
+    return (goofer_create_detached_process(command_line_params, &process_id));
+}
+
+bool goofer_get_process_tree(unsigned int pid, std::list<unsigned int> & pid_list)
 {
     return (0 != pid && get_process_tree(pid, pid_list));
 }
 
-void goofer_kill_process(size_t pid, int exit_code, bool whole_tree)
+void goofer_kill_process(unsigned int pid, int exit_code, bool whole_tree)
 {
     if (0 == pid)
     {

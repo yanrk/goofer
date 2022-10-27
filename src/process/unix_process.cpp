@@ -18,17 +18,22 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/types.h>
-#include <sys/inotify.h>
 #include <cstdio>
 #include <cstdlib>
 #include "process/unix_process.h"
 #include "string/string.h"
 #include "utility/guard.h"
 
+#ifdef _MAC_OS
+    #include <sys/event.h>
+#else
+    #include <sys/inotify.h>
+#endif // _MAC_OS
+
 struct process_info_t
 {
-    size_t  pid;
-    size_t  ppid;
+    unsigned int pid;
+    unsigned int ppid;
 };
 
 static void get_all_process(std::list<process_info_t> & process_info_list)
@@ -89,7 +94,7 @@ static void get_all_process(std::list<process_info_t> & process_info_list)
     pclose(file);
 }
 
-static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_tree)
+static bool get_process_tree(unsigned int process_id, std::list<unsigned int> & process_id_tree)
 {
     process_id_tree.clear();
 
@@ -131,7 +136,7 @@ static bool get_process_tree(size_t process_id, std::list<size_t> & process_id_t
     return (true);
 }
 
-static void kill_process(size_t process_id, int exit_code)
+static void kill_process(unsigned int process_id, int exit_code)
 {
     if (0 == process_id)
     {
@@ -141,24 +146,45 @@ static void kill_process(size_t process_id, int exit_code)
     kill(static_cast<pid_t>(process_id), exit_code);
 }
 
-static void kill_process_tree(size_t process_id, int exit_code)
+static void kill_process_tree(unsigned int process_id, int exit_code)
 {
     if (0 == process_id)
     {
         return;
     }
 
-    std::list<size_t> process_id_tree;
+    std::list<unsigned int> process_id_tree;
     get_process_tree(process_id, process_id_tree);
 
-    for (std::list<size_t>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
+    for (std::list<unsigned int>::reverse_iterator iter = process_id_tree.rbegin(); process_id_tree.rend() != iter; ++iter)
     {
         kill_process(*iter, exit_code);
     }
 }
 
-static int wait_for_pid(int pid)
+static int wait_for_pid(unsigned int pid)
 {
+#ifdef _MAC_OS
+    int kq = kqueue();
+    if (-1 == kq)
+    {
+        return (-1);
+    }
+
+    struct kevent kc;
+    EV_SET(&kc, pid, EVFILT_PROC, EV_ADD | EV_ENABLE, NOTE_EXIT, 0, 0);
+
+    struct kevent ke;
+    int ne = kevent(kq, &kc, 1, &ke, 1, nullptr);
+    close(kq);
+
+    if (ne <= 0 || ke.ident != pid || !(ke.fflags & NOTE_EXIT))
+    {
+        return (-1);
+    }
+
+    return (0);
+#else
     int ret = -1;
     int in_fd = -1;
     int iw = -1;
@@ -187,21 +213,13 @@ static int wait_for_pid(int pid)
             break;
         }
 
-        while (true)
+        struct inotify_event event;
+        if (read(in_fd, &event, sizeof(event)) < 0)
         {
-            struct inotify_event event;
-            if (read(in_fd, &event, sizeof(event)) < 0)
-            {
-                break;
-            }
-            int f = openat(dir_fd, "fd", 0);
-            if (f < 0)
-            {
-                ret = 0;
-                break;
-            }
-            close(f);
+            break;
         }
+
+        ret = 0;
     } while (false);
 
     if (dir_fd >= 0)
@@ -218,6 +236,7 @@ static int wait_for_pid(int pid)
     }
 
     return (ret);
+#endif // _MAC_OS
 }
 
 static int wait_for_child(pid_t pid, int & exit_code)
@@ -297,9 +316,9 @@ UnixJoinProcess::~UnixJoinProcess()
     clear();
 }
 
-bool UnixJoinProcess::monitor(size_t pid)
+bool UnixJoinProcess::monitor(unsigned int pid)
 {
-    if (0 == pid || getpid() == pid)
+    if (0 == pid || static_cast<unsigned int>(getpid()) == pid)
     {
         return (false);
     }
@@ -426,7 +445,7 @@ bool UnixJoinProcess::wait_exit(int & exit_code)
 
     if (m_command_line_params.empty())
     {
-        ret = (wait_for_pid(static_cast<size_t>(pid)) >= 0);
+        ret = (wait_for_pid(static_cast<unsigned int>(pid)) >= 0);
     }
     else
     {
@@ -482,23 +501,31 @@ std::string UnixJoinProcess::process_name()
     return (m_name);
 }
 
-size_t UnixJoinProcess::process_id() const
+unsigned int UnixJoinProcess::process_id() const
 {
-    return (static_cast<size_t>(m_pid));
+    return (static_cast<unsigned int>(m_pid));
 }
 
-bool goofer_create_detached_process(const std::string & command_line)
+static bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int * process_id)
 {
-    std::vector<std::string> command_line_params;
-    goofer_split_command_line(command_line.c_str(), command_line_params);
-    return (goofer_create_detached_process(command_line_params));
-}
+    int fd[2] = { -1, -1 };
+    if (nullptr != process_id)
+    {
+        *process_id = 0;
+        if (-1 == pipe(fd))
+        {
+            return (false);
+        }
+    }
 
-bool goofer_create_detached_process(const std::vector<std::string> & command_line_params)
-{
     pid_t pid = fork();
     if (pid < 0)
     {
+        if (nullptr != process_id)
+        {
+            close(fd[0]);
+            close(fd[1]);
+        }
         return (false);
     }
     else if (0 == pid)
@@ -506,10 +533,20 @@ bool goofer_create_detached_process(const std::vector<std::string> & command_lin
         pid_t cpid = fork();
         if (cpid < 0)
         {
+            if (nullptr != process_id)
+            {
+                close(fd[0]);
+                close(fd[1]);
+            }
             exit(0);
         }
         else if (0 == cpid)
         {
+            if (nullptr != process_id)
+            {
+                close(fd[0]);
+                close(fd[1]);
+            }
             std::vector<const char *> argv(command_line_params.size() + 1, nullptr);
             for (size_t index = 0; index < command_line_params.size(); ++index)
             {
@@ -518,35 +555,71 @@ bool goofer_create_detached_process(const std::vector<std::string> & command_lin
             close(STDIN_FILENO);
             close(STDOUT_FILENO);
             close(STDERR_FILENO);
-            /*
-             * if execv() success, will not execute the next exit()
-             */
             if (execv(argv[0], const_cast<char **>(&argv[0])) < 0)
             {
-                exit(0); // should not be here
+                exit(0);
             }
-            exit(0); // should never be here
+            exit(0);
         }
         else
         {
+            if (nullptr != process_id)
+            {
+                *process_id = static_cast<unsigned int>(cpid);
+                close(fd[0]);
+                write(fd[1], process_id, sizeof(*process_id));
+                close(fd[1]);
+            }
             exit(0);
         }
     }
     else
     {
-        int exit_status = -1;
-        waitpid(pid, &exit_status, 0);
+        if (nullptr != process_id)
+        {
+            close(fd[1]);
+            read(fd[0], process_id, sizeof(*process_id));
+            close(fd[0]);
+        }
+        waitpid(pid, nullptr, 0);
     }
 
     return (true);
 }
 
-bool goofer_get_process_tree(size_t pid, std::list<size_t> & pid_list)
+bool goofer_create_detached_process(const std::vector<std::string> & command_line_params)
+{
+    return (goofer_create_detached_process(command_line_params, nullptr));
+}
+
+bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int & process_id)
+{
+    return (goofer_create_detached_process(command_line_params, &process_id));
+}
+
+static bool goofer_create_detached_process(const std::string & command_line, unsigned int * process_id)
+{
+    std::vector<std::string> command_line_params;
+    goofer_split_command_line(command_line.c_str(), command_line_params);
+    return (goofer_create_detached_process(command_line_params, process_id));
+}
+
+bool goofer_create_detached_process(const std::string & command_line)
+{
+    return (goofer_create_detached_process(command_line, nullptr));
+}
+
+bool goofer_create_detached_process(const std::string & command_line, unsigned int & process_id)
+{
+    return (goofer_create_detached_process(command_line, &process_id));
+}
+
+bool goofer_get_process_tree(unsigned int pid, std::list<unsigned int> & pid_list)
 {
     return (0 != pid && get_process_tree(pid, pid_list));
 }
 
-void goofer_kill_process(size_t pid, int exit_code, bool whole_tree)
+void goofer_kill_process(unsigned int pid, int exit_code, bool whole_tree)
 {
     if (0 == pid)
     {
