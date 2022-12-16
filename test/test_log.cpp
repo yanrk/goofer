@@ -15,11 +15,15 @@ static void test_log_with_write_mode_1(GOOFER_LOG_WRITE_MODE write_mode, const c
     }
     for (size_t type = LOG_TYPE_MIN; type < LOG_TYPE_MAX; ++type)
     {
-        log_config.log_file[type].write_mode = write_mode;
-        log_config.log_file[type].log_min_level = TRK_LEVEL;
-        log_config.log_file[type].log_file_size = 10;
-        log_config.log_file[type].buffer_count = 50;
-        log_config.log_file[type].output_to_console = false;
+        GOOFER_LOG_CONFIG::FILE_CONFIG & file_config = log_config.log_file[type];
+        file_config.write_mode = write_mode;
+        file_config.log_min_level = TRK_LEVEL;
+        file_config.log_file_size = 10;
+        file_config.buffer_count = 50;
+        file_config.output_to_console = false;
+        file_config.auto_delete_file = true;
+        file_config.max_keep_count = 10;
+        file_config.max_keep_days = 7;
     }
 
     goofer_log_init(log_config);
@@ -47,11 +51,15 @@ static void test_log_with_write_mode_2(GOOFER_LOG_WRITE_MODE write_mode, const c
     }
     for (size_t type = LOG_TYPE_MIN; type < LOG_TYPE_MAX; ++type)
     {
-        log_config.log_file[type].write_mode = write_mode;
-        log_config.log_file[type].log_min_level = TRK_LEVEL;
-        log_config.log_file[type].log_file_size = 10;
-        log_config.log_file[type].buffer_count = 50;
-        log_config.log_file[type].output_to_console = false;
+        GOOFER_LOG_CONFIG::FILE_CONFIG & file_config = log_config.log_file[type];
+        file_config.write_mode = write_mode;
+        file_config.log_min_level = TRK_LEVEL;
+        file_config.log_file_size = 10;
+        file_config.buffer_count = 50;
+        file_config.output_to_console = false;
+        file_config.auto_delete_file = true;
+        file_config.max_keep_count = 10;
+        file_config.max_keep_days = 7;
     }
 
     Singleton<LogSwitch>::instance().init(log_config);

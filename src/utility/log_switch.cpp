@@ -40,11 +40,15 @@ bool LogSwitch::init(const char * config_file)
         log_config.log_file_path = "./log/";
         for (size_t type = LOG_TYPE_MIN; type < LOG_TYPE_MAX; ++type)
         {
-            log_config.log_file[type].write_mode = SYNC_WRITE_MODE;
-            log_config.log_file[type].log_min_level = DBG_LEVEL;
-            log_config.log_file[type].log_file_size = 10;
-            log_config.log_file[type].buffer_count = 50;
-            log_config.log_file[type].output_to_console = false;
+            GOOFER_LOG_CONFIG::FILE_CONFIG & file_config = log_config.log_file[type];
+            file_config.write_mode = SYNC_WRITE_MODE;
+            file_config.log_min_level = DBG_LEVEL;
+            file_config.log_file_size = 10;
+            file_config.buffer_count = 50;
+            file_config.output_to_console = false;
+            file_config.auto_delete_file = false;
+            file_config.max_keep_count = 50;
+            file_config.max_keep_days = 7;
         }
     }
 

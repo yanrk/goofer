@@ -59,13 +59,16 @@ struct GOOFER_LOG_CONFIG
 {
     std::string log_file_path;
 
-    struct
+    struct FILE_CONFIG
     {
         GOOFER_LOG_WRITE_MODE   write_mode;
         GOOFER_LOG_LEVEL        log_min_level;
         size_t                  log_file_size;
         size_t                  buffer_count;
         bool                    output_to_console;
+        bool                    auto_delete_file;
+        size_t                  max_keep_count;
+        size_t                  max_keep_days;
     } log_file[LOG_TYPE_MAX];
 };
 

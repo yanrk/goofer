@@ -126,6 +126,21 @@ bool goofer_log_load_config(const std::string & file, GOOFER_LOG_CONFIG & log_co
         {
             return (false);
         }
+
+        if (!log_ini.get_value(app_name, "auto_delete_file", log_config.log_file[type].auto_delete_file))
+        {
+            log_config.log_file[type].auto_delete_file = false;
+        }
+
+        if (!log_ini.get_value(app_name, "max_keep_count", log_config.log_file[type].max_keep_count))
+        {
+            log_config.log_file[type].max_keep_count = 50;
+        }
+
+        if (!log_ini.get_value(app_name, "max_keep_days", log_config.log_file[type].max_keep_days))
+        {
+            log_config.log_file[type].max_keep_days = 7;
+        }
     }
 
     return (true);
@@ -150,9 +165,7 @@ bool goofer_log_init(const GOOFER_LOG_CONFIG & log_config)
                     (
                         log_config.log_file_path, 
                         GOOFER_LOG_TYPE_INFO[type], 
-                        log_config.log_file[type].log_min_level, 
-                        log_config.log_file[type].log_file_size, 
-                        log_config.log_file[type].output_to_console
+                        log_config.log_file[type]
                     )
                 );
                 break;
@@ -166,9 +179,7 @@ bool goofer_log_init(const GOOFER_LOG_CONFIG & log_config)
                     (
                         log_config.log_file_path, 
                         GOOFER_LOG_TYPE_INFO[type], 
-                        log_config.log_file[type].log_min_level, 
-                        log_config.log_file[type].log_file_size, 
-                        log_config.log_file[type].output_to_console
+                        log_config.log_file[type]
                     )
                 );
                 s_need_aysn_write_thread = true;
@@ -183,10 +194,7 @@ bool goofer_log_init(const GOOFER_LOG_CONFIG & log_config)
                     (
                         log_config.log_file_path, 
                         GOOFER_LOG_TYPE_INFO[type], 
-                        log_config.log_file[type].log_min_level, 
-                        log_config.log_file[type].log_file_size, 
-                        log_config.log_file[type].buffer_count, 
-                        log_config.log_file[type].output_to_console
+                        log_config.log_file[type]
                     )
                 );
                 break;

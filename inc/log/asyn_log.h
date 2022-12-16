@@ -26,7 +26,7 @@ NAMESPACE_GOOFER_BEGIN
 class GOOFER_API AsynLog : public LogBase
 {
 public:
-    AsynLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, bool output_to_console);
+    AsynLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config);
     virtual ~AsynLog();
 
 public:

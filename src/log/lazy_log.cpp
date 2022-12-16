@@ -16,15 +16,15 @@
 
 NAMESPACE_GOOFER_BEGIN
 
-LazyLog::LazyLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, size_t max_record_count, bool output_to_console)
-    : LogBase(path, log_type, min_log_level, max_file_size, output_to_console)
+LazyLog::LazyLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config)
+    : LogBase(path, log_type, file_config)
     , m_record(nullptr)
-    , m_reserve(max_record_count)
+    , m_reserve(file_config.buffer_count)
     , m_begin(0)
     , m_count(0)
     , m_record_locker("record locker of lazy log")
 {
-    GOOFER_NEW_ARR(m_record, LOG_RECORD, max_record_count);
+    GOOFER_NEW_ARR(m_record, LOG_RECORD, file_config.buffer_count);
     assert(nullptr != m_record);
 }
 

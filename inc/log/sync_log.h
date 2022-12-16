@@ -21,7 +21,7 @@ NAMESPACE_GOOFER_BEGIN
 class GOOFER_API SyncLog : public LogBase
 {
 public:
-    SyncLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, bool output_to_console);
+    SyncLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config);
     virtual ~SyncLog();
 
 protected:

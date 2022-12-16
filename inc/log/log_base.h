@@ -15,6 +15,7 @@
 
 #include <cstdarg>
 #include <string>
+#include <list>
 #include "common/common.h"
 #include "utility/uncopy.h"
 #include "filesystem/file.h"
@@ -26,7 +27,7 @@ NAMESPACE_GOOFER_BEGIN
 class GOOFER_API LogBase : private Uncopy
 {
 public:
-    LogBase(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, bool output_to_console);
+    LogBase(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config);
     virtual ~LogBase();
 
 public:
@@ -41,15 +42,25 @@ protected:
     void write(const char * data, size_t size);
 
 private:
-    const std::string   m_dirname;
-    const std::string   m_log_type;
-    const std::string   m_filename;
-    File                m_file;
-    GOOFER_LOG_LEVEL    m_min_log_level;
-    int64_t             m_cur_file_size;
-    const int64_t       m_max_file_size;
-    ThreadLocker        m_file_locker;
-    bool                m_output_to_console;
+    void load_files();
+    void clean_files();
+
+private:
+    const std::string       m_dirname;
+    const std::string       m_log_type;
+    const std::string       m_filename;
+    std::list<std::string>  m_filelist;
+    std::string             m_old_date;
+    File                    m_file;
+    GOOFER_LOG_LEVEL        m_min_log_level;
+    int64_t                 m_cur_file_size;
+    const int64_t           m_max_file_size;
+    size_t                  m_cur_file_count;
+    ThreadLocker            m_file_locker;
+    bool                    m_output_to_console;
+    bool                    m_auto_delete_file;
+    size_t                  m_max_file_count;
+    size_t                  m_max_keep_days;
 };
 
 NAMESPACE_GOOFER_END

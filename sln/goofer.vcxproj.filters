@@ -162,11 +162,11 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\cfg\log.ini">
-      <Filter>cfg</Filter>
-    </None>
     <None Include="goofer.def">
       <Filter>res</Filter>
+    </None>
+    <None Include="..\cfg\log.ini">
+      <Filter>cfg</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

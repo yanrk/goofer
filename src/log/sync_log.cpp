@@ -13,8 +13,8 @@
 
 NAMESPACE_GOOFER_BEGIN
 
-SyncLog::SyncLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, bool output_to_console)
-    : LogBase(path, log_type, min_log_level, max_file_size, output_to_console)
+SyncLog::SyncLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config)
+    : LogBase(path, log_type, file_config)
 {
 
 }

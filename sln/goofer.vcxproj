@@ -436,7 +436,7 @@
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\..\cfg\log.ini" />
+    <None Include="..\cfg\log.ini" />
     <None Include="goofer.def" />
   </ItemGroup>
   <ItemGroup>

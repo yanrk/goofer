@@ -28,8 +28,8 @@ Thread AsynLog::s_write_file_thread;
 std::list<AsynLog *> AsynLog::s_asyn_log_obj_list;
 ThreadLocker AsynLog::s_asyn_log_obj_locker;
 
-AsynLog::AsynLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, bool output_to_console)
-    : LogBase(path, log_type, min_log_level, max_file_size, output_to_console)
+AsynLog::AsynLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config)
+    : LogBase(path, log_type, file_config)
     , m_idle_pool("idle pool of asyn log", "idle pool locker of asyn log")
     , m_data_pool("data pool of asyn log", "data pool locker of asyn log")
     , m_current_record(nullptr)

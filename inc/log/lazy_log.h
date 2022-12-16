@@ -22,7 +22,7 @@ NAMESPACE_GOOFER_BEGIN
 class GOOFER_API LazyLog : public LogBase
 {
 public:
-    LazyLog(const std::string & path, const std::string & log_type, GOOFER_LOG_LEVEL min_log_level, size_t max_file_size, size_t max_record_count, bool output_to_console);
+    LazyLog(const std::string & path, const std::string & log_type, const GOOFER_LOG_CONFIG::FILE_CONFIG & file_config);
     virtual ~LazyLog();
 
 protected:

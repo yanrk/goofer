@@ -122,17 +122,26 @@ struct timeval goofer_gettimeofday()
 
 int goofer_get_timezone()
 {
-    long time_zone = 0;
+    static bool s_inited = false;
+    static int s_time_zone = 0;
+
+    if (!s_inited)
+    {
+        long time_zone = 0;
 
 #ifdef _MSC_VER
-    _tzset();
-    _get_timezone(&time_zone);
+        _tzset();
+        _get_timezone(&time_zone);
 #else
-    tzset();
-    time_zone = timezone;
+        tzset();
+        time_zone = timezone;
 #endif // _MSC_VER
 
-    return (static_cast<int>(time_zone));
+        s_time_zone = static_cast<int>(time_zone);
+        s_inited = true;
+    }
+
+    return (s_time_zone);
 }
 
 int goofer_get_day_of_week(const struct tm & tm_value)
