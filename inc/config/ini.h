@@ -35,6 +35,10 @@ public:
     void clear();
 
 public:
+    bool set_document(const std::string & document, char comment_char = ';', bool support_modify = false, bool loose = false);
+    std::string get_document() const;
+
+public:
     bool get_value(const std::string & app_name, const std::string & key_name, std::string & key_value) const;
     bool get_value(const std::string & app_name, const std::string & key_name, char * key_value, size_t key_value_size) const;
     bool set_value(const std::string & app_name, const std::string & key_name, const std::string & key_value);
@@ -43,49 +47,45 @@ public:
     template <typename T> bool set_value(const std::string & app_name, const std::string & key_name, T key_value);
 
 private:
-    void add_app_node(const std::string & app_name);
-    void add_key_node(const std::string & app_name, const std::string & key_name, const std::string & key_value);
-    void save_app_name(std::ofstream & ofs, const std::string & app_name);
-    void save_key_value(std::ofstream & ofs, const std::string & key_name, const std::string & key_value);
+    void parse(std::istream & is);
+    void build(std::ostream & os) const;
 
 private:
-    struct KEY_NODE
+    void add_app_node(const std::string & app_name);
+    void add_key_node(const std::string & app_name, const std::string & key_name, const std::string & key_value);
+    void save_app_name(std::ostream & os, const std::string & app_name) const;
+    void save_key_value(std::ostream & os, const std::string & key_name, const std::string & key_value) const;
+
+private:
+    struct key_node_t
     {
         std::string              m_key_name;
         std::string              m_key_value;
 
-        KEY_NODE(const std::string & key_name, const std::string & key_value);
+        key_node_t(const std::string & key_name, const std::string & key_value);
         bool operator == (const std::string & key_name) const;
     };
 
-    struct APP_NODE
+    struct app_node_t
     {
         std::string              m_app_name;
-        std::list<KEY_NODE>      m_key_list;
+        std::list<key_node_t>    m_key_list;
 
-        APP_NODE(const std::string & app_name);
+        app_node_t(const std::string & app_name);
         bool operator == (const std::string & app_name) const;
     };
 
-    typedef std::pair<std::string, std::string>                   APP_KEY_PAIR;
-    typedef std::map<APP_KEY_PAIR, std::string>::const_iterator   PAIR_CO_ITER;
-    typedef std::list<APP_NODE>::iterator                         APP_ITER;
-    typedef std::list<APP_NODE>::reverse_iterator                 APP_RE_ITER;
-    typedef std::list<KEY_NODE>::iterator                         KEY_ITER;
+private:
+    static const char *                                         s_app_head_format[2];
+    static const char *                                         s_app_tail_format[2];
+    static const char *                                         s_key_equal_format[2];
 
 private:
-    static const char *                   s_app_head_format[2];
-    static const char *                   s_app_tail_format[2];
-    static const char *                   s_key_equal_format[2];
-
-private:
-    std::string                           m_file_name;
-    char                                  m_comment_char;
-    bool                                  m_support_modify;
-    size_t                                m_format_mode;
-    bool                                  m_need_save;
-    std::map<APP_KEY_PAIR, std::string>   m_pair_map;
-    std::list<APP_NODE>                   m_app_list;
+    std::string                                                 m_file_name;
+    char                                                        m_comment_char;
+    size_t                                                      m_format_mode;
+    std::map<std::pair<std::string, std::string>, std::string>  m_pair_map;
+    std::list<app_node_t>                                       m_app_list;
 };
 
 template <typename T>

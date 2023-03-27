@@ -24,26 +24,26 @@ const char * Ini::s_app_head_format[] = { "[", "[ " };
 const char * Ini::s_app_tail_format[] = { "]", " ]" };
 const char * Ini::s_key_equal_format[] = { "=", " = " };
 
-Ini::KEY_NODE::KEY_NODE(const std::string & key_name, const std::string & key_value)
+Ini::key_node_t::key_node_t(const std::string & key_name, const std::string & key_value)
     : m_key_name(key_name)
     , m_key_value(key_value)
 {
 
 }
 
-bool Ini::KEY_NODE::operator == (const std::string & key_name) const
+bool Ini::key_node_t::operator == (const std::string & key_name) const
 {
     return (key_name == m_key_name);
 }
 
-Ini::APP_NODE::APP_NODE(const std::string & app_name)
+Ini::app_node_t::app_node_t(const std::string & app_name)
     : m_app_name(app_name)
     , m_key_list()
 {
 
 }
 
-bool Ini::APP_NODE::operator == (const std::string & app_name) const
+bool Ini::app_node_t::operator == (const std::string & app_name) const
 {
     return (app_name == m_app_name);
 }
@@ -51,9 +51,7 @@ bool Ini::APP_NODE::operator == (const std::string & app_name) const
 Ini::Ini()
     : m_file_name()
     , m_comment_char(';')
-    , m_support_modify(false)
     , m_format_mode(0)
-    , m_need_save(false)
     , m_pair_map()
     , m_app_list()
 {
@@ -65,34 +63,16 @@ Ini::~Ini()
 
 }
 
-bool Ini::load(const std::string & file_name, char comment_char, bool support_modify, bool loose)
+void Ini::parse(std::istream & is)
 {
-    clear();
-
-    if (isspace(comment_char))
-    {
-        comment_char = ';';
-    }
-
-    m_file_name = utf8_to_ansi(file_name);
-    m_comment_char = comment_char;
-    m_support_modify = support_modify;
-    m_format_mode = (loose ? 1 : 0);
-
-    std::ifstream ifs(m_file_name.c_str());
-    if (!ifs.is_open())
-    {
-        return (support_modify);
-    }
-
     std::string app_name;
     std::string message;
-    while (!ifs.eof())
+    while (!is.eof())
     {
         message.clear();
-        std::getline(ifs, message);
+        std::getline(is, message);
         goofer_string_trim(message);
-        std::string::size_type comment_pos = message.find(comment_char);
+        std::string::size_type comment_pos = message.find(m_comment_char);
         if (std::string::npos != comment_pos)
         {
             message.resize(comment_pos);
@@ -146,15 +126,77 @@ bool Ini::load(const std::string & file_name, char comment_char, bool support_mo
                 continue;
             }
 
-            if (support_modify)
-            {
-                add_app_node(app_name);
-                add_key_node(app_name, key_name, key_value);
-            }
+            add_app_node(app_name);
+            add_key_node(app_name, key_name, key_value);
         }
     }
+}
+
+void Ini::build(std::ostream & os) const
+{
+    std::list<app_node_t>::const_iterator app_iter = m_app_list.begin();
+    while (m_app_list.end() != app_iter)
+    {
+        save_app_name(os, app_iter->m_app_name);
+        std::list<key_node_t>::const_iterator key_iter = app_iter->m_key_list.begin();
+        while (app_iter->m_key_list.end() != key_iter)
+        {
+            save_key_value(os, key_iter->m_key_name, key_iter->m_key_value);
+            ++key_iter;
+        }
+        ++app_iter;
+    }
+}
+
+bool Ini::load(const std::string & file_name, char comment_char, bool support_modify, bool loose)
+{
+    clear();
+
+    if (isspace(comment_char))
+    {
+        comment_char = ';';
+    }
+
+    m_file_name = utf8_to_ansi(file_name);
+    m_comment_char = comment_char;
+    m_format_mode = (loose ? 1 : 0);
+
+    std::ifstream ifs(m_file_name.c_str());
+    if (!ifs.is_open())
+    {
+        return (support_modify);
+    }
+
+    parse(ifs);
 
     ifs.close();
+
+    return (true);
+}
+
+bool Ini::set_document(const std::string & document, char comment_char, bool support_modify, bool loose)
+{
+    const std::string file_name = m_file_name;
+
+    clear();
+
+    if (isspace(comment_char))
+    {
+        comment_char = ';';
+    }
+
+    m_file_name = file_name;
+    m_comment_char = comment_char;
+    m_format_mode = (loose ? 1 : 0);
+
+    if (document.empty())
+    {
+        return (true);
+    }
+
+    std::istringstream iss(document);
+
+    parse(iss);
 
     return (true);
 }
@@ -171,18 +213,7 @@ bool Ini::save(const std::string & file_name)
         return (false);
     }
 
-    APP_ITER app_iter = m_app_list.begin();
-    while (m_app_list.end() != app_iter)
-    {
-        save_app_name(ofs, app_iter->m_app_name);
-        KEY_ITER key_iter = app_iter->m_key_list.begin();
-        while (app_iter->m_key_list.end() != key_iter)
-        {
-            save_key_value(ofs, key_iter->m_key_name, key_iter->m_key_value);
-            ++key_iter;
-        }
-        ++app_iter;
-    }
+    build(ofs);
 
     ofs.close();
 
@@ -193,14 +224,9 @@ bool Ini::save(const std::string & file_name)
 
 bool Ini::save()
 {
-    if (!m_support_modify)
+    if (m_file_name.empty())
     {
         return (false);
-    }
-
-    if (!m_need_save)
-    {
-        return (true);
     }
 
     if (!save(m_file_name))
@@ -208,9 +234,16 @@ bool Ini::save()
         return (false);
     }
 
-    m_need_save = false;
-
     return (true);
+}
+
+std::string Ini::get_document() const
+{
+    std::ostringstream oss;
+
+    build(oss);
+
+    return (oss.str());
 }
 
 bool Ini::get_value(const std::string & app_name, const std::string & key_name, std::string & key_value) const
@@ -220,7 +253,7 @@ bool Ini::get_value(const std::string & app_name, const std::string & key_name, 
         return (false);
     }
 
-    PAIR_CO_ITER pair_iter = m_pair_map.find(std::make_pair(app_name, key_name));
+    std::map<std::pair<std::string, std::string>, std::string>::const_iterator pair_iter = m_pair_map.find(std::make_pair(app_name, key_name));
     if (m_pair_map.end() != pair_iter)
     {
         key_value = pair_iter->second;
@@ -249,28 +282,23 @@ bool Ini::get_value(const std::string & app_name, const std::string & key_name, 
 
 bool Ini::set_value(const std::string & app_name, const std::string & key_name, const std::string & key_value)
 {
-    if (!m_support_modify)
-    {
-        return (false);
-    }
-
     if (key_name.empty())
     {
         return (false);
     }
 
-    APP_ITER app_iter = std::find(m_app_list.begin(), m_app_list.end(), app_name);
+    std::list<app_node_t>::iterator app_iter = std::find(m_app_list.begin(), m_app_list.end(), app_name);
     if (m_app_list.end() == app_iter)
     {
-        m_app_list.push_back(APP_NODE(app_name));
+        m_app_list.push_back(app_node_t(app_name));
         app_iter = m_app_list.end();
         --app_iter;
     }
-    std::list<KEY_NODE> & key_list = app_iter->m_key_list;
-    KEY_ITER key_iter = std::find(key_list.begin(), key_list.end(), key_name);
+    std::list<key_node_t> & key_list = app_iter->m_key_list;
+    std::list<key_node_t>::iterator key_iter = std::find(key_list.begin(), key_list.end(), key_name);
     if (key_list.end() == key_iter)
     {
-        key_list.push_back(KEY_NODE(key_name, key_value));
+        key_list.push_back(key_node_t(key_name, key_value));
     }
     else
     {
@@ -278,8 +306,6 @@ bool Ini::set_value(const std::string & app_name, const std::string & key_name, 
     }
 
     m_pair_map[std::make_pair(app_name, key_name)] = key_value;
-
-    m_need_save = true;
 
     return (true);
 }
@@ -304,48 +330,46 @@ void Ini::add_app_node(const std::string & app_name)
     {
         return;
     }
-    m_app_list.push_back(APP_NODE(app_name));
+    m_app_list.push_back(app_node_t(app_name));
 }
 
 void Ini::add_key_node(const std::string & app_name, const std::string & key_name, const std::string & key_value)
 {
-    APP_RE_ITER app_re_iter = std::find(m_app_list.rbegin(), m_app_list.rend(), app_name);
+    std::list<app_node_t>::reverse_iterator app_re_iter = std::find(m_app_list.rbegin(), m_app_list.rend(), app_name);
     if (m_app_list.rend() == app_re_iter)
     {
         return;
     }
 
-    std::list<KEY_NODE> & key_list = app_re_iter->m_key_list;
+    std::list<key_node_t> & key_list = app_re_iter->m_key_list;
     if (key_list.end() != std::find(key_list.begin(), key_list.end(), key_name))
     {
         return;
     }
 
-    key_list.push_back(KEY_NODE(key_name, key_value));
+    key_list.push_back(key_node_t(key_name, key_value));
 }
 
 void Ini::clear()
 {
     m_file_name.clear();
     m_comment_char = ';';
-    m_support_modify = false;
     m_format_mode = 0;
-    m_need_save = false;
     m_pair_map.clear();
     m_app_list.clear();
 }
 
-void Ini::save_app_name(std::ofstream & ofs, const std::string & app_name)
+void Ini::save_app_name(std::ostream & os, const std::string & app_name) const
 {
     if (!app_name.empty())
     {
-        ofs << s_app_head_format[m_format_mode] << app_name << s_app_tail_format[m_format_mode] << std::endl;
+        os << s_app_head_format[m_format_mode] << app_name << s_app_tail_format[m_format_mode] << std::endl;
     }
 }
 
-void Ini::save_key_value(std::ofstream & ofs, const std::string & key_name, const std::string & key_value)
+void Ini::save_key_value(std::ostream & os, const std::string & key_name, const std::string & key_value) const
 {
-    ofs << key_name << s_key_equal_format[m_format_mode] << key_value << std::endl;
+    os << key_name << s_key_equal_format[m_format_mode] << key_value << std::endl;
 }
 
 NAMESPACE_GOOFER_END
