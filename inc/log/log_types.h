@@ -74,7 +74,7 @@ struct GOOFER_LOG_CONFIG
 
 enum
 {
-    LOG_RECORD_SIZE = 2048
+    LOG_RECORD_SIZE = 4096
 };
 
 

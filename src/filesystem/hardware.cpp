@@ -849,3 +849,30 @@ bool get_system_uptime(uint64_t & uptime)
 NAMESPACE_GOOFER_END
 
 #endif // _MSC_VER
+
+NAMESPACE_GOOFER_BEGIN
+
+bool get_system_mac_by_ip(const std::string & ip, std::string & mac)
+{
+    mac.clear();
+
+    std::vector<ifconfig_t> ifconfigs;
+    if (!get_system_ifconfig(ifconfigs))
+    {
+        return (false);
+    }
+
+    for (std::vector<ifconfig_t>::const_iterator iter = ifconfigs.begin(); ifconfigs.end() != iter; ++iter)
+    {
+        const ifconfig_t & ifconfig = *iter;
+        if (ifconfig.ip == ip)
+        {
+            mac = ifconfig.mac;
+            return (true);
+        }
+    }
+
+    return (false);
+}
+
+NAMESPACE_GOOFER_END
