@@ -36,7 +36,7 @@ GOOFER_CXX_API(bool) get_system_disk_usage(const char * disk_path, uint64_t & to
 GOOFER_CXX_API(bool) get_system_cpu_usage(std::vector<size_t> & cpu_usage);
 GOOFER_CXX_API(bool) get_system_cpu_core_count(size_t & core_count);
 GOOFER_CXX_API(bool) get_system_uptime(uint64_t & uptime);
-GOOFER_CXX_API(bool) get_system_mac_by_ip(const std::string & ip, std::string & mac);
+GOOFER_CXX_API(bool) get_system_mac_by_ip(const std::string & ip, std::string & mac, bool force_match_ip);
 
 NAMESPACE_GOOFER_END
 

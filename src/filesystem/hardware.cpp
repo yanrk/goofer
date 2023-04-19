@@ -852,7 +852,7 @@ NAMESPACE_GOOFER_END
 
 NAMESPACE_GOOFER_BEGIN
 
-bool get_system_mac_by_ip(const std::string & ip, std::string & mac)
+bool get_system_mac_by_ip(const std::string & ip, std::string & mac, bool force_match_ip)
 {
     mac.clear();
 
@@ -865,10 +865,29 @@ bool get_system_mac_by_ip(const std::string & ip, std::string & mac)
     for (std::vector<ifconfig_t>::const_iterator iter = ifconfigs.begin(); ifconfigs.end() != iter; ++iter)
     {
         const ifconfig_t & ifconfig = *iter;
-        if (ifconfig.ip == ip)
+        if (force_match_ip)
         {
-            mac = ifconfig.mac;
-            return (true);
+            if (ip == ifconfig.ip)
+            {
+                mac = ifconfig.mac;
+                return (true);
+            }
+        }
+        else
+        {
+            if (0x0 == ifconfig.mac[0])
+            {
+                continue;
+            }
+            else if (ip == ifconfig.ip)
+            {
+                mac = ifconfig.mac;
+                break;
+            }
+            else if (mac.empty())
+            {
+                mac = ifconfig.mac;
+            }
         }
     }
 
