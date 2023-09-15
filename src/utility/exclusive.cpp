@@ -75,18 +75,18 @@ static bool exclusive_init(const char * exclusive_unique_name, size_t & unique_i
         std::ostringstream oss;
         if (global_exclusive)
         {
-            oss << "/var/run/" << exclusive_unique_name << ".pid";
+            oss << "/var/run/." << exclusive_unique_name << ".pid";
         }
         else
         {
             const char * user_path = getenv("HOME");
             if (nullptr != user_path && '\0' != user_path[0])
             {
-                oss << user_path << "/" << exclusive_unique_name << ".pid";
+                oss << user_path << "/." << exclusive_unique_name << ".pid";
             }
             else
             {
-                oss << "./" << exclusive_unique_name << ".pid";
+                oss << "./." << exclusive_unique_name << ".pid";
             }
         }
         exclusive_file = oss.str();
