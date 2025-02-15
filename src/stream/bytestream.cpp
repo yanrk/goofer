@@ -28,7 +28,10 @@ ByteStream::~ByteStream()
 
 void ByteStream::host_to_net(void * obj, size_t size)
 {
-    assert(nullptr != obj);
+    if (nullptr == obj || size < 2)
+    {
+        return;
+    }
 
     static union
     {
@@ -51,8 +54,6 @@ void ByteStream::host_to_net(void * obj, size_t size)
 
 void ByteStream::net_to_host(void * obj, size_t size)
 {
-    assert(nullptr != obj);
-
     host_to_net(obj, size);
 }
 
