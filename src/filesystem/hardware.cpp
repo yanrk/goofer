@@ -15,7 +15,7 @@
 #include "charset/charset.h"
 #include "filesystem/hardware.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 
 #include <ctime>
 #include <atlstr.h>
@@ -319,7 +319,7 @@ bool get_system_uptime(uint64_t & uptime)
 
 NAMESPACE_GOOFER_END
 
-#elif defined(_MAC_OS)
+#elif defined(GOOFER_OS_IS_MAC)
 
 #include <errno.h>
 #include <unistd.h>
@@ -536,7 +536,7 @@ bool get_system_uptime(uint64_t & uptime)
 
 NAMESPACE_GOOFER_END
 
-#else // !defined(_MSC_VER) && !defined(_MAC_OS)
+#else // !defined(GOOFER_OS_IS_WIN) && !defined(GOOFER_OS_IS_MAC)
 
 #include <errno.h>
 #include <unistd.h>
@@ -860,7 +860,7 @@ bool get_system_uptime(uint64_t & uptime)
 
 NAMESPACE_GOOFER_END
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 

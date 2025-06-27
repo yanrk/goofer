@@ -13,6 +13,9 @@
 #define GOOFER_COMMON_H
 
 
+#include <cstddef>
+#include <cstdint>
+
 #include "common/enums.h"
 #include "common/macros.h"
 #include "common/memory.h"

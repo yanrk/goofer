@@ -5,5 +5,5 @@ USING_NAMESPACE_GOOFER
 
 void test_utility(void)
 {
-    printf("pid: %u, tid: %u\n", get_pid(), get_tid());
+    printf("pid: %u, tid: " GOOFER_U64_FMT "\n", get_pid(), get_tid());
 }

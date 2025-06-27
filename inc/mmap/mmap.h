@@ -15,21 +15,21 @@
 
 #include "common/common.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "mmap/windows_mmap.h"
 #else
     #include "mmap/unix_mmap.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsMemMap               MemMap;
     typedef WindowsFileMap              FileMap;
 #else
     typedef UnixMemMap                  MemMap;
     typedef UnixFileMap                 FileMap;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_END
 

@@ -15,7 +15,7 @@
 
 #include "common/macros.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef unsigned int         thread_return_t;
     typedef void *               thread_argument_t;
     #define THREAD_DEFAULT_RET   0U
@@ -23,7 +23,7 @@
     typedef void *               thread_return_t;
     typedef void *               thread_argument_t;
     #define THREAD_DEFAULT_RET   nullptr
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 typedef thread_return_t (GOOFER_STDCALL * thread_func_ptr_t) (thread_argument_t);
 

@@ -433,10 +433,8 @@ uint64_t IBStream::read_integer()
 
 IBStream & IBStream::operator >> (bool & value)
 {
-    static const uint64_t MAX_VALUE = 0x01;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0x01 >= real_value);
     value = (1 == real_value ? true : false);
 
     return (*this);
@@ -444,10 +442,8 @@ IBStream & IBStream::operator >> (bool & value)
 
 IBStream & IBStream::operator >> (int8_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xff >= real_value);
     value = static_cast<int8_t>(real_value);
 
     return (*this);
@@ -455,10 +451,8 @@ IBStream & IBStream::operator >> (int8_t & value)
 
 IBStream & IBStream::operator >> (uint8_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xff >= real_value);
     value = static_cast<uint8_t>(real_value);
 
     return (*this);
@@ -466,10 +460,8 @@ IBStream & IBStream::operator >> (uint8_t & value)
 
 IBStream & IBStream::operator >> (int16_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xffff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xffff >= real_value);
     value = static_cast<int16_t>(real_value);
 
     return (*this);
@@ -477,10 +469,8 @@ IBStream & IBStream::operator >> (int16_t & value)
 
 IBStream & IBStream::operator >> (uint16_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xffff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xffff >= real_value);
     value = static_cast<uint16_t>(real_value);
 
     return (*this);
@@ -488,10 +478,8 @@ IBStream & IBStream::operator >> (uint16_t & value)
 
 IBStream & IBStream::operator >> (int32_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xffffffff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xffffffff >= real_value);
     value = static_cast<int32_t>(real_value);
 
     return (*this);
@@ -499,10 +487,8 @@ IBStream & IBStream::operator >> (int32_t & value)
 
 IBStream & IBStream::operator >> (uint32_t & value)
 {
-    static const uint64_t MAX_VALUE = 0xffffffff;
-
     uint64_t real_value = read_integer();
-    assert(MAX_VALUE >= real_value);
+    assert(0xffffffff >= real_value);
     value = static_cast<uint32_t>(real_value);
 
     return (*this);

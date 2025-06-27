@@ -50,7 +50,7 @@ static thread_return_t GOOFER_STDCALL detached_thread_run(thread_argument_t argu
     printf("[detached thread] start\n");
     s_stdout_locker.release();
 
-    for (size_t index = 0; index < 20; ++index)
+    for (int index = 0; index < 20; ++index)
     {
         Guard<ThreadLocker> stdout_guard(s_stdout_locker);
         printf("[detached thread] %d\n", index);

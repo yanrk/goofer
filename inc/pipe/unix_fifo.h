@@ -13,12 +13,13 @@
 #define GOOFER_UNIX_NAMED_PIPE_H
 
 
-#ifndef _MSC_VER
+#include "common/common.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <string>
 
-#include "common/common.h"
 #include "utility/uncopy.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -45,7 +46,7 @@ private:
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_UNIX_NAMED_PIPE_H

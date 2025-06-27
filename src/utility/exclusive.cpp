@@ -9,7 +9,10 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "utility/exclusive.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <errno.h>
@@ -17,12 +20,11 @@
     #include <unistd.h>
     #include <cstdio>
     #include <cstdlib>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <string>
 #include <sstream>
 
-#include "utility/exclusive.h"
 #include "log/log.h"
 
 static bool exclusive_init(const char * exclusive_unique_name, size_t & unique_id, bool global_exclusive)
@@ -33,7 +35,7 @@ static bool exclusive_init(const char * exclusive_unique_name, size_t & unique_i
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     unique_id = reinterpret_cast<size_t>(nullptr);
 
     std::string exclusive_file;
@@ -136,14 +138,14 @@ static bool exclusive_init(const char * exclusive_unique_name, size_t & unique_i
     }
 
     unique_id = static_cast<size_t>(fd);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
 
 static void exclusive_exit(size_t & unique_id)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     HANDLE mutex = reinterpret_cast<HANDLE>(unique_id);
     if (nullptr != mutex)
     {
@@ -157,12 +159,12 @@ static void exclusive_exit(size_t & unique_id)
         ::close(fd);
     }
     unique_id = static_cast<size_t>(-1);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 static bool exclusive_is_exist(const char * exclusive_unique_name, bool global_exclusive)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     std::string exclusive_file;
     {
         std::ostringstream oss;
@@ -228,7 +230,7 @@ static bool exclusive_is_exist(const char * exclusive_unique_name, bool global_e
     ::close(fd);
 
     return (is_exist);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 NAMESPACE_GOOFER_BEGIN

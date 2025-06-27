@@ -9,7 +9,9 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifndef _MSC_VER
+#include "pipe/unix_fifo.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <fcntl.h>
@@ -17,8 +19,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-
-#include "pipe/unix_fifo.h"
 
 static bool read_pipe(int file_descriptor, char * buff, size_t buff_size, size_t & read_len)
 {
@@ -162,4 +162,4 @@ bool UnixNamedPipe::write(const char * data, size_t data_len)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

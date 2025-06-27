@@ -9,11 +9,12 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "locker/windows_locker.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
 #include <cassert>
-#include "locker/windows_locker.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -76,4 +77,4 @@ bool WindowsProcessLocker::try_acquire() const
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

@@ -9,11 +9,6 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
-    #include <windows.h>
-    #include <sys/timeb.h>
-#endif // _MSC_VER
-
 #include <sstream>
 #include <iomanip>
 #include "string/string.h"
@@ -28,7 +23,7 @@ uint64_t goofer_time()
 
 uint64_t goofer_ns_time()
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     static bool s_got_clock_frequency = false;
     static LARGE_INTEGER s_clock_frequency;
     if (!s_got_clock_frequency)
@@ -42,13 +37,13 @@ uint64_t goofer_ns_time()
     current_time *= 1000000000.0;
     current_time /= static_cast<double>(s_clock_frequency.QuadPart);
     return (static_cast<uint64_t>(current_time));
-#elif defined(_MAC_OS)
+#elif defined(GOOFER_OS_IS_MAC)
     return (static_cast<uint64_t>(clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW)));
 #else
     struct timespec ts = { 0x0 };
     clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
     return (static_cast<uint64_t>(ts.tv_sec) * GOOFER_U64_VAL(1000000000) + static_cast<uint64_t>(ts.tv_nsec));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 uint64_t goofer_monotonic_time()
@@ -66,11 +61,11 @@ struct tm goofer_make_localtime(uint64_t time_second)
     time_t time_value = static_cast<time_t>(time_second);
     struct tm tm_value;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     localtime_s(&tm_value, &time_value);
 #else
     localtime_r(&time_value, &tm_value);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (tm_value);
 }
@@ -80,11 +75,11 @@ struct tm goofer_make_gmtime(uint64_t time_second)
     time_t time_value = static_cast<time_t>(time_second);
     struct tm tm_value;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     gmtime_s(&tm_value, &time_value);
 #else
     gmtime_r(&time_value, &tm_value);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (tm_value);
 }
@@ -108,14 +103,14 @@ struct timeval goofer_gettimeofday()
 {
     struct timeval tv_now;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     timeb time_now;
     ftime(&time_now);
     tv_now.tv_sec = static_cast<long>(time_now.time);
     tv_now.tv_usec = static_cast<long>(time_now.millitm) * 1000L;
 #else
     gettimeofday(&tv_now, nullptr);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (tv_now);
 }
@@ -129,13 +124,13 @@ int goofer_get_timezone()
     {
         long time_zone = 0;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
         _tzset();
         _get_timezone(&time_zone);
 #else
         tzset();
         time_zone = timezone;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
         s_time_zone = static_cast<int>(time_zone);
         s_inited = true;
@@ -218,11 +213,11 @@ std::string goofer_datetime()
     time_t t_now = time(nullptr);
     struct tm tm_now = { 0x0 };
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     localtime_s(&tm_now, &t_now);
 #else
     localtime_r(&t_now, &tm_now);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     char str_time[32] = { 0x0 };
     strftime(str_time, sizeof(str_time), "%Y-%m-%d %H:%M:%S", &tm_now);
@@ -274,7 +269,7 @@ void goofer_ms_sleep(size_t milliseconds)
 
 void goofer_ns_sleep(uint64_t nanoseconds)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     Sleep(static_cast<DWORD>(nanoseconds / 1000000));
 #else
     struct timespec sleep_time;
@@ -285,7 +280,7 @@ void goofer_ns_sleep(uint64_t nanoseconds)
     {
         /* continue */
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 NAMESPACE_GOOFER_END

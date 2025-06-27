@@ -17,19 +17,19 @@
 #include <vector>
 #include "common/common.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "process/windows_process.h"
 #else
     #include "process/unix_process.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsJoinProcess   Process;
 #else
     typedef UnixJoinProcess      Process;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_END
 

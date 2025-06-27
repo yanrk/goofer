@@ -13,18 +13,21 @@
 #define GOOFER_TIME_H
 
 
-#ifdef _MSC_VER
-    #include <windows.h>
+#include "common/common.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
+    #include <winsock2.h>
+    #include <sys/timeb.h>
 #else
     #include <sys/time.h>
     #include <unistd.h>
     #include <errno.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <ctime>
 #include <cstdint>
 #include <string>
-#include "common/common.h"
 
 NAMESPACE_GOOFER_BEGIN
 

@@ -36,7 +36,7 @@ static thread_return_t GOOFER_STDCALL thread_run(thread_argument_t argument)
 
     {
         Guard<ThreadLocker> stdout_guard(s_stdout_locker);
-        printf("[%s] set value [%u]\n", test->thread->thread_name().c_str(), reinterpret_cast<size_t>(thread_specific_value));
+        printf("[%s] set value [" GOOFER_U64_FMT "]\n", test->thread->thread_name().c_str(), reinterpret_cast<size_t>(thread_specific_value));
     }
 
     while (test->thread->running())
@@ -45,7 +45,7 @@ static thread_return_t GOOFER_STDCALL thread_run(thread_argument_t argument)
 
         {
             Guard<ThreadLocker> stdout_guard(s_stdout_locker);
-            printf("[%s] get value [%u]\n", test->thread->thread_name().c_str(), reinterpret_cast<size_t>(thread_specific_value));
+            printf("[%s] get value [" GOOFER_U64_FMT "]\n", test->thread->thread_name().c_str(), reinterpret_cast<size_t>(thread_specific_value));
         }
 
         goofer_ms_sleep(1);

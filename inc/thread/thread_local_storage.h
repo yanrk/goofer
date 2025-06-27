@@ -15,19 +15,19 @@
 
 #include "common/common.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "thread/windows_thread_local_storage.h"
 #else
     #include "thread/unix_thread_local_storage.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsThreadLocalStorage   ThreadLocalStorage;
 #else
     typedef UnixThreadLocalStorage      ThreadLocalStorage;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_END
 

@@ -9,12 +9,12 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifndef _MSC_VER
+#include "pipe/unix_pipe.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <unistd.h>
-
-#include "pipe/unix_pipe.h"
 
 static bool create_pipe_endpoints(int file_descriptor[2])
 {
@@ -191,4 +191,4 @@ void UnixAnonymousPipe::close_child_endpoint()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

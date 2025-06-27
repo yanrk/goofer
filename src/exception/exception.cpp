@@ -11,10 +11,9 @@
 
 #include "exception/exception.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 
 #define WIN32_LEAN_AND_MEAN
-
 #include <windows.h>
 #include <dbghelp.h>
 #include <psapi.h>
@@ -63,7 +62,7 @@ LONG WINAPI unhandled_exception_handler(EXCEPTION_POINTERS * exception)
     return (EXCEPTION_EXECUTE_HANDLER);
 }
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -111,7 +110,7 @@ const std::string & Exception::what() const
 
 void goofer_set_dump_directory(const char * store_dir_root, const char * store_file_prefix)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (nullptr == store_dir_root || nullptr == store_file_prefix || '\0' == store_dir_root[0] || '\0' == store_file_prefix[0])
     {
         std::string program_path;
@@ -139,7 +138,7 @@ void goofer_set_dump_directory(const char * store_dir_root, const char * store_f
     goofer_create_directory_recursive(g_dump_save_root);
 
     ::SetUnhandledExceptionFilter(unhandled_exception_handler);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 NAMESPACE_GOOFER_END

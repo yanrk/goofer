@@ -9,7 +9,9 @@
  * Copyright(C): 2013 - 2022
  ********************************************************/
 
-#ifndef _MSC_VER
+#include "mmap/unix_mmap.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <fcntl.h>
@@ -17,7 +19,6 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 #include "charset/charset.h"
-#include "mmap/unix_mmap.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -289,4 +290,4 @@ bool UnixFileMap::flush(char * data, std::size_t size)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

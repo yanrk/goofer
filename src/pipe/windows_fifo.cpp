@@ -9,10 +9,10 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
-
-
 #include "pipe/windows_fifo.h"
+
+#ifdef GOOFER_OS_IS_WIN
+
 
 static bool read_pipe(HANDLE read_handle, char * buff, size_t buff_size, size_t & read_len)
 {
@@ -156,4 +156,4 @@ bool WindowsNamedPipe::write(const char * data, size_t data_len)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

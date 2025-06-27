@@ -9,14 +9,15 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "thread/thread.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
 #include <process.h>
 
 #include <cassert>
 #include "utility/guard.h"
-#include "thread/thread.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -113,4 +114,4 @@ std::string WindowsJoinThread::thread_name()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

@@ -9,11 +9,12 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "thread/windows_thread_local_storage.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
 #include <cassert>
-#include "thread/windows_thread_local_storage.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -41,4 +42,4 @@ void * WindowsThreadLocalStorage::get_value()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

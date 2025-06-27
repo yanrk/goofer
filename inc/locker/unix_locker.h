@@ -13,14 +13,15 @@
 #define GOOFER_UNIX_LOCKER_H
 
 
-#ifndef _MSC_VER
+#include "common/common.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <pthread.h>
 
 #include <cassert>
 #include <string>
-#include "common/common.h"
 #include "utility/uncopy.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -98,7 +99,7 @@ bool UnixMutexLocker<b_thread_lock>::try_acquire() const
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_UNIX_LOCKER_H

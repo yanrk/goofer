@@ -13,18 +13,20 @@
 #define GOOFER_SYSTEM_IO_H
 
 
-#ifdef _MSC_VER
+#include "common/macros.h"
+
+#ifdef GOOFER_OS_IS_WIN
     #include <io.h>
     #include <direct.h>
 #else
     #include <unistd.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #define GOOFER_R_OK     4
     #define GOOFER_W_OK     2
     #define GOOFER_X_OK     1
@@ -34,9 +36,9 @@
     #define GOOFER_W_OK     W_OK
     #define GOOFER_X_OK     X_OK
     #define GOOFER_F_OK     F_OK
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #define goofer_umask()            (0)
     #define goofer_chmod(file)        ::chmod(file, S_IREAD | S_IWRITE)
     #define goofer_open(file, mode)   ::_open(file, mode, S_IREAD | S_IWRITE)
@@ -62,13 +64,13 @@
     #define goofer_lseek              ::lseek
     #define goofer_read               ::read
     #define goofer_write              ::write
-#ifdef _MAC_OS
+#ifdef GOOFER_OS_IS_MAC
     #define goofer_stat               ::stat
     #define goofer_stat_t             struct stat
 #else
     #define goofer_stat               ::stat64
     #define goofer_stat_t             struct stat64
-#endif // _MAC_OS
+#endif // GOOFER_OS_IS_MAC
     #define goofer_access             ::access
     #define goofer_mkdir(dir)         ::mkdir(dir, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)
     #define goofer_rmdir(dir)         ::rmdir(dir)
@@ -77,7 +79,7 @@
     #define goofer_rename             ::rename
     #define goofer_unlink             ::unlink
     #define goofer_sync               ::fsync
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_SYSTEM_IO_H

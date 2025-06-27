@@ -13,13 +13,15 @@
 #define GOOFER_WINDOWS_LOCKER_H
 
 
-#ifdef _MSC_VER
+#include "common/common.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <string>
-#include "common/common.h"
 #include "utility/uncopy.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -60,7 +62,7 @@ private:
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_WINDOWS_LOCKER_H

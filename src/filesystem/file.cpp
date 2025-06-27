@@ -9,19 +9,19 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
+#include "time/time.h"
 #include "filesystem/file.h"
 #include "filesystem/sys_io.h"
 #include "charset/charset.h"
 #include "string/string.h"
-#include "time/time.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include <sys/types.h>
     #include <sys/utime.h>
 #else
     #include <sys/types.h>
     #include <utime.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -29,12 +29,12 @@ File::File()
     : m_is_write(false)
     , m_is_truncate(false)
     , m_file_name()
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     , m_file(INVALID_HANDLE_VALUE)
     , m_is_eof(false)
 #else
     , m_file(nullptr)
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 {
 
 }
@@ -53,7 +53,7 @@ bool File::open(const char * filename, bool is_write, bool is_truncate)
         m_file_name = filename;
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (INVALID_HANDLE_VALUE != m_file)
     {
         ::CloseHandle(m_file);
@@ -99,25 +99,25 @@ bool File::open(const char * filename, bool is_write, bool is_truncate)
     }
 
     return (file_is_open(m_file));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::is_open() const
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (INVALID_HANDLE_VALUE != m_file);
 #else
     return (file_is_open(m_file));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::is_eof() const
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (INVALID_HANDLE_VALUE != m_file && m_is_eof);
 #else
     return (file_eof(m_file));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::read(char * buff, size_t buff_size, size_t & read_len)
@@ -128,7 +128,7 @@ bool File::read(char * buff, size_t buff_size, size_t & read_len)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     read_len = 0;
     if (INVALID_HANDLE_VALUE == m_file)
     {
@@ -159,7 +159,7 @@ bool File::read(char * buff, size_t buff_size, size_t & read_len)
     return (true);
 #else
     return (file_read(m_file, buff, buff_size, read_len));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::write(const char * data, size_t data_len)
@@ -169,7 +169,7 @@ bool File::write(const char * data, size_t data_len)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (INVALID_HANDLE_VALUE == m_file)
     {
         return (false);
@@ -190,7 +190,7 @@ bool File::write(const char * data, size_t data_len)
     return (true);
 #else
     return (file_write(m_file, data, data_len));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::seek(int64_t offset, int whence)
@@ -200,7 +200,7 @@ bool File::seek(int64_t offset, int whence)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (INVALID_HANDLE_VALUE == m_file)
     {
         return (false);
@@ -210,7 +210,7 @@ bool File::seek(int64_t offset, int whence)
     return (0 != ::SetFilePointerEx(m_file, distance, nullptr, whence));
 #else
     return (file_seek(m_file, offset, whence));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::seek(int64_t file_pos)
@@ -220,11 +220,11 @@ bool File::seek(int64_t file_pos)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (seek(file_pos, FILE_BEGIN));
 #else
     return (file_seek(m_file, file_pos));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::tell(int64_t & file_pos)
@@ -234,7 +234,7 @@ bool File::tell(int64_t & file_pos)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (INVALID_HANDLE_VALUE == m_file)
     {
         return (false);
@@ -249,21 +249,21 @@ bool File::tell(int64_t & file_pos)
     return (ret);
 #else
     return (file_tell(m_file, file_pos));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool File::flush()
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (m_is_write && INVALID_HANDLE_VALUE != m_file && ::FlushFileBuffers(m_file));
 #else
     return (file_flush(m_file));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 void File::close()
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (INVALID_HANDLE_VALUE != m_file)
     {
         ::CloseHandle(m_file);
@@ -272,7 +272,7 @@ void File::close()
     m_is_eof = false;
 #else
     file_close(m_file);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     m_is_write = false;
     m_is_truncate = false;
@@ -285,13 +285,13 @@ FILE * file_open_for_read(const char * filename)
     {
         return (nullptr);
     }
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     const wchar_t * mode = L"rb";
     return (_wfopen(utf8_to_unicode(filename).c_str(), mode));
 #else
     const char * mode = "rb";
     return (fopen(utf8_to_ansi(filename).c_str(), mode));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 FILE * file_open_for_write(const char * filename, bool is_truncate)
@@ -300,13 +300,13 @@ FILE * file_open_for_write(const char * filename, bool is_truncate)
     {
         return (nullptr);
     }
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     const wchar_t * mode = (is_truncate ? L"wb" : L"ab");
     return (_wfopen(utf8_to_unicode(filename).c_str(), mode));
 #else
     const char * mode = (is_truncate ? "wb" : "ab");
     return (fopen(utf8_to_ansi(filename).c_str(), mode));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 void file_close(FILE *& file)
@@ -381,13 +381,13 @@ bool file_seek(FILE * file, int64_t offset, int whence)
         return (false);
     }
     fflush(file);
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == static_cast<int64_t>(_fseeki64(file, static_cast<int64_t>(offset), whence)));
-#elif defined(_MAC_OS)
+#elif defined(GOOFER_OS_IS_MAC)
     return (0 == static_cast<int64_t>(fseeko(file, static_cast<off_t>(offset), whence)));
 #else
     return (0 == static_cast<int64_t>(fseeko64(file, static_cast<off64_t>(offset), whence)));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool file_seek(FILE * file, int64_t file_pos)
@@ -404,13 +404,13 @@ bool file_tell(FILE * file, int64_t & file_pos)
     }
     clearerr(file);
     fflush(file);
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     file_pos = static_cast<int64_t>(_ftelli64(file));
-#elif defined(_MAC_OS)
+#elif defined(GOOFER_OS_IS_MAC)
     file_pos = static_cast<int64_t>(ftello(file));
 #else
     file_pos = static_cast<int64_t>(ftello64(file));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
     return (file_pos >= 0);
 }
 
@@ -424,7 +424,7 @@ bool file_flush(FILE * file)
     return (true);
 }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 static bool file_time_to_utc_time(const FILETIME & file_time, time_t & utc_time)
 {
     SYSTEMTIME sys_time = { 0x0 };
@@ -452,7 +452,7 @@ static bool file_time_to_utc_time(const FILETIME & file_time, time_t & utc_time)
 
     return (true);
 }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 bool goofer_access_safe(const char * path_name)
 {
@@ -461,7 +461,7 @@ bool goofer_access_safe(const char * path_name)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     std::string pathname(path_name);
     if (!pathname.empty() && ':' == *pathname.rbegin())
     {
@@ -476,7 +476,7 @@ bool goofer_access_safe(const char * path_name)
     {
         return (false);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
@@ -492,7 +492,7 @@ bool goofer_stat_safe(const char * path_name, goofer_stat_t & path_stat)
 
     std::string pathname(path_name);
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     const std::string long_path_prefix("\\\\?\\");
     if (0 == strncmp(path_name, long_path_prefix.c_str(), long_path_prefix.size()))
     {
@@ -532,11 +532,11 @@ bool goofer_stat_safe(const char * path_name, goofer_stat_t & path_stat)
             pathname = "\\\\" + pathname;
         }
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     goofer_string_trim_tail(pathname, "\\/");
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (!pathname.empty() && ':' == *pathname.rbegin())
     {
         pathname += g_directory_separator;
@@ -554,7 +554,7 @@ bool goofer_stat_safe(const char * path_name, goofer_stat_t & path_stat)
     {
         return (false);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
@@ -584,11 +584,11 @@ bool goofer_mkdir_safe(const char * dir_name)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == _wmkdir(utf8_to_unicode(dir_name).c_str()));
 #else
     return (0 == mkdir(utf8_to_ansi(dir_name).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_rmdir_safe(const char * dir_name)
@@ -598,43 +598,43 @@ bool goofer_rmdir_safe(const char * dir_name)
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == _wrmdir(utf8_to_unicode(dir_name).c_str()));
 #else
     return (0 == rmdir(utf8_to_ansi(dir_name).c_str()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_rename_safe(const char * src_path_name, const char * dst_path_name)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == _wrename(utf8_to_unicode(src_path_name).c_str(), utf8_to_unicode(dst_path_name).c_str()));
 #else
     return (0 == rename(utf8_to_ansi(src_path_name).c_str(), utf8_to_ansi(dst_path_name).c_str()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_unlink_safe(const char * file_name)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == _wunlink(utf8_to_unicode(file_name).c_str()));
 #else
     return (0 == unlink(utf8_to_ansi(file_name).c_str()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_chmod_safe(const char * file_name)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (0 == _wchmod(utf8_to_unicode(file_name).c_str(), S_IREAD | S_IWRITE));
 #else
     return (0 == chmod(utf8_to_ansi(file_name).c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_truncate_safe(const char * file_name, std::size_t file_size)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     HANDLE handle = CreateFileW(utf8_to_unicode(file_name).c_str(), GENERIC_WRITE, 0, nullptr, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
     if (INVALID_HANDLE_VALUE == handle)
     {
@@ -647,7 +647,7 @@ bool goofer_truncate_safe(const char * file_name, std::size_t file_size)
     return (ret);
 #else
     return (0 == truncate(utf8_to_ansi(file_name).c_str(), static_cast<off_t>(file_size)));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool file_get_size(const char * filename, int64_t & filesize)
@@ -666,13 +666,13 @@ bool file_get_time(const char * filename, int64_t & filetime)
 
 bool file_set_time(const char * filename, int64_t filetime)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     struct _utimbuf timebuff = { static_cast<time_t>(time(nullptr)), static_cast<time_t>(filetime) };
     return (0 == _wutime(utf8_to_unicode(filename).c_str(), &timebuff));
 #else
     struct utimbuf timebuff = { static_cast<time_t>(time(nullptr)), static_cast<time_t>(filetime) };
     return (0 == utime(utf8_to_ansi(filename).c_str(), &timebuff));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 NAMESPACE_GOOFER_END

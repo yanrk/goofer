@@ -9,23 +9,25 @@
  * Copyright(C): 2022 - 2022
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "console/color.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <unistd.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cstdio>
 #include <cstdarg>
-#include "console/color.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #define vfprintf_safe vfprintf_s
     #define fprintf_safe  fprintf_s
 #else
     #define vfprintf_safe vfprintf
     #define fprintf_safe  fprintf
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 static unsigned short get_psx_foreground_color(GOOFER_CONSOLE_FONT_COLOR console_color)
 {
@@ -215,7 +217,7 @@ static unsigned short get_psx_background_color(GOOFER_CONSOLE_FONT_COLOR console
     return (color);
 }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 static unsigned short get_win_foreground_color(GOOFER_CONSOLE_FONT_COLOR console_color)
 {
     unsigned short color = 0;
@@ -403,7 +405,7 @@ static unsigned short get_win_background_color(GOOFER_CONSOLE_FONT_COLOR console
     }
     return (color);
 }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 static bool s_console_color_posix = false;
 static bool s_console_color_enable = false;
@@ -454,7 +456,7 @@ static size_t goofer_console_color_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
         }
         else
         {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
             HANDLE console_handle = GetStdHandle(stream == stdout ? STD_OUTPUT_HANDLE : STD_ERROR_HANDLE);
             CONSOLE_SCREEN_BUFFER_INFO console_screen_buffer_info = { 0x0 };
             if (INVALID_HANDLE_VALUE != console_handle && !!GetConsoleScreenBufferInfo(console_handle, &console_screen_buffer_info))
@@ -491,7 +493,7 @@ static size_t goofer_console_color_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
             }
 #else
             ret_siz = vfprintf_safe(stream, format, args);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
         }
     }
     else
@@ -507,7 +509,7 @@ NAMESPACE_GOOFER_BEGIN
 void goofer_console_color_enable()
 {
     s_console_color_posix = false;
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     HANDLE console_handle = GetStdHandle(STD_OUTPUT_HANDLE);
     if (INVALID_HANDLE_VALUE != console_handle)
     {
@@ -523,7 +525,7 @@ void goofer_console_color_enable()
     }
 #else
     s_console_color_posix = true;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
     s_console_color_enable = true;
 }
 

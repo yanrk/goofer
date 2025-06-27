@@ -15,19 +15,19 @@
 
 #include "common/common.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "thread/windows_thread.h"
 #else
     #include "thread/unix_thread.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsJoinThread   Thread;
 #else
     typedef UnixJoinThread      Thread;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 GOOFER_CXX_API(bool) goofer_create_detached_thread(thread_func_ptr_t func, thread_argument_t argu);
 

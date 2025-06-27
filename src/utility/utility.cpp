@@ -9,43 +9,39 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "utility/utility.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <unistd.h>
     #include <pthread.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cstdlib>
 #include "string/string.h"
-#include "utility/utility.h"
-
-#ifdef _MSC_VER
-    #define ENV_DELIMITER ";"
-#else
-    #define ENV_DELIMITER ":"
-#endif // _MSC_VER
 
 NAMESPACE_GOOFER_BEGIN
 
 unsigned int get_pid()
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (static_cast<unsigned int>(GetCurrentProcessId()));
 #else
     return (static_cast<unsigned int>(getpid()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 size_t get_tid()
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (static_cast<size_t>(GetCurrentThreadId()));
-#elif defined(_MAC_OS)
+#elif defined(GOOFER_OS_IS_MAC)
     return (reinterpret_cast<size_t>(pthread_self()));
 #else
     return (static_cast<size_t>(pthread_self()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool get_env(const char * name, std::string & value)

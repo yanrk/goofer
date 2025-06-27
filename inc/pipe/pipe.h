@@ -15,33 +15,25 @@
 
 #include "common/common.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "pipe/windows_fifo.h"
     #include "pipe/windows_pipe.h"
 #else
     #include "pipe/unix_fifo.h"
     #include "pipe/unix_pipe.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cstdio>
 
-#ifdef _MSC_VER
-    #define goofer_popen(cmd, mode)     ::_popen(cmd, mode)
-    #define goofer_pclose(file)         ::_pclose(file)
-#else
-    #define goofer_popen(cmd, mode)     ::popen(cmd, mode)
-    #define goofer_pclose(file)         ::pclose(file)
-#endif // _MSC_VER
-
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsAnonymousPipe        AnonymousPipe;
     typedef WindowsNamedPipe            NamedPipe;
 #else
     typedef UnixAnonymousPipe           AnonymousPipe;
     typedef UnixNamedPipe               NamedPipe;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_END
 

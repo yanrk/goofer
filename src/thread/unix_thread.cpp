@@ -9,12 +9,13 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifndef _MSC_VER
+#include "thread/thread.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <cassert>
 #include "utility/guard.h"
-#include "thread/thread.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -116,11 +117,11 @@ bool UnixJoinThread::running()
 
 size_t UnixJoinThread::thread_id() const
 {
-#ifdef _MAC_OS
+#ifdef GOOFER_OS_IS_MAC
     return (reinterpret_cast<size_t>(pthread_self()));
 #else
     return (static_cast<size_t>(pthread_self()));
-#endif // _MAC_OS
+#endif // GOOFER_OS_IS_MAC
 }
 
 std::string UnixJoinThread::thread_name()
@@ -131,4 +132,4 @@ std::string UnixJoinThread::thread_name()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

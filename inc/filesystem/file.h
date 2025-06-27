@@ -13,14 +13,15 @@
 #define GOOFER_FILE_H
 
 
-#ifdef _MSC_VER
+#include "common/common.h"
+
+#ifdef GOOFER_OS_IS_WIN
     #include <wtypes.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cstdint>
 #include <cstdio>
 #include <string>
-#include "common/common.h"
 #include "utility/uncopy.h"
 #include "filesystem/sys_io.h"
 
@@ -53,12 +54,12 @@ private:
     bool                m_is_write;
     bool                m_is_truncate;
     std::string         m_file_name;
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     HANDLE              m_file;
     bool                m_is_eof;
 #else
     FILE              * m_file;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 };
 
 GOOFER_CXX_API(FILE *) file_open_for_read(const char * filename);

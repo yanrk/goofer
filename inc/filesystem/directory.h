@@ -13,15 +13,17 @@
 #define GOOFER_DIRECTORY_H
 
 
-#ifdef _MSC_VER
+#include "common/common.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <dirent.h>
     #include <sys/stat.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <string>
-#include "common/common.h"
 #include "utility/uncopy.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -49,14 +51,14 @@ private:
     std::string          m_current_sub_path_short_name;
     bool                 m_current_sub_path_is_directory;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     HANDLE               m_dir;
     WIN32_FIND_DATAW     m_file;
     bool                 m_eof;
 #else
     DIR                * m_dir;
     struct dirent      * m_file;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 };
 
 GOOFER_CXX_API(void) goofer_create_directory_recursive(const std::string & dirname);

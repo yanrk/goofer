@@ -13,15 +13,17 @@
 #define GOOFER_WINDOWS_PROCESS_H
 
 
-#ifdef _MSC_VER
+#include "common/common.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 
 #include <string>
 #include <vector>
 #include <list>
-#include "common/common.h"
 #include "utility/uncopy.h"
 #include "locker/locker.h"
 
@@ -73,7 +75,7 @@ GOOFER_CXX_API(void) goofer_kill_process(unsigned int pid, int exit_code = 9, bo
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_WINDOWS_PROCESS_H

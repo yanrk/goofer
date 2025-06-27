@@ -9,12 +9,14 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "process/windows_process.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tlhelp32.h>
-#include "process/windows_process.h"
 #include "string/string.h"
 #include "utility/guard.h"
 
@@ -455,4 +457,4 @@ void goofer_kill_process(unsigned int pid, int exit_code, bool whole_tree)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

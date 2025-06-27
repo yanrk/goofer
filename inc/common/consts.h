@@ -18,11 +18,11 @@
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #define g_directory_separator   '\\'
 #else
     #define g_directory_separator   '/'
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #define g_blank_character_set       " \t\v\r\n\f"
 

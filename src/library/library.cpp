@@ -9,13 +9,15 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "library/library.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <dlfcn.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
-#include "library/library.h"
 #include "string/string.h"
 
 NAMESPACE_GOOFER_BEGIN
@@ -27,11 +29,11 @@ void * goofer_library_acquire(const char * filename)
         return (nullptr);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (reinterpret_cast<void *>(LoadLibraryA(filename)));
 #else
     return (dlopen(filename, RTLD_LAZY | RTLD_LOCAL));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 int goofer_library_release(void * library)
@@ -41,11 +43,11 @@ int goofer_library_release(void * library)
         return (0);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (FreeLibrary(reinterpret_cast<HMODULE>(library)) ? 1 : 0);
 #else
     return (0 == dlclose(library) ? 1 : 0);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 void * goofer_library_symbol(void * library, const char * symbol)
@@ -60,17 +62,17 @@ void * goofer_library_symbol(void * library, const char * symbol)
         return (nullptr);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (GetProcAddress(reinterpret_cast<HMODULE>(library), symbol));
 #else
     return (dlsym(library, symbol));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 const char * goofer_library_error(void)
 {
     static char library_error[128] = { 0 };
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     DWORD error_code = GetLastError();
     if (0 == error_code)
     {
@@ -84,7 +86,7 @@ const char * goofer_library_error(void)
         return ("");
     }
     goofer_snprintf(library_error, sizeof(library_error), "library error: %s", error_info);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
     return (library_error);
 }
 

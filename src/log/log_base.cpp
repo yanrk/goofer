@@ -9,17 +9,16 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
-    #include <windows.h>
-#else
+#include "time/time.h"
+
+#ifndef GOOFER_OS_IS_WIN
     #include <pthread.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <fstream>
 #include "utility/guard.h"
 #include "utility/utility.h"
 #include "filesystem/directory.h"
-#include "time/time.h"
 #include "string/string.h"
 #include "log/log_base.h"
 
@@ -100,9 +99,9 @@ void LogBase::push_record(GOOFER_LOG_LEVEL level, const char * file, const char 
 
     record[record_size - 1] = '\0';
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 //  OutputDebugStringA(record);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     if (m_output_to_console)
     {
@@ -132,9 +131,9 @@ void LogBase::write(const char * data, size_t size)
         return;
     }
 
-#ifndef _MSC_VER
+#ifndef GOOFER_OS_IS_WIN
     m_file.flush();
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     m_cur_file_size += size;
     if (m_cur_file_size < m_max_file_size)

@@ -13,19 +13,21 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "charset/charset.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <clocale>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cwchar>
 #include <utility>
-#include "charset/charset.h"
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifndef _MSC_VER
+#ifndef GOOFER_OS_IS_WIN
 static void locale_init()
 {
     static bool initialized = false;
@@ -38,7 +40,7 @@ static void locale_init()
         initialized = true;
     }
 }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 static bool host_is_little_endian()
 {
@@ -80,7 +82,7 @@ static bool unicode_to_ansi(const wchar_t * unicode_str, std::string & ansi_str)
         return (true);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     int bytes_count = ::WideCharToMultiByte(CP_ACP, 0, unicode_str, -1, nullptr, 0, nullptr, nullptr);
     if (bytes_count > 1)
     {
@@ -100,7 +102,7 @@ static bool unicode_to_ansi(const wchar_t * unicode_str, std::string & ansi_str)
         ansi_str.resize(bytes_count);
         std::wcsrtombs(&ansi_str[0], &unicode_str, bytes_count, &mbstate);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
@@ -114,7 +116,7 @@ static bool ansi_to_unicode(const char * ansi_str, std::wstring & unicode_str)
         return (true);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     int chars_count = ::MultiByteToWideChar(CP_ACP, 0, ansi_str, -1, nullptr, 0);
     if (chars_count > 1)
     {
@@ -134,7 +136,7 @@ static bool ansi_to_unicode(const char * ansi_str, std::wstring & unicode_str)
         unicode_str.resize(chars_count);
         std::mbsrtowcs(&unicode_str[0], &ansi_str, chars_count, &mbstate);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
@@ -148,7 +150,7 @@ static bool ansi_to_utfx(const char * ansi_str, std::string & utf_str)
         return (true);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     int chars_count = ::MultiByteToWideChar(CP_ACP, 0, ansi_str, -1, nullptr, 0);
     if (chars_count > 1)
     {
@@ -168,7 +170,7 @@ static bool ansi_to_utfx(const char * ansi_str, std::string & utf_str)
         utf_str.resize(sizeof(wchar_t) * chars_count);
         std::mbsrtowcs(reinterpret_cast<wchar_t *>(&utf_str[0]), &ansi_str, chars_count, &mbstate);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
@@ -674,7 +676,7 @@ private:
         {
             std::string utfx_str;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
             switch (m_utfx_type)
             {
                 case UTFX::UTF8:
@@ -726,7 +728,7 @@ private:
                     break;
                 }
             }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
             std::string ansi_str;
             unicode_to_ansi(reinterpret_cast<const wchar_t *>(utfx_str.c_str()), ansi_str);
@@ -827,7 +829,7 @@ private:
             if (ansi_to_utfx(m_data.c_str(), utfx_str))
             {
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
                 switch (utfx_type)
                 {
                     case UTFX::UTF8:
@@ -867,7 +869,7 @@ private:
                         break;
                     }
                 }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
             }
         }
@@ -880,7 +882,7 @@ private:
         {
             std::string utfx_str;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
             switch (m_utfx_type)
             {
                 case UTFX::UTF8:
@@ -926,7 +928,7 @@ private:
                     break;
                 }
             }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
             return (std::wstring(reinterpret_cast<const wchar_t *>(utfx_str.c_str()), utfx_str.size() / sizeof(wchar_t)));
         }
@@ -972,7 +974,7 @@ public:
     {
         bool dst_is_little_endian = is_little_endian(endian_type);
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
         switch (utfx_type)
         {
             case UTFX::UTF8:
@@ -1012,7 +1014,7 @@ public:
                 break;
             }
         }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
         return (std::string());
     }

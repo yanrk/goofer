@@ -9,10 +9,10 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifndef _MSC_VER
-
-
 #include "thread/unix_thread_local_storage.h"
+
+#ifndef GOOFER_OS_IS_WIN
+
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -40,4 +40,4 @@ void * UnixThreadLocalStorage::get_value()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

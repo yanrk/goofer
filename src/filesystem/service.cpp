@@ -11,17 +11,18 @@
 
 #include <string>
 
-#ifdef _MSC_VER
-    #include <cstring>
+#include "filesystem/service.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
     #include <process.h>
+    #include <cstring>
 #else
     #include <errno.h>
     #include <unistd.h>
     #include <syslog.h>
-#endif // _MSC_VER
-
-#include "filesystem/service.h"
+#endif // GOOFER_OS_IS_WIN
 
 static Goofer::SystemServiceBase      * s_service = nullptr;
 static std::string                      s_service_name;
@@ -34,7 +35,7 @@ static const char * s_service_run_account_name[] =
     "NT AUTHORITY\\NetworkService"
 };
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 
 static bool install_system_service(const char * service_name, const char * display_name, const char * start_name = nullptr, const char * password = nullptr, const char * dependencies = "")
 {
@@ -453,7 +454,7 @@ step2) install/uninstall system_service_testd
 
 */
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -482,7 +483,7 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (argc > 1)
     {
         if (0 == strcmp("install", argv[1]) || 0 == strcmp("-install", argv[1]) || 0 == strcmp("/install", argv[1]))
@@ -574,7 +575,7 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
     close_event_log();
 
     return (ret);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 NAMESPACE_GOOFER_END

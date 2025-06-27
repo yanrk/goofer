@@ -13,7 +13,9 @@
 #define GOOFER_UNIX_PROCESS_H
 
 
-#ifndef _MSC_VER
+#include "common/common.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <pthread.h>
@@ -21,7 +23,6 @@
 #include <string>
 #include <vector>
 #include <list>
-#include "common/common.h"
 #include "utility/uncopy.h"
 #include "locker/locker.h"
 
@@ -72,7 +73,7 @@ GOOFER_CXX_API(void) goofer_kill_process(unsigned int pid, int exit_code = 9, bo
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 
 #endif // GOOFER_UNIX_PROCESS_H

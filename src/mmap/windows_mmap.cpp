@@ -9,14 +9,15 @@
  * Copyright(C): 2013 - 2022
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "mmap/windows_mmap.h"
+
+#ifdef GOOFER_OS_IS_WIN
 
 
 #include <algorithm>
 #include "filesystem/directory.h"
 #include "filesystem/file.h"
 #include "charset/charset.h"
-#include "mmap/windows_mmap.h"
 
 static std::wstring get_file_map_name(HANDLE file_handle)
 {
@@ -371,4 +372,4 @@ bool WindowsFileMap::flush(char * data, std::size_t size)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

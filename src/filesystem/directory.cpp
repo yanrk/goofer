@@ -9,11 +9,14 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
+#include "filesystem/directory.h"
+
+#ifdef GOOFER_OS_IS_WIN
+    #define WIN32_LEAN_AND_MEAN
     #include <windows.h>
 #else
     #include <unistd.h>
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 #include <cstring>
 #include <list>
@@ -23,7 +26,6 @@
 #include "charset/charset.h"
 #include "filesystem/sys_io.h"
 #include "filesystem/file.h"
-#include "filesystem/directory.h"
 
 NAMESPACE_GOOFER_BEGIN
 
@@ -32,14 +34,14 @@ Directory::Directory()
     , m_current_sub_path_name()
     , m_current_sub_path_short_name()
     , m_current_sub_path_is_directory(false)
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     , m_dir(INVALID_HANDLE_VALUE)
     , m_file()
     , m_eof(true)
 #else
     , m_dir(nullptr)
     , m_file(nullptr)
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 {
 
 }
@@ -64,7 +66,7 @@ bool Directory::open(const char * dirname)
         m_dir_name += g_directory_separator;
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     std::wstring pattern(utf8_to_unicode(m_dir_name) + L"*");
     m_dir = FindFirstFileW(pattern.c_str(), &m_file);
     if (INVALID_HANDLE_VALUE == m_dir)
@@ -79,18 +81,18 @@ bool Directory::open(const char * dirname)
         return (false);
     }
     m_file = readdir(m_dir);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     return (true);
 }
 
 bool Directory::is_open() const
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (INVALID_HANDLE_VALUE != m_dir);
 #else
     return (nullptr != m_dir);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool Directory::read()
@@ -100,7 +102,7 @@ bool Directory::read()
         return (false);
     }
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     while (!m_eof)
     {
         const std::wstring file_name(m_file.cFileName);
@@ -190,7 +192,7 @@ bool Directory::read()
         }
 #endif // 0
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     m_current_sub_path_short_name.clear();
     m_current_sub_path_name.clear();
@@ -210,13 +212,13 @@ void Directory::close()
     m_current_sub_path_name.clear();
     m_current_sub_path_is_directory = false;
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     FindClose(m_dir);
     m_dir = INVALID_HANDLE_VALUE;
 #else
     closedir(m_dir);
     m_dir = nullptr;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 const std::string & Directory::sub_path_name() const
@@ -311,11 +313,11 @@ void goofer_directory_format_to_unix(std::string & dirname)
 
 void goofer_directory_format(std::string & dirname)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     goofer_directory_format_to_windows(dirname);
 #else
     goofer_directory_format_to_unix(dirname);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 void goofer_pathname_format_strictly_to_windows(const std::string & src_pathname, std::string & dst_pathname)
@@ -394,11 +396,11 @@ std::string goofer_pathname_format_strictly_to_unix(const std::string & pathname
 
 void goofer_pathname_format_strictly(const std::string & src_pathname, std::string & dst_pathname)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     goofer_pathname_format_strictly_to_windows(src_pathname, dst_pathname);
 #else
     goofer_pathname_format_strictly_to_unix(src_pathname, dst_pathname);
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 std::string goofer_pathname_format_strictly(const std::string & pathname)
@@ -422,7 +424,7 @@ bool goofer_absolute_pathname_format_strictly(const std::string & src_pathname, 
     std::list<std::string> src_path_node_list;
     goofer_split_piece(src_pathname, "\\/", false, true, src_path_node_list);
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
 
     /*
      * valid format:
@@ -524,7 +526,7 @@ bool goofer_absolute_pathname_format_strictly(const std::string & src_pathname, 
         return (false);
     }
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
     std::list<std::string> dst_path_node_list;
     while (!src_path_node_list.empty())
@@ -542,13 +544,13 @@ bool goofer_absolute_pathname_format_strictly(const std::string & src_pathname, 
             }
             src_path_node_list.pop_front();
         }
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
         else if (trim_single_dot && path_node.size() >= 2 && '.' != path_node[path_node.size() - 2] && '.' == path_node[path_node.size() - 1])
         {
             dst_path_node_list.push_back(path_node.substr(0, path_node.size() - 1));
             src_path_node_list.pop_front();
         }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
         else
         {
             dst_path_node_list.push_back(path_node);
@@ -591,7 +593,7 @@ std::string goofer_absolute_pathname_format_strictly(const std::string & pathnam
 
 bool goofer_get_current_work_directory(std::string & dirname)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     wchar_t temp[512] = { 0 };
     if (nullptr == _wgetcwd(temp, sizeof(temp) / sizeof(temp[0])))
     {
@@ -617,12 +619,12 @@ bool goofer_get_current_work_directory(std::string & dirname)
         goofer_directory_format(dirname);
         return (true);
     }
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_set_current_work_directory(const std::string & dirname)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     std::string platform_dirname(dirname);
     goofer_directory_format(platform_dirname);
     return (0 == _wchdir(utf8_to_unicode(platform_dirname).c_str()));
@@ -630,7 +632,7 @@ bool goofer_set_current_work_directory(const std::string & dirname)
     std::string platform_dirname(dirname);
     goofer_directory_format(platform_dirname);
     return (0 == chdir(utf8_to_ansi(platform_dirname).c_str()));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool goofer_extract_directory(const char * pathname, std::string & dirname, bool format)
@@ -740,14 +742,14 @@ bool goofer_extract_path(const char * pathname, std::string & dirname, std::stri
 bool goofer_get_current_process_pathname(std::string & pathname)
 {
     char filename[1024] = { 0x0 };
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     if (GetModuleFileNameA(nullptr, filename, sizeof(filename)) > 0 && ERROR_SUCCESS == GetLastError())
 #else
     char linkname[64] = { 0x0 };
     snprintf(linkname, sizeof(linkname) - 1, "/proc/%d/exe", getpid());
     std::size_t bytes = static_cast<std::size_t>(readlink(linkname, filename, sizeof(filename)));
     if (bytes > 0 && bytes < sizeof(filename))
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
     {
         pathname = filename;
         return (true);

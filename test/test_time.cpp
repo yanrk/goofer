@@ -6,7 +6,7 @@ USING_NAMESPACE_GOOFER
 void test_time(void)
 {
     size_t time_now = static_cast<size_t>(goofer_time());
-    printf("seconds from 1900-01-01 00:00:00 is %u\n", time_now);
+    printf("seconds from 1900-01-01 00:00:00 is " GOOFER_U64_FMT "\n", time_now);
 
     tm tm_utc_now = goofer_gmtime();
     printf

@@ -9,10 +9,10 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifdef _MSC_VER
-
-
 #include "pipe/windows_pipe.h"
+
+#ifdef GOOFER_OS_IS_WIN
+
 
 static bool create_pipe_endpoints(HANDLE & read_handle, HANDLE & write_handle)
 {
@@ -189,4 +189,4 @@ void WindowsAnonymousPipe::close_child_endpoint()
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

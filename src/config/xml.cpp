@@ -46,11 +46,11 @@ Xml & Xml::operator = (const Xml & other)
 
 bool Xml::load(const char * file_name)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (nullptr != file_name && m_markup->Load(utf8_to_unicode(file_name)));
 #else
     return (nullptr != file_name && m_markup->Load(utf8_to_ansi(file_name)));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool Xml::set_document(const char * document)
@@ -302,11 +302,11 @@ bool Xml::get_element_content(const char * element_name, std::string & element_c
 
 bool Xml::save(const char * file_name)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (nullptr != file_name && m_markup->Save(utf8_to_unicode(file_name)));
 #else
     return (nullptr != file_name && m_markup->Save(utf8_to_ansi(file_name)));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 bool Xml::add_element(const char * element_name, const char * element_value)

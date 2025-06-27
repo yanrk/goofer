@@ -153,20 +153,20 @@ void goofer_string_simplify(std::string & str, const char * trim, char simplify)
 
 int goofer_strcmp_ignore_case(const char * str1, const char * str2)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (stricmp(str1, str2));
 #else
     return (strcasecmp(str1, str2));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 int goofer_strncmp_ignore_case(const char * str1, const char * str2, int count)
 {
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     return (strnicmp(str1, str2, count));
 #else
     return (strncasecmp(str1, str2, count));
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 }
 
 #define CSTRING_TO_TYPE(type, fmt)                                  \

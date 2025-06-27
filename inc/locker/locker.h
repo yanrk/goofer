@@ -15,21 +15,21 @@
 
 #include "locker/null_locker.h"
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     #include "locker/windows_locker.h"
 #else
     #include "locker/unix_locker.h"
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_BEGIN
 
-#ifdef _MSC_VER
+#ifdef GOOFER_OS_IS_WIN
     typedef WindowsThreadLocker      ThreadLocker;
     typedef WindowsProcessLocker     ProcessLocker;
 #else
     typedef UnixMutexLocker<true>    ThreadLocker;
     typedef UnixMutexLocker<false>   ProcessLocker;
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN
 
 NAMESPACE_GOOFER_END
 

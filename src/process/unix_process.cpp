@@ -9,7 +9,9 @@
  * Copyright(C): 2013 - 2020
  ********************************************************/
 
-#ifndef _MSC_VER
+#include "process/unix_process.h"
+
+#ifndef GOOFER_OS_IS_WIN
 
 
 #include <errno.h>
@@ -20,15 +22,14 @@
 #include <sys/types.h>
 #include <cstdio>
 #include <cstdlib>
-#include "process/unix_process.h"
 #include "string/string.h"
 #include "utility/guard.h"
 
-#ifdef _MAC_OS
+#ifdef GOOFER_OS_IS_MAC
     #include <sys/event.h>
 #else
     #include <sys/inotify.h>
-#endif // _MAC_OS
+#endif // GOOFER_OS_IS_MAC
 
 struct process_info_t
 {
@@ -164,7 +165,7 @@ static void kill_process_tree(unsigned int process_id, int exit_code)
 
 static int wait_for_pid(unsigned int pid)
 {
-#ifdef _MAC_OS
+#ifdef GOOFER_OS_IS_MAC
     int kq = kqueue();
     if (-1 == kq)
     {
@@ -236,7 +237,7 @@ static int wait_for_pid(unsigned int pid)
     }
 
     return (ret);
-#endif // _MAC_OS
+#endif // GOOFER_OS_IS_MAC
 }
 
 static int wait_for_child(pid_t pid, int & exit_code)
@@ -639,4 +640,4 @@ void goofer_kill_process(unsigned int pid, int exit_code, bool whole_tree)
 NAMESPACE_GOOFER_END
 
 
-#endif // _MSC_VER
+#endif // GOOFER_OS_IS_WIN

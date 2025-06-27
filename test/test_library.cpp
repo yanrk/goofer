@@ -10,7 +10,7 @@ typedef void (*destroy_math_func) (simple_math *);
 
 void test_library_1(void)
 {
-    void * library = goofer_library_acquire(GOOFER_LIBRARY(".", "simple_math"));
+    void * library = goofer_library_acquire(GOOFER_LIBRARY_FILE(".", "simple_math"));
     if (nullptr == library)
     {
         printf("%s\n", goofer_library_error());
@@ -208,7 +208,7 @@ void test_library_1(void)
 void test_library_2(void)
 {
     Library library;
-    if (!library.acquire(GOOFER_LIBRARY(".", "simple_math")))
+    if (!library.acquire(GOOFER_LIBRARY_FILE(".", "simple_math")))
     {
         printf("%s\n", library.what().c_str());
         return;
