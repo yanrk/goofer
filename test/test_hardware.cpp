@@ -43,7 +43,7 @@ void test_hardware(void)
             printf("cpu : ");
             for (std::vector<size_t>::iterator iter = cpu_usage.begin(); cpu_usage.end() != iter; ++iter)
             {
-                printf(GOOFER_U64_FMT " ", *iter);
+                printf("%zu ", *iter);
             }
             printf("\n");
         }
@@ -57,7 +57,7 @@ void test_hardware(void)
         size_t cpu_core_count = 0;
         if (get_system_cpu_core_count(cpu_core_count))
         {
-            printf("cpu core count : " GOOFER_U64_FMT "\n", cpu_core_count);
+            printf("cpu core count : %zu\n", cpu_core_count);
         }
         else
         {
