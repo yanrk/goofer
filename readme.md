@@ -12,9 +12,9 @@
 ---
 
 **Unix-Like**：
-- **way 1**：`cd sln && make` to build goofer, `cd test && make` to build test, 
+- **way 1**：`cd sln && make` to build goofer, `cd test && make` to build test
 - **way 2**：use CMake to generate projects
-  - `cmake -S . -B build -D BUILD_STATIC=OFF -D BUILD_TESTS=ON`
+  - `cmake -S . -B build -D BUILD_STATIC=OFF -D BUILD_TESTS=ON -D CMAKE_BUILD_TYPE=Release`
   - `cmake --build build`
 
 ---
