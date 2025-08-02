@@ -41,7 +41,7 @@ static bool install_system_service(const char * service_name, const char * displ
 {
     if (nullptr == service_name || nullptr == display_name)
     {
-        return (false);
+        return false;
     }
 
     bool ret = false;
@@ -82,14 +82,14 @@ static bool install_system_service(const char * service_name, const char * displ
         CloseServiceHandle(service_control_manager);
     }
 
-    return (ret);
+    return ret;
 }
 
 static bool uninstall_system_service(const char * service_name)
 {
     if (nullptr == service_name)
     {
-        return (false);
+        return false;
     }
 
     bool ret = false;
@@ -144,7 +144,7 @@ static bool uninstall_system_service(const char * service_name)
         CloseServiceHandle(service_control_manager);
     }
 
-    return (ret);
+    return ret;
 }
 
 struct service_args_t
@@ -200,19 +200,19 @@ static unsigned int __stdcall run_service(void *)
 {
     if (nullptr == s_service_args.argv || nullptr == s_service)
     {
-        return (-1);
+        return -1;
     }
     write_info_event("service in on_start");
     if (!s_service->on_start(s_service_args.argc, s_service_args.argv))
     {
         write_error_event("service on_start failed");
-        return (-1);
+        return -1;
     }
     while (s_service->running())
     {
         Sleep(1000);
     }
-    return (0);
+    return 0;
 }
 
 static bool create_service_thread()
@@ -220,12 +220,12 @@ static bool create_service_thread()
     HANDLE thread_handle = reinterpret_cast<HANDLE>(_beginthreadex(nullptr, 0, run_service, nullptr, 0, nullptr));
     if (nullptr == thread_handle)
     {
-        return (false);
+        return false;
     }
     else
     {
         CloseHandle(thread_handle);
-        return (true);
+        return true;
     }
 }
 
@@ -475,12 +475,12 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
 {
     if (nullptr == service_name || argc <= 0 || nullptr == argv)
     {
-        return (false);
+        return false;
     }
 
     if (nullptr != s_service)
     {
-        return (false);
+        return false;
     }
 
 #ifdef GOOFER_OS_IS_WIN
@@ -488,11 +488,11 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
     {
         if (0 == strcmp("install", argv[1]) || 0 == strcmp("-install", argv[1]) || 0 == strcmp("/install", argv[1]))
         {
-            return (install_system_service(service_name, service_name, s_service_run_account));
+            return install_system_service(service_name, service_name, s_service_run_account);
         }
         else if (0 == strcmp("remove", argv[1]) || 0 == strcmp("-remove", argv[1]) || 0 == strcmp("/remove", argv[1]))
         {
-            return (uninstall_system_service(service_name));
+            return uninstall_system_service(service_name);
         }
     }
 
@@ -522,10 +522,10 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
     if (!StartServiceCtrlDispatcherA(service_table))
     {
         write_error_event("service start dispatcher failed");
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 #else
     bool ret = false;
 
@@ -574,7 +574,7 @@ bool SystemServiceBase::run(const char * service_name, int argc, char * argv [])
 
     close_event_log();
 
-    return (ret);
+    return ret;
 #endif // GOOFER_OS_IS_WIN
 }
 

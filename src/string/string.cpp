@@ -18,7 +18,7 @@ size_t goofer_vsnprintf(char * buffer, size_t bufsiz, const char * fmt, va_list 
 {
     if (nullptr == buffer || 0 == bufsiz || nullptr == fmt || nullptr == args)
     {
-        return (0);
+        return 0;
     }
 
     size_t ret_siz = vsnprintf(buffer, bufsiz, fmt, args);
@@ -29,14 +29,14 @@ size_t goofer_vsnprintf(char * buffer, size_t bufsiz, const char * fmt, va_list 
         buffer[ret_siz] = '\0';
     }
 
-    return (ret_siz);
+    return ret_siz;
 }
 
 size_t goofer_snprintf(char * buffer, size_t bufsiz, const char * fmt, ...)
 {
     if (nullptr == fmt)
     {
-        return (0);
+        return 0;
     }
 
     va_list args;
@@ -47,7 +47,7 @@ size_t goofer_snprintf(char * buffer, size_t bufsiz, const char * fmt, ...)
 
     va_end(args);
 
-    return (ret_siz);
+    return ret_siz;
 }
 
 void goofer_string_trim_head(std::string & str, const char * trim)
@@ -154,18 +154,18 @@ void goofer_string_simplify(std::string & str, const char * trim, char simplify)
 int goofer_strcmp_ignore_case(const char * str1, const char * str2)
 {
 #ifdef GOOFER_OS_IS_WIN
-    return (stricmp(str1, str2));
+    return stricmp(str1, str2);
 #else
-    return (strcasecmp(str1, str2));
+    return strcasecmp(str1, str2);
 #endif // GOOFER_OS_IS_WIN
 }
 
 int goofer_strncmp_ignore_case(const char * str1, const char * str2, int count)
 {
 #ifdef GOOFER_OS_IS_WIN
-    return (strnicmp(str1, str2, count));
+    return strnicmp(str1, str2, count);
 #else
-    return (strncasecmp(str1, str2, count));
+    return strncasecmp(str1, str2, count);
 #endif // GOOFER_OS_IS_WIN
 }
 
@@ -174,21 +174,21 @@ bool goofer_string_to_##type(const char * str, type & val)          \
 {                                                                   \
     if (nullptr == str)                                             \
     {                                                               \
-        return (false);                                              \
+        return false;                                              \
     }                                                               \
-    return (sscanf(str, fmt, &val) > 0);                             \
+    return sscanf(str, fmt, &val) > 0;                             \
 }
 
 #define STRING_TO_TYPE(type)                                        \
 bool goofer_string_to_##type(const std::string & str, type & val)   \
 {                                                                   \
-    return (goofer_string_to_##type(str.c_str(), val));              \
+    return goofer_string_to_##type(str.c_str(), val);              \
 }
 
 #define TYPE_TO_CSTRING(type, fmt)                                  \
 bool goofer_##type##_to_string(type val, char * str, int size)      \
 {                                                                   \
-    return (goofer_snprintf(str, size, fmt, val) > 0);               \
+    return goofer_snprintf(str, size, fmt, val) > 0;               \
 }
 
 #define TYPE_TO_STRING(type)                                        \
@@ -198,7 +198,7 @@ bool goofer_##type##_to_string(type val, std::string & str)         \
     char buffer[bufsiz];                                            \
     goofer_##type##_to_string(val, buffer, bufsiz);                 \
     str = buffer;                                                   \
-    return (true);                                                   \
+    return true;                                                   \
 }
 
 CSTRING_TO_TYPE(  char,  "%c")

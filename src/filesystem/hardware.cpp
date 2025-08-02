@@ -52,7 +52,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
     GetAdaptersAddresses(AF_INET, 0, nullptr, nullptr, &addr_buffer_size);
     if (0 == addr_buffer_size)
     {
-        return (false);
+        return false;
     }
 
     std::vector<char> addr_buffer(addr_buffer_size, 0x0);
@@ -63,7 +63,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
     GetAdaptersInfo(nullptr, &info_buffer_size);
     if (0 == info_buffer_size)
     {
-        return (false);
+        return false;
     }
 
     std::vector<char> info_buffer(info_buffer_size, 0x0);
@@ -156,7 +156,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
         }
     }
 
-    return (!ifconfigs.empty());
+    return !ifconfigs.empty();
 }
 
 bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
@@ -167,13 +167,13 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
     {
         total_size = static_cast<uint64_t>(memory_status_ex.ullTotalPhys);
         avali_size = static_cast<uint64_t>(memory_status_ex.ullAvailPhys);
-        return (true);
+        return true;
     }
     else
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 }
 
@@ -181,7 +181,7 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
 {
     if (nullptr == disk_path)
     {
-        return (false);
+        return false;
     }
 
     ULARGE_INTEGER caller_bytes;
@@ -192,13 +192,13 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
     {
         total_size = static_cast<uint64_t>(total_bytes.QuadPart);
         avali_size = static_cast<uint64_t>(avali_bytes.QuadPart);
-        return (true);
+        return true;
     }
     else
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 }
 
@@ -213,13 +213,13 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
     HMODULE module = GetModuleHandle("ntdll.dll");
     if (nullptr == module)
     {
-        return (false);
+        return false;
     }
 
     NtQuerySystemInformationFuncPtr nt_query_system_information = (NtQuerySystemInformationFuncPtr)GetProcAddress(module, "NtQuerySystemInformation");
     if (nullptr == nt_query_system_information)
     {
-        return (false);
+        return false;
     }
 
     SYSTEM_INFO system_info = { 0x0 };
@@ -236,7 +236,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
 
         if (0 != nt_query_system_information(SystemProcessorPerformanceInformation, new_sppi_array, (sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION) * query_core_count), &bytes_returned))
         {
-            return (false);
+            return false;
         }
 
         if (first_time)
@@ -268,7 +268,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
 
     memcpy(old_sppi_array, new_sppi_array, sizeof(old_sppi_array));
 
-    return (true);
+    return true;
 }
 
 bool get_system_cpu_core_count(size_t & core_count)
@@ -279,7 +279,7 @@ bool get_system_cpu_core_count(size_t & core_count)
     ULONG highest_node_number = 0;
     if (!GetNumaHighestNodeNumber(&highest_node_number))
     {
-        return (false);
+        return false;
     }
 
     for (USHORT node_number = 0; node_number <= highest_node_number; ++node_number)
@@ -308,13 +308,13 @@ bool get_system_cpu_core_count(size_t & core_count)
 
     core_count = static_cast<size_t>(system_info.dwNumberOfProcessors);
 #endif // _WIN32_WINNT >= 0x0601
-    return (true);
+    return true;
 }
 
 bool get_system_uptime(uint64_t & uptime)
 {
     uptime = static_cast<uint64_t>(GetTickCount64() / CLOCKS_PER_SEC);
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_END
@@ -343,7 +343,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
     struct ifaddrs * ifas = nullptr;
     if (0 != getifaddrs(&ifas))
     {
-        return (false);
+        return false;
     }
 
     for (struct ifaddrs * ifap_inet = ifas; nullptr != ifap_inet; ifap_inet = ifap_inet->ifa_next)
@@ -402,7 +402,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
 
     freeifaddrs(ifas);
 
-    return (!ifconfigs.empty());
+    return !ifconfigs.empty();
 }
 
 bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
@@ -413,7 +413,7 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 
     vm_size_t page_size;
@@ -423,12 +423,12 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
     if (KERN_SUCCESS != host_page_size(mach_port, &page_size) || KERN_SUCCESS != host_statistics64(mach_port, HOST_VM_INFO, (host_info64_t)&vm_stats, &count))
     {
         avali_size = 0;
-        return (false);
+        return false;
     }
     else
     {
         avali_size = static_cast<uint64_t>(page_size) * static_cast<uint64_t>(vm_stats.free_count + vm_stats.purgeable_count + vm_stats.external_page_count);
-        return (true);
+        return true;
     }
 }
 
@@ -438,7 +438,7 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 
     struct statvfs file_info;
@@ -446,13 +446,13 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
     {
         total_size = file_info.f_bsize * file_info.f_blocks;
         avali_size = file_info.f_bsize * file_info.f_bavail;
-        return (true);
+        return true;
     }
     else
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 }
 
@@ -467,7 +467,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
     natural_t core_count = 0;
     if (KERN_SUCCESS != host_processor_info(mach_host_self(), PROCESSOR_CPU_LOAD_INFO, &core_count, &new_cpu_info, &new_cpu_info_size))
     {
-        return (false);
+        return false;
     }
 
     for (natural_t index = 0; index < core_count; ++index)
@@ -502,7 +502,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
     new_cpu_info = nullptr;
     new_cpu_info_size = 0;
 
-    return (true);
+    return true;
 }
 
 bool get_system_cpu_core_count(size_t & core_count)
@@ -512,9 +512,9 @@ bool get_system_cpu_core_count(size_t & core_count)
     if (0 != sysctl(mib, sizeof(mib) / sizeof(mib[0]), &core_count, &len, nullptr, 0))
     {
         core_count = 1;
-        return (false);
+        return false;
     }
-    return (true);
+    return true;
 }
 
 bool get_system_uptime(uint64_t & uptime)
@@ -525,12 +525,12 @@ bool get_system_uptime(uint64_t & uptime)
     if (0 != sysctl(mib, sizeof(mib) / sizeof(mib[0]), &boot_time, &len, nullptr, 0))
     {
         uptime = 0;
-        return (false);
+        return false;
     }
     else
     {
         uptime = static_cast<uint64_t>(time(nullptr) - boot_time.tv_sec);
-        return (true);
+        return true;
     }
 }
 
@@ -561,23 +561,23 @@ static uint64_t memory_unit_bytes(const char * unit)
 {
     if (nullptr != strchr(unit, 'k') || nullptr != strchr(unit, 'K'))
     {
-        return (1024ULL);
+        return 1024ULL;
     }
     else if (nullptr != strchr(unit, 'm') || nullptr != strchr(unit, 'M'))
     {
-        return (1024ULL * 1024);
+        return 1024ULL * 1024;
     }
     else if (nullptr != strchr(unit, 'g') || nullptr != strchr(unit, 'G'))
     {
-        return (1024ULL * 1024 * 1024);
+        return 1024ULL * 1024 * 1024;
     }
     else if (nullptr != strchr(unit, 't') || nullptr != strchr(unit, 'T'))
     {
-        return (1024ULL * 1024 * 1024 * 1024);
+        return 1024ULL * 1024 * 1024 * 1024;
     }
     else
     {
-        return (1ULL);
+        return 1ULL;
     }
 }
 
@@ -597,7 +597,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
     int sock = socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0)
     {
-        return (false);
+        return false;
     }
 
     char buffer[1024] = { 0x0 };
@@ -607,7 +607,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
     if (0 != ioctl(sock, SIOCGIFCONF, &ifc))
     {
         close(sock);
-        return (false);
+        return false;
     }
 
     for (std::size_t index = 0, count = ifc.ifc_len / sizeof(struct ifreq); index < count; ++index)
@@ -660,7 +660,7 @@ bool get_system_ifconfig(std::vector<ifconfig_t> & ifconfigs)
 
     close(sock);
 
-    return (!ifconfigs.empty());
+    return !ifconfigs.empty();
 }
 
 bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
@@ -670,7 +670,7 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 
     total_size = 0;
@@ -720,7 +720,7 @@ bool get_system_memory_usage(uint64_t & total_size, uint64_t & avali_size)
         total_size = avali_size;
     }
 
-    return (4 == got_count);
+    return 4 == got_count;
 }
 
 bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64_t & avali_size)
@@ -729,7 +729,7 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 
     struct statvfs file_info;
@@ -737,13 +737,13 @@ bool get_system_disk_usage(const char * disk_path, uint64_t & total_size, uint64
     {
         total_size = file_info.f_bsize * file_info.f_blocks;
         avali_size = file_info.f_bsize * file_info.f_bavail;
-        return (true);
+        return true;
     }
     else
     {
         total_size = 1;
         avali_size = 0;
-        return (false);
+        return false;
     }
 }
 
@@ -762,7 +762,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
         std::ifstream ifs("/proc/stat", std::ios::binary);
         if (!ifs.is_open())
         {
-            return (false);
+            return false;
         }
         size_t index = 0;
         char buffer[4096] = { 0x0 };
@@ -822,7 +822,7 @@ bool get_system_cpu_usage(std::vector<size_t> & cpu_usage)
 
     memcpy(old_occupy_array, new_occupy_array, sizeof(old_occupy_array));
 
-    return (true);
+    return true;
 }
 
 bool get_system_cpu_core_count(size_t & core_count)
@@ -835,12 +835,12 @@ bool get_system_cpu_core_count(size_t & core_count)
     {
         errno = 0;
         core_count = 1;
-        return (false);
+        return false;
     }
 
     core_count = static_cast<size_t>(processor_count);
 
-    return (true);
+    return true;
 }
 
 bool get_system_uptime(uint64_t & uptime)
@@ -849,12 +849,12 @@ bool get_system_uptime(uint64_t & uptime)
     if (0 != sysinfo(&sys_info))
     {
         uptime = 0;
-        return (false);
+        return false;
     }
     else
     {
         uptime = static_cast<uint64_t>(sys_info.uptime);
-        return (true);
+        return true;
     }
 }
 
@@ -871,7 +871,7 @@ bool get_system_mac_by_ip(const std::string & ip, std::string & mac, bool force_
     std::vector<ifconfig_t> ifconfigs;
     if (!get_system_ifconfig(ifconfigs))
     {
-        return (false);
+        return false;
     }
 
     for (std::vector<ifconfig_t>::const_iterator iter = ifconfigs.begin(); ifconfigs.end() != iter; ++iter)
@@ -882,7 +882,7 @@ bool get_system_mac_by_ip(const std::string & ip, std::string & mac, bool force_
             if (ip == ifconfig.ip)
             {
                 mac = ifconfig.mac;
-                return (true);
+                return true;
             }
         }
         else
@@ -903,7 +903,7 @@ bool get_system_mac_by_ip(const std::string & ip, std::string & mac, bool force_
         }
     }
 
-    return (false);
+    return false;
 }
 
 NAMESPACE_GOOFER_END

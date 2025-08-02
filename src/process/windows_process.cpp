@@ -55,7 +55,7 @@ static bool get_process_tree(unsigned int process_id, std::list<unsigned int> & 
 
     if (0 == process_id)
     {
-        return (false);
+        return false;
     }
 
     std::list<process_info_t> process_info_list;
@@ -88,7 +88,7 @@ static bool get_process_tree(unsigned int process_id, std::list<unsigned int> & 
         }
     }
 
-    return (true);
+    return true;
 }
 
 static void kill_process(unsigned int process_id, int exit_code)
@@ -194,13 +194,13 @@ bool WindowsJoinProcess::monitor(unsigned int pid)
 {
     if (0 == pid || GetCurrentProcessId() == pid)
     {
-        return (false);
+        return false;
     }
 
     Guard<ThreadLocker> thread_guard(m_locker);
     if (m_running)
     {
-        return (false);
+        return false;
     }
     m_running = true;
 
@@ -208,14 +208,14 @@ bool WindowsJoinProcess::monitor(unsigned int pid)
     if (nullptr == handle)
     {
         m_running = false;
-        return (false);
+        return false;
     }
 
     m_command_line_params.clear();
     m_pid = static_cast<DWORD>(pid);
     m_handle = handle;
 
-    return (true);
+    return true;
 }
 
 bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, size_t child_reader, size_t child_writer)
@@ -223,7 +223,7 @@ bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, siz
     Guard<ThreadLocker> thread_guard(m_locker);
     if (m_running || m_command_line_params.empty())
     {
-        return (false);
+        return false;
     }
     m_running = true;
 
@@ -257,14 +257,14 @@ bool WindowsJoinProcess::acquire(size_t parent_reader, size_t parent_writer, siz
     if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, 0 != si.dwFlags, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
     {
         m_running = false;
-        return (false);
+        return false;
     }
     CloseHandle(pi.hThread);
 
     m_pid = pi.dwProcessId;
     m_handle = pi.hProcess;
 
-    return (true);
+    return true;
 }
 
 void WindowsJoinProcess::release(bool process_tree, int exit_code)
@@ -286,7 +286,7 @@ bool WindowsJoinProcess::wait_exit(int & exit_code)
 {
     if (!m_running || nullptr == m_handle)
     {
-        return (false);
+        return false;
     }
 
     bool ret = false;
@@ -331,7 +331,7 @@ bool WindowsJoinProcess::wait_exit(int & exit_code)
         ret = false;
     }
 
-    return (ret);
+    return ret;
 }
 
 void WindowsJoinProcess::clear()
@@ -367,17 +367,17 @@ void WindowsJoinProcess::set_process_args(const std::vector<std::string> & comma
 
 bool WindowsJoinProcess::running()
 {
-    return (m_running);
+    return m_running;
 }
 
 std::string WindowsJoinProcess::process_name()
 {
-    return (m_name);
+    return m_name;
 }
 
 unsigned int WindowsJoinProcess::process_id() const
 {
-    return (static_cast<unsigned int>(m_pid));
+    return static_cast<unsigned int>(m_pid);
 }
 
 static bool goofer_create_detached_process(const std::string & command_line, unsigned int * process_id)
@@ -392,7 +392,7 @@ static bool goofer_create_detached_process(const std::string & command_line, uns
 
     if (!CreateProcessA(nullptr, reinterpret_cast<LPSTR>(const_cast<char *>(command_line.c_str())), nullptr, nullptr, false, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi))
     {
-        return (false);
+        return false;
     }
     CloseHandle(pi.hThread);
     CloseHandle(pi.hProcess);
@@ -402,39 +402,39 @@ static bool goofer_create_detached_process(const std::string & command_line, uns
         *process_id = pi.dwProcessId;
     }
 
-    return (true);
+    return true;
 }
 
 bool goofer_create_detached_process(const std::string & command_line)
 {
-    return (goofer_create_detached_process(command_line, nullptr));
+    return goofer_create_detached_process(command_line, nullptr);
 }
 
 bool goofer_create_detached_process(const std::string & command_line, unsigned int & process_id)
 {
-    return (goofer_create_detached_process(command_line, &process_id));
+    return goofer_create_detached_process(command_line, &process_id);
 }
 
 static bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int * process_id)
 {
     std::string command_line;
     command_params_to_command_line(command_line_params, command_line);
-    return (goofer_create_detached_process(command_line, process_id));
+    return goofer_create_detached_process(command_line, process_id);
 }
 
 bool goofer_create_detached_process(const std::vector<std::string> & command_line_params)
 {
-    return (goofer_create_detached_process(command_line_params, nullptr));
+    return goofer_create_detached_process(command_line_params, nullptr);
 }
 
 bool goofer_create_detached_process(const std::vector<std::string> & command_line_params, unsigned int & process_id)
 {
-    return (goofer_create_detached_process(command_line_params, &process_id));
+    return goofer_create_detached_process(command_line_params, &process_id);
 }
 
 bool goofer_get_process_tree(unsigned int pid, std::list<unsigned int> & pid_list)
 {
-    return (0 != pid && get_process_tree(pid, pid_list));
+    return 0 != pid && get_process_tree(pid, pid_list);
 }
 
 void goofer_kill_process(unsigned int pid, int exit_code, bool whole_tree)

@@ -18,7 +18,7 @@ NAMESPACE_GOOFER_BEGIN
 
 uint64_t goofer_time()
 {
-    return (static_cast<uint64_t>(time(nullptr)));
+    return static_cast<uint64_t>(time(nullptr));
 }
 
 uint64_t goofer_ns_time()
@@ -36,24 +36,24 @@ uint64_t goofer_ns_time()
     double current_time = static_cast<double>(clock_count.QuadPart);
     current_time *= 1000000000.0;
     current_time /= static_cast<double>(s_clock_frequency.QuadPart);
-    return (static_cast<uint64_t>(current_time));
+    return static_cast<uint64_t>(current_time);
 #elif defined(GOOFER_OS_IS_MAC)
-    return (static_cast<uint64_t>(clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW)));
+    return static_cast<uint64_t>(clock_gettime_nsec_np(CLOCK_MONOTONIC_RAW));
 #else
     struct timespec ts = { 0x0 };
     clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-    return (static_cast<uint64_t>(ts.tv_sec) * GOOFER_U64_VAL(1000000000) + static_cast<uint64_t>(ts.tv_nsec));
+    return static_cast<uint64_t>(ts.tv_sec) * GOOFER_U64_VAL(1000000000) + static_cast<uint64_t>(ts.tv_nsec);
 #endif // GOOFER_OS_IS_WIN
 }
 
 uint64_t goofer_monotonic_time()
 {
-    return (goofer_make_monotonic_time(goofer_ns_time()));
+    return goofer_make_monotonic_time(goofer_ns_time());
 }
 
 uint64_t goofer_make_monotonic_time(uint64_t monotonic_time_nanosecond)
 {
-    return (monotonic_time_nanosecond / 1000000000);
+    return monotonic_time_nanosecond / 1000000000;
 }
 
 struct tm goofer_make_localtime(uint64_t time_second)
@@ -67,7 +67,7 @@ struct tm goofer_make_localtime(uint64_t time_second)
     localtime_r(&time_value, &tm_value);
 #endif // GOOFER_OS_IS_WIN
 
-    return (tm_value);
+    return tm_value;
 }
 
 struct tm goofer_make_gmtime(uint64_t time_second)
@@ -81,22 +81,22 @@ struct tm goofer_make_gmtime(uint64_t time_second)
     gmtime_r(&time_value, &tm_value);
 #endif // GOOFER_OS_IS_WIN
 
-    return (tm_value);
+    return tm_value;
 }
 
 uint64_t goofer_make_time(struct tm tm_value)
 {
-    return (static_cast<uint64_t>(mktime(&tm_value)));
+    return static_cast<uint64_t>(mktime(&tm_value));
 }
 
 struct tm goofer_localtime()
 {
-    return (goofer_make_localtime(goofer_time()));
+    return goofer_make_localtime(goofer_time());
 }
 
 struct tm goofer_gmtime()
 {
-    return (goofer_make_gmtime(goofer_time()));
+    return goofer_make_gmtime(goofer_time());
 }
 
 struct timeval goofer_gettimeofday()
@@ -112,7 +112,7 @@ struct timeval goofer_gettimeofday()
     gettimeofday(&tv_now, nullptr);
 #endif // GOOFER_OS_IS_WIN
 
-    return (tv_now);
+    return tv_now;
 }
 
 int goofer_get_timezone()
@@ -136,17 +136,17 @@ int goofer_get_timezone()
         s_inited = true;
     }
 
-    return (s_time_zone);
+    return s_time_zone;
 }
 
 int goofer_get_day_of_week(const struct tm & tm_value)
 {
-    return (tm_value.tm_wday);
+    return tm_value.tm_wday;
 }
 
 int goofer_get_day_of_week()
 {
-    return (goofer_get_day_of_week(goofer_localtime()));
+    return goofer_get_day_of_week(goofer_localtime());
 }
 
 std::string goofer_get_week(const struct tm & tm_value, bool week_abbreviation)
@@ -156,12 +156,12 @@ std::string goofer_get_week(const struct tm & tm_value, bool week_abbreviation)
         { "Sun",    "Mon",    "Tue",     "Wed",       "Thu",      "Fri",    "Sat"      }, 
         { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" }  
     };
-    return (std::string(week[week_abbreviation ? 0 : 1][goofer_get_day_of_week(tm_value)]));
+    return std::string(week[week_abbreviation ? 0 : 1][goofer_get_day_of_week(tm_value)]);
 }
 
 std::string goofer_get_week(bool week_abbreviation)
 {
-    return (goofer_get_week(goofer_localtime(), week_abbreviation));
+    return goofer_get_week(goofer_localtime(), week_abbreviation);
 }
 
 std::string goofer_get_date(const struct tm & tm_value, const char * date_delimiter)
@@ -178,12 +178,12 @@ std::string goofer_get_date(const struct tm & tm_value, const char * date_delimi
         << std::setw(2) << (tm_value.tm_mon + 1)
         << date_delimiter
         << std::setw(2) << (tm_value.tm_mday);
-    return (oss.str());
+    return oss.str();
 }
 
 std::string goofer_get_date(const char * date_delimiter)
 {
-    return (goofer_get_date(goofer_localtime(), date_delimiter));
+    return goofer_get_date(goofer_localtime(), date_delimiter);
 }
 
 std::string goofer_get_time(const struct tm & tm_value, const char * time_delimiter)
@@ -200,12 +200,12 @@ std::string goofer_get_time(const struct tm & tm_value, const char * time_delimi
         << std::setw(2) << (tm_value.tm_min)
         << time_delimiter
         << std::setw(2) << (tm_value.tm_sec);
-    return (oss.str());
+    return oss.str();
 }
 
 std::string goofer_get_time(const char * time_delimiter)
 {
-    return (goofer_get_time(goofer_localtime(), time_delimiter));
+    return goofer_get_time(goofer_localtime(), time_delimiter);
 }
 
 std::string goofer_datetime()
@@ -222,7 +222,7 @@ std::string goofer_datetime()
     char str_time[32] = { 0x0 };
     strftime(str_time, sizeof(str_time), "%Y-%m-%d %H:%M:%S", &tm_now);
 
-    return (str_time);
+    return str_time;
 }
 
 std::string goofer_get_datetime(const struct tm & tm_value, const char * date_delimiter, const char * time_delimiter, const char * date_time_delimiter)
@@ -231,12 +231,12 @@ std::string goofer_get_datetime(const struct tm & tm_value, const char * date_de
     {
         date_time_delimiter = " ";
     }
-    return (goofer_get_date(tm_value, date_delimiter) + date_time_delimiter + goofer_get_time(tm_value, time_delimiter));
+    return goofer_get_date(tm_value, date_delimiter) + date_time_delimiter + goofer_get_time(tm_value, time_delimiter);
 }
 
 std::string goofer_get_datetime(const char * date_delimiter, const char * time_delimiter, const char * date_time_delimiter)
 {
-    return (goofer_get_datetime(goofer_localtime(), date_delimiter, time_delimiter, date_time_delimiter));
+    return goofer_get_datetime(goofer_localtime(), date_delimiter, time_delimiter, date_time_delimiter);
 }
 
 std::string goofer_get_comprehensive_datetime(
@@ -258,7 +258,7 @@ std::string goofer_get_comprehensive_datetime(
         time_ms, goofer_get_timezone() / -3600
     );
 
-    return (goofer_get_datetime(tm_now, date_delimiter, time_delimiter, date_time_delimiter) + buff + goofer_get_week(tm_now));
+    return goofer_get_datetime(tm_now, date_delimiter, time_delimiter, date_time_delimiter) + buff + goofer_get_week(tm_now);
 }
 
 void goofer_ms_sleep(size_t milliseconds)

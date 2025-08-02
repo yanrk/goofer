@@ -36,7 +36,7 @@ void WindowsThreadLocalStorage::set_value(void * thread_specific_value)
 
 void * WindowsThreadLocalStorage::get_value()
 {
-    return (TlsGetValue(m_thread_key));
+    return TlsGetValue(m_thread_key);
 }
 
 NAMESPACE_GOOFER_END

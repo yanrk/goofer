@@ -19,7 +19,7 @@ static bool create_pipe_endpoints(HANDLE & read_handle, HANDLE & write_handle)
     read_handle = INVALID_HANDLE_VALUE;
     write_handle = INVALID_HANDLE_VALUE;
     SECURITY_ATTRIBUTES sa = { sizeof(SECURITY_ATTRIBUTES), nullptr, TRUE };
-    return (TRUE == CreatePipe(&read_handle, &write_handle, &sa, 0));
+    return TRUE == CreatePipe(&read_handle, &write_handle, &sa, 0);
 }
 
 static void close_pipe_endpoint(HANDLE & handle)
@@ -36,22 +36,22 @@ static bool read_pipe(HANDLE read_handle, char * buff, size_t buff_size, size_t 
     read_len = 0;
     if (INVALID_HANDLE_VALUE == read_handle || nullptr == buff || 0 == buff_size)
     {
-        return (false);
+        return false;
     }
     DWORD read_size = 0;
     if (ReadFile(read_handle, buff, static_cast<DWORD>(buff_size), &read_size, nullptr))
     {
         read_len = static_cast<size_t>(read_size);
-        return (true);
+        return true;
     }
-    return (ERROR_BROKEN_PIPE == GetLastError());
+    return ERROR_BROKEN_PIPE == GetLastError();
 }
 
 static bool write_pipe(HANDLE write_handle, const char * data, size_t data_len)
 {
     if (INVALID_HANDLE_VALUE == write_handle || nullptr == data || 0 == data_len)
     {
-        return (false);
+        return false;
     }
     while (data_len > 0)
     {
@@ -63,10 +63,10 @@ static bool write_pipe(HANDLE write_handle, const char * data, size_t data_len)
         }
         else
         {
-            return (false);
+            return false;
         }
     }
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -89,14 +89,14 @@ bool WindowsAnonymousPipe::acquire(bool parent_read_child_write, bool parent_wri
 {
     if (INVALID_HANDLE_VALUE != m_parent_read_handle || INVALID_HANDLE_VALUE != m_parent_write_handle || INVALID_HANDLE_VALUE != m_child_read_handle || INVALID_HANDLE_VALUE != m_child_write_handle)
     {
-        return (false);
+        return false;
     }
     if (parent_read_child_write)
     {
         if (!create_pipe_endpoints(m_parent_read_handle, m_child_write_handle))
         {
             release();
-            return (false);
+            return false;
         }
     }
     if (parent_write_child_read)
@@ -104,10 +104,10 @@ bool WindowsAnonymousPipe::acquire(bool parent_read_child_write, bool parent_wri
         if (!create_pipe_endpoints(m_child_read_handle, m_parent_write_handle))
         {
             release();
-            return (false);
+            return false;
         }
     }
-    return (parent_read_child_write || parent_write_child_read);
+    return parent_read_child_write || parent_write_child_read;
 }
 
 void WindowsAnonymousPipe::release()
@@ -118,12 +118,12 @@ void WindowsAnonymousPipe::release()
 
 bool WindowsAnonymousPipe::read(char * buff, size_t buff_size, size_t & read_len)
 {
-    return (read_pipe(m_parent_read_handle, buff, buff_size, read_len));
+    return read_pipe(m_parent_read_handle, buff, buff_size, read_len);
 }
 
 bool WindowsAnonymousPipe::write(const char * data, size_t data_len)
 {
-    return (write_pipe(m_parent_write_handle, data, data_len));
+    return write_pipe(m_parent_write_handle, data, data_len);
 }
 
 void WindowsAnonymousPipe::get_parent_reader(size_t & parent_reader)

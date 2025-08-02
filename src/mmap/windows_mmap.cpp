@@ -25,13 +25,13 @@ static std::wstring get_file_map_name(HANDLE file_handle)
 
     if (INVALID_HANDLE_VALUE == file_handle)
     {
-        return (map_name);
+        return map_name;
     }
 
     wchar_t path_name[MAX_PATH] = { 0x0 };
     if (0 == GetFinalPathNameByHandleW(file_handle, path_name, sizeof(path_name) / sizeof(path_name[0]), VOLUME_NAME_DOS))
     {
-        return (map_name);
+        return map_name;
     }
 
     map_name = path_name;
@@ -48,29 +48,29 @@ static std::wstring get_file_map_name(HANDLE file_handle)
         }
     }
 
-    return (map_name);
+    return map_name;
 }
 
 static bool truncate_file(HANDLE file_handle, std::size_t file_length)
 {
     if (INVALID_HANDLE_VALUE == file_handle)
     {
-        return (false);
+        return false;
     }
 
     LARGE_INTEGER file_size;
     file_size.QuadPart = static_cast<LONGLONG>(file_length);
     if (!::SetFilePointerEx(file_handle, file_size, nullptr, FILE_BEGIN))
     {
-        return (false);
+        return false;
     }
 
     if (!::SetEndOfFile(file_handle))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -176,12 +176,12 @@ bool WindowsVirtualMemoryMap::init(const char * filename, std::size_t map_size, 
 
         m_map_size = map_size;
 
-        return (true);
+        return true;
     } while (false);
 
     exit();
 
-    return (false);
+    return false;
 }
 
 void WindowsVirtualMemoryMap::exit()
@@ -217,12 +217,12 @@ bool WindowsVirtualMemoryMap::resize(std::size_t map_size)
 {
     if (INVALID_HANDLE_VALUE == m_file_handle)
     {
-        return (false);
+        return false;
     }
 
     if (map_size == m_map_capacity)
     {
-        return (true);
+        return true;
     }
 
     do
@@ -294,22 +294,22 @@ bool WindowsVirtualMemoryMap::resize(std::size_t map_size)
 
         m_map_size = map_size;
 
-        return (true);
+        return true;
     } while (false);
 
     exit();
 
-    return (false);
+    return false;
 }
 
 char * WindowsVirtualMemoryMap::get_map_data()
 {
-    return (m_map_data);
+    return m_map_data;
 }
 
 std::size_t WindowsVirtualMemoryMap::get_map_size()
 {
-    return (m_map_size);
+    return m_map_size;
 }
 
 WindowsMemMap::WindowsMemMap()
@@ -325,7 +325,7 @@ WindowsMemMap::~WindowsMemMap()
 
 bool WindowsMemMap::init(const char * map_name, bool creator, std::size_t map_size, bool global)
 {
-    return (WindowsVirtualMemoryMap::init(map_name, map_size, false, creator, global));
+    return WindowsVirtualMemoryMap::init(map_name, map_size, false, creator, global);
 }
 
 WindowsFileMap::WindowsFileMap()
@@ -341,14 +341,14 @@ WindowsFileMap::~WindowsFileMap()
 
 bool WindowsFileMap::init(const char * file_name, bool creator, std::size_t map_size, bool global)
 {
-    return (WindowsVirtualMemoryMap::init(file_name, map_size, true, creator, global));
+    return WindowsVirtualMemoryMap::init(file_name, map_size, true, creator, global);
 }
 
 bool WindowsFileMap::flush(char * data, std::size_t size)
 {
     if (INVALID_HANDLE_VALUE == m_file_handle || nullptr == m_map_data || 0 == m_map_size)
     {
-        return (false);
+        return false;
     }
 
     if (nullptr == data || 0 == size)
@@ -358,15 +358,15 @@ bool WindowsFileMap::flush(char * data, std::size_t size)
     }
     else if (data < m_map_data || data + size > m_map_data + m_map_size)
     {
-        return (false);
+        return false;
     }
 
     if (!::FlushViewOfFile(data, size))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_END

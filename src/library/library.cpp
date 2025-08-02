@@ -26,13 +26,13 @@ void * goofer_library_acquire(const char * filename)
 {
     if (nullptr == filename)
     {
-        return (nullptr);
+        return nullptr;
     }
 
 #ifdef GOOFER_OS_IS_WIN
-    return (reinterpret_cast<void *>(LoadLibraryA(filename)));
+    return reinterpret_cast<void *>(LoadLibraryA(filename));
 #else
-    return (dlopen(filename, RTLD_LAZY | RTLD_LOCAL));
+    return dlopen(filename, RTLD_LAZY | RTLD_LOCAL);
 #endif // GOOFER_OS_IS_WIN
 }
 
@@ -40,13 +40,13 @@ int goofer_library_release(void * library)
 {
     if (nullptr == library)
     {
-        return (0);
+        return 0;
     }
 
 #ifdef GOOFER_OS_IS_WIN
-    return (FreeLibrary(reinterpret_cast<HMODULE>(library)) ? 1 : 0);
+    return FreeLibrary(reinterpret_cast<HMODULE>(library)) ? 1 : 0;
 #else
-    return (0 == dlclose(library) ? 1 : 0);
+    return 0 == dlclose(library) ? 1 : 0;
 #endif // GOOFER_OS_IS_WIN
 }
 
@@ -54,18 +54,18 @@ void * goofer_library_symbol(void * library, const char * symbol)
 {
     if (nullptr == library)
     {
-        return (nullptr);
+        return nullptr;
     }
 
     if (nullptr == symbol)
     {
-        return (nullptr);
+        return nullptr;
     }
 
 #ifdef GOOFER_OS_IS_WIN
-    return (GetProcAddress(reinterpret_cast<HMODULE>(library), symbol));
+    return GetProcAddress(reinterpret_cast<HMODULE>(library), symbol);
 #else
-    return (dlsym(library, symbol));
+    return dlsym(library, symbol);
 #endif // GOOFER_OS_IS_WIN
 }
 
@@ -76,18 +76,18 @@ const char * goofer_library_error(void)
     DWORD error_code = GetLastError();
     if (0 == error_code)
     {
-        return ("");
+        return "";
     }
     goofer_snprintf(library_error, sizeof(library_error), "library error: %d", error_code);
 #else
     const char * error_info = dlerror();
     if (nullptr == error_info)
     {
-        return ("");
+        return "";
     }
     goofer_snprintf(library_error, sizeof(library_error), "library error: %s", error_info);
 #endif // GOOFER_OS_IS_WIN
-    return (library_error);
+    return library_error;
 }
 
 Library::Library()
@@ -110,7 +110,7 @@ bool Library::acquire(const char * library_name)
     if (nullptr == library_name)
     {
         m_what = "library name is nullptr";
-        return (false);
+        return false;
     }
 
     m_name = library_name;
@@ -118,10 +118,10 @@ bool Library::acquire(const char * library_name)
     if (nullptr == m_library)
     {
         m_what = goofer_library_error();
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 void Library::release()
@@ -140,12 +140,12 @@ void Library::release()
 
 const std::string & Library::name() const
 {
-    return (m_name);
+    return m_name;
 }
 
 const std::string & Library::what() const
 {
-    return (m_what);
+    return m_what;
 }
 
 NAMESPACE_GOOFER_END

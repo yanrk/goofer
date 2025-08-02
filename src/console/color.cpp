@@ -120,7 +120,7 @@ static unsigned short get_psx_foreground_color(GOOFER_CONSOLE_FONT_COLOR console
             break;
         }
     }
-    return (color);
+    return color;
 }
 
 static unsigned short get_psx_background_color(GOOFER_CONSOLE_FONT_COLOR console_color)
@@ -214,7 +214,7 @@ static unsigned short get_psx_background_color(GOOFER_CONSOLE_FONT_COLOR console
             break;
         }
     }
-    return (color);
+    return color;
 }
 
 #ifdef GOOFER_OS_IS_WIN
@@ -309,7 +309,7 @@ static unsigned short get_win_foreground_color(GOOFER_CONSOLE_FONT_COLOR console
             break;
         }
     }
-    return (color);
+    return color;
 }
 
 static unsigned short get_win_background_color(GOOFER_CONSOLE_FONT_COLOR console_color)
@@ -403,7 +403,7 @@ static unsigned short get_win_background_color(GOOFER_CONSOLE_FONT_COLOR console
             break;
         }
     }
-    return (color);
+    return color;
 }
 #endif // GOOFER_OS_IS_WIN
 
@@ -414,12 +414,12 @@ static size_t goofer_console_color_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
 {
     if (nullptr == stream || nullptr == format || nullptr == args)
     {
-        return (0);
+        return 0;
     }
 
     if (stream != stdout && stream != stderr)
     {
-        return (0);
+        return 0;
     }
 
     int ret_siz = 0;
@@ -501,7 +501,7 @@ static size_t goofer_console_color_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
         ret_siz = vfprintf_safe(stream, format, args);
     }
 
-    return (ret_siz < 0 ? 0 : ret_siz);
+    return ret_siz < 0 ? 0 : ret_siz;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -544,7 +544,7 @@ size_t goofer_console_color_stdout_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
 
     va_end(args);
 
-    return (ret_siz);
+    return ret_siz;
 }
 
 size_t goofer_console_color_stderr_print(GOOFER_CONSOLE_FONT_COLOR foreground_color, GOOFER_CONSOLE_FONT_COLOR background_color, const char * format, ...)
@@ -557,7 +557,7 @@ size_t goofer_console_color_stderr_print(GOOFER_CONSOLE_FONT_COLOR foreground_co
 
     va_end(args);
 
-    return (ret_siz);
+    return ret_siz;
 }
 
 NAMESPACE_GOOFER_END

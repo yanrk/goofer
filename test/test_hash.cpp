@@ -57,17 +57,17 @@ struct Person
 
     bool operator == (const Person & other) const
     {
-        return (
+        return 
             gender == other.gender && age == other.age && height == other.height && weight == other.weight && 
             first_name == other.first_name && last_name == other.last_name && province == other.province
-        );
+        ;
     }
 };
 
 std::ostream & operator << (std::ostream & os, const Person & person)
 {
-    return (os << "[" << person.gender << "," << person.age << "," << person.height << "," << person.weight << "," 
-               << person.first_name << "," << person.last_name << "," << person.province << "]");
+    return os << "[" << person.gender << "," << person.age << "," << person.height << "," << person.weight << "," 
+               << person.first_name << "," << person.last_name << "," << person.province << "]";
 }
 
 namespace std
@@ -85,7 +85,7 @@ namespace std
             hash_combine(seed, person.first_name);
             hash_combine(seed, person.last_name);
             hash_combine(seed, person.province);
-            return (seed);
+            return seed;
         }
     };
 }
@@ -97,7 +97,7 @@ struct People
 
     bool operator == (const People & other) const
     {
-        return (name == other.name && person_list == other.person_list);
+        return name == other.name && person_list == other.person_list;
     }
 };
 
@@ -107,7 +107,7 @@ std::ostream & operator << (std::ostream & os, const People & people)
     os << people.name << std::endl;
     std::for_each(people.person_list.begin(), people.person_list.end(), [&os](const Person & person) {os << person << std::endl; });
     os << "}";
-    return (os);
+    return os;
 }
 
 namespace std
@@ -120,7 +120,7 @@ namespace std
             std::size_t seed = 0;
             hash_combine(seed, people.name);
             hash_combine(seed, hash_range(people.person_list.begin(), people.person_list.end()));
-            return (seed);
+            return seed;
         }
     };
 }

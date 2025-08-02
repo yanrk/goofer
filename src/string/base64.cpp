@@ -28,31 +28,31 @@ static unsigned char base64_index(const char cSymbol)
 {
     if ('A' <= cSymbol && 'Z' >= cSymbol)
     {
-        return (cSymbol - 'A' + 0);
+        return cSymbol - 'A' + 0;
     }
     else if ('a' <= cSymbol && 'z' >= cSymbol)
     {
-        return (cSymbol - 'a' + 26);
+        return cSymbol - 'a' + 26;
     }
     else if ('0' <= cSymbol && '9' >= cSymbol)
     {
-        return (cSymbol - '0' + 52);
+        return cSymbol - '0' + 52;
     }
     else if ('+' == cSymbol)
     {
-        return (62);
+        return 62;
     }
     else if ('/' == cSymbol)
     {
-        return (63);
+        return 63;
     }
     else if ('=' == cSymbol)
     {
-        return (0);
+        return 0;
     }
     else
     {
-        return (64);
+        return 64;
     }
 }
 
@@ -64,7 +64,7 @@ bool base64_encode(const unsigned char * src, size_t src_len, char * dst, size_t
 
     if (nullptr == src || nullptr == dst || BASE64_ENCODE_SIZE(src_len) > dst_len)
     {
-        return (false);
+        return false;
     }
 
     for (size_t index = 0; index < src_len; index += 3)
@@ -98,7 +98,7 @@ bool base64_encode(const unsigned char * src, size_t src_len, char * dst, size_t
         }
     }
 
-    return (true);
+    return true;
 }
 
 bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t dst_len, size_t & out_len)
@@ -107,24 +107,24 @@ bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t
 
     if (nullptr == src || nullptr == dst)
     {
-        return (false);
+        return false;
     }
 
     if (0 != src_len % 4)
     {
-        return (false);
+        return false;
     }
 
     if (0 == src_len)
     {
-        return (true);
+        return true;
     }
 
     for (size_t index = 0; index < src_len - 2; ++index)
     {
         if ('=' == src[index])
         {
-            return (false);
+            return false;
         }
     }
 
@@ -141,7 +141,7 @@ bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t
 
             if ((src_tmp[n] = base64_index(src[n])) > 63)
             {
-                return (false);
+                return false;
             }
         }
 
@@ -149,7 +149,7 @@ bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t
 
         if (out_len > dst_len)
         {
-            return (false);
+            return false;
         }
 
         switch (pad_cnt)
@@ -169,7 +169,7 @@ bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t
             }
             default:
             {
-                return (false);
+                return false;
                 break;
             }
         }
@@ -180,64 +180,64 @@ bool base64_decode(const char * src, size_t src_len, unsigned char * dst, size_t
 
     if ('=' == src[-2] && '=' != src[-1])
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool base64_encode(const unsigned char * src, size_t src_len, char * dst, size_t dst_len)
 {
     size_t out_len = 0;
 
-    return (base64_encode(src, src_len, dst, dst_len, out_len));
+    return base64_encode(src, src_len, dst, dst_len, out_len);
 }
 
 bool base64_decode(const char * src, unsigned char * dst, size_t dst_len)
 {
     if (nullptr == src)
     {
-        return (false);
+        return false;
     }
 
     size_t src_len = strlen(src);
     size_t out_len = 0;
 
-    return (base64_decode(src, src_len, dst, dst_len, out_len));
+    return base64_decode(src, src_len, dst, dst_len, out_len);
 }
 
 bool base64_encode(const void * src, size_t src_len, char * dst, size_t dst_len)
 {
-    return (base64_encode(reinterpret_cast<const unsigned char *>(src), src_len, dst, dst_len));
+    return base64_encode(reinterpret_cast<const unsigned char *>(src), src_len, dst, dst_len);
 }
 
 bool base64_decode(const char * src, void * dst, size_t dst_len)
 {
-    return (base64_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len));
+    return base64_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len);
 }
 
 bool base64_encode(const char * src, char * dst, size_t dst_len)
 {
     if (nullptr == src)
     {
-        return (false);
+        return false;
     }
 
     size_t src_len = strlen(src);
 
-    return (base64_encode(src, src_len, dst, dst_len));
+    return base64_encode(src, src_len, dst, dst_len);
 }
 
 bool base64_decode(const char * src, char * dst, size_t dst_len)
 {
     if (nullptr == dst || 0 == dst_len)
     {
-        return (false);
+        return false;
     }
 
     memset(dst, 0x0, dst_len);
 
-    return (base64_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len - 1));
+    return base64_decode(src, reinterpret_cast<unsigned char *>(dst), dst_len - 1);
 }
 
 bool base64_encode(const void * src, size_t src_len, std::string & dst)
@@ -247,12 +247,12 @@ bool base64_encode(const void * src, size_t src_len, std::string & dst)
     if (base64_encode(reinterpret_cast<const unsigned char *>(src), src_len, &dst[0], dst.size(), out_len))
     {
         dst.resize(out_len);
-        return (true);
+        return true;
     }
     else
     {
         dst.clear();
-        return (false);
+        return false;
     }
 }
 
@@ -261,9 +261,9 @@ bool base64_encode(const char * src, std::string & dst)
     if (nullptr == src)
     {
         dst.clear();
-        return (false);
+        return false;
     }
-    return (base64_encode(src, strlen(src), dst));
+    return base64_encode(src, strlen(src), dst);
 }
 
 bool base64_decode(const std::string & src, std::vector<unsigned char> & dst)
@@ -274,12 +274,12 @@ bool base64_decode(const std::string & src, std::vector<unsigned char> & dst)
     if (base64_decode(src.c_str(), src_len, &dst[0], dst.size(), out_len))
     {
         dst.resize(out_len);
-        return (true);
+        return true;
     }
     else
     {
         dst.clear();
-        return (false);
+        return false;
     }
 }
 
@@ -290,12 +290,12 @@ bool base64_encode(const void * src, size_t src_len, std::vector<char> & dst)
     if (base64_encode(reinterpret_cast<const unsigned char *>(src), src_len, &dst[0], dst.size(), out_len))
     {
         dst.resize(out_len);
-        return (true);
+        return true;
     }
     else
     {
         dst.clear();
-        return (false);
+        return false;
     }
 }
 
@@ -304,9 +304,9 @@ bool base64_encode(const char * src, std::vector<char> & dst)
     if (nullptr == src)
     {
         dst.clear();
-        return (false);
+        return false;
     }
-    return (base64_encode(src, strlen(src), dst));
+    return base64_encode(src, strlen(src), dst);
 }
 
 bool base64_decode(const std::vector<char> & src, std::vector<unsigned char> & dst)
@@ -317,12 +317,12 @@ bool base64_decode(const std::vector<char> & src, std::vector<unsigned char> & d
     if (base64_decode(src.data(), src_len, &dst[0], dst.size(), out_len))
     {
         dst.resize(out_len);
-        return (true);
+        return true;
     }
     else
     {
         dst.clear();
-        return (false);
+        return false;
     }
 }
 

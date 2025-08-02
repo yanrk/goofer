@@ -34,25 +34,25 @@ inline std::size_t hash_range(Iter first, Iter last)
         hash_combine(seed, *first);
         ++first;
     }
-    return (seed);
+    return seed;
 }
 
 template <typename T>
 inline std::size_t hash_value(const T & t)
 {
-    return (std::hash<T>()(t));
+    return std::hash<T>()(t);
 }
 
 template <typename T, unsigned int N>
 inline std::size_t hash_value(const T (&t) [N])
 {
-    return (hash_range(t, t + N));
+    return hash_range(t, t + N);
 }
 
 template <typename T, unsigned int N>
 inline std::size_t hash_value(T (&t) [N])
 {
-    return (hash_range(t, t + N));
+    return hash_range(t, t + N);
 }
 
 NAMESPACE_GOOFER_END

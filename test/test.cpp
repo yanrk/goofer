@@ -37,5 +37,5 @@ int main(int argc, char * argv[])
     test_hash();
     test_pipe();
     test_mmap();
-    return (0);
+    return 0;
 }

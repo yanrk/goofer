@@ -20,7 +20,7 @@ static bool create_pipe_endpoints(int file_descriptor[2])
 {
     file_descriptor[0] = -1;
     file_descriptor[1] = -1;
-    return (-1 != pipe(file_descriptor));
+    return -1 != pipe(file_descriptor);
 }
 
 static void close_pipe_endpoint(int file_descriptor)
@@ -37,22 +37,22 @@ static bool read_pipe(int file_descriptor, char * buff, size_t buff_size, size_t
     read_len = 0;
     if (-1 == file_descriptor || nullptr == buff || 0 == buff_size)
     {
-        return (false);
+        return false;
     }
     ssize_t read_size = read(file_descriptor, buff, buff_size);
     if (-1 != read_size)
     {
         read_len = static_cast<size_t>(read_size);
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 static bool write_pipe(int file_descriptor, const char * data, size_t data_len)
 {
     if (-1 == file_descriptor || nullptr == data || 0 == data_len)
     {
-        return (false);
+        return false;
     }
     while (data_len > 0)
     {
@@ -64,10 +64,10 @@ static bool write_pipe(int file_descriptor, const char * data, size_t data_len)
         }
         else
         {
-            return (false);
+            return false;
         }
     }
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -91,14 +91,14 @@ bool UnixAnonymousPipe::acquire(bool parent_read_child_write, bool parent_write_
 {
     if (-1 != m_parent_read_child_write_pipe[0] || -1 != m_parent_read_child_write_pipe[1] || -1 != m_parent_write_child_read_pipe[0] || -1 != m_parent_write_child_read_pipe[1])
     {
-        return (false);
+        return false;
     }
     if (parent_read_child_write)
     {
         if (!create_pipe_endpoints(m_parent_read_child_write_pipe))
         {
             release();
-            return (false);
+            return false;
         }
     }
     if (parent_write_child_read)
@@ -106,10 +106,10 @@ bool UnixAnonymousPipe::acquire(bool parent_read_child_write, bool parent_write_
         if (!create_pipe_endpoints(m_parent_write_child_read_pipe))
         {
             release();
-            return (false);
+            return false;
         }
     }
-    return (parent_read_child_write || parent_write_child_read);
+    return parent_read_child_write || parent_write_child_read;
 }
 
 void UnixAnonymousPipe::release()
@@ -120,12 +120,12 @@ void UnixAnonymousPipe::release()
 
 bool UnixAnonymousPipe::read(char * buff, size_t buff_size, size_t & read_len)
 {
-    return (read_pipe(m_parent_read_child_write_pipe[0], buff, buff_size, read_len));
+    return read_pipe(m_parent_read_child_write_pipe[0], buff, buff_size, read_len);
 }
 
 bool UnixAnonymousPipe::write(const char * data, size_t data_len)
 {
-    return (write_pipe(m_parent_write_child_read_pipe[1], data, data_len));
+    return write_pipe(m_parent_write_child_read_pipe[1], data, data_len);
 }
 
 void UnixAnonymousPipe::get_parent_reader(size_t & parent_reader)

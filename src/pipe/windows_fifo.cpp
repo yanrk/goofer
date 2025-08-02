@@ -19,22 +19,22 @@ static bool read_pipe(HANDLE read_handle, char * buff, size_t buff_size, size_t 
     read_len = 0;
     if (INVALID_HANDLE_VALUE == read_handle || nullptr == buff || 0 == buff_size)
     {
-        return (false);
+        return false;
     }
     DWORD read_size = 0;
     if (ReadFile(read_handle, buff, static_cast<DWORD>(buff_size), &read_size, nullptr))
     {
         read_len = static_cast<size_t>(read_size);
-        return (true);
+        return true;
     }
-    return (ERROR_BROKEN_PIPE == GetLastError());
+    return ERROR_BROKEN_PIPE == GetLastError();
 }
 
 static bool write_pipe(HANDLE write_handle, const char * data, size_t data_len)
 {
     if (INVALID_HANDLE_VALUE == write_handle || nullptr == data || 0 == data_len)
     {
-        return (false);
+        return false;
     }
     while (data_len > 0)
     {
@@ -46,10 +46,10 @@ static bool write_pipe(HANDLE write_handle, const char * data, size_t data_len)
         }
         else
         {
-            return (false);
+            return false;
         }
     }
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -72,7 +72,7 @@ bool WindowsNamedPipe::acquire(const std::string & pipe_name, bool is_creator, b
 {
     if (INVALID_HANDLE_VALUE != m_pipe_handle || pipe_name.empty() || (!is_reader && !is_writer))
     {
-        return (false);
+        return false;
     }
     m_is_creator = is_creator;
     m_is_reader = is_reader;
@@ -83,12 +83,12 @@ bool WindowsNamedPipe::acquire(const std::string & pipe_name, bool is_creator, b
         m_pipe_handle = CreateNamedPipeA(full_pipe_name.c_str(), ((is_reader ? PIPE_ACCESS_INBOUND : 0) | (is_writer ? PIPE_ACCESS_OUTBOUND : 0)), (PIPE_WAIT | PIPE_TYPE_BYTE | PIPE_READMODE_BYTE | PIPE_REJECT_REMOTE_CLIENTS), PIPE_UNLIMITED_INSTANCES, 4096, 4096, 0, nullptr);
         if (INVALID_HANDLE_VALUE == m_pipe_handle)
         {
-            return (false);
+            return false;
         }
         if (!ConnectNamedPipe(m_pipe_handle, nullptr) && (GetLastError() != ERROR_PIPE_CONNECTED))
         {
             release();
-            return (false);
+            return false;
         }
     }
     else
@@ -102,7 +102,7 @@ bool WindowsNamedPipe::acquire(const std::string & pipe_name, bool is_creator, b
             }
             if (ERROR_FILE_NOT_FOUND != GetLastError())
             {
-                return (false);
+                return false;
             }
             if (!WaitNamedPipeA(full_pipe_name.c_str(), 1000 * 30) && GetLastError() != ERROR_PIPE_BUSY && GetLastError() != ERROR_SEM_TIMEOUT)
             {
@@ -112,7 +112,7 @@ bool WindowsNamedPipe::acquire(const std::string & pipe_name, bool is_creator, b
                 }
                 else
                 {
-                    return (false);
+                    return false;
                 }
             }
         }
@@ -123,11 +123,11 @@ bool WindowsNamedPipe::acquire(const std::string & pipe_name, bool is_creator, b
             {
                 int a = GetLastError();
                 release();
-                return (false);
+                return false;
             }
         }
     }
-    return (true);
+    return true;
 }
 
 void WindowsNamedPipe::release()
@@ -145,12 +145,12 @@ void WindowsNamedPipe::release()
 
 bool WindowsNamedPipe::read(char * buff, size_t buff_size, size_t & read_len)
 {
-    return (m_is_reader && read_pipe(m_pipe_handle, buff, buff_size, read_len));
+    return m_is_reader && read_pipe(m_pipe_handle, buff, buff_size, read_len);
 }
 
 bool WindowsNamedPipe::write(const char * data, size_t data_len)
 {
-    return (m_is_writer && write_pipe(m_pipe_handle, data, data_len));
+    return m_is_writer && write_pipe(m_pipe_handle, data, data_len);
 }
 
 NAMESPACE_GOOFER_END

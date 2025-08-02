@@ -117,12 +117,12 @@ bool UnixVirtualMemoryMap::init(const char * filename, std::size_t map_size, boo
 
         m_map_size = map_size;
 
-        return (true);
+        return true;
     } while (false);
 
     exit();
 
-    return (false);
+    return false;
 }
 
 void UnixVirtualMemoryMap::exit()
@@ -157,12 +157,12 @@ bool UnixVirtualMemoryMap::resize(std::size_t map_size)
 {
     if (m_map_fd < 0)
     {
-        return (false);
+        return false;
     }
 
     if (map_size == m_map_capacity)
     {
-        return (true);
+        return true;
     }
 
     do
@@ -212,22 +212,22 @@ bool UnixVirtualMemoryMap::resize(std::size_t map_size)
 
         m_map_size = map_size;
 
-        return (true);
+        return true;
     } while (false);
 
     exit();
 
-    return (false);
+    return false;
 }
 
 char * UnixVirtualMemoryMap::get_map_data()
 {
-    return (m_map_data);
+    return m_map_data;
 }
 
 std::size_t UnixVirtualMemoryMap::get_map_size()
 {
-    return (m_map_size);
+    return m_map_size;
 }
 
 UnixMemMap::UnixMemMap()
@@ -243,7 +243,7 @@ UnixMemMap::~UnixMemMap()
 
 bool UnixMemMap::init(const char * map_name, bool creator, std::size_t map_size, bool global)
 {
-    return (UnixVirtualMemoryMap::init(map_name, map_size, false, creator, global));
+    return UnixVirtualMemoryMap::init(map_name, map_size, false, creator, global);
 }
 
 UnixFileMap::UnixFileMap()
@@ -259,14 +259,14 @@ UnixFileMap::~UnixFileMap()
 
 bool UnixFileMap::init(const char * file_name, bool creator, std::size_t map_size, bool global)
 {
-    return (UnixVirtualMemoryMap::init(file_name, map_size, true, creator, global));
+    return UnixVirtualMemoryMap::init(file_name, map_size, true, creator, global);
 }
 
 bool UnixFileMap::flush(char * data, std::size_t size)
 {
     if (m_map_fd < 0 || nullptr == m_map_data || 0 == m_map_size)
     {
-        return (false);
+        return false;
     }
 
     if (nullptr == data || 0 == size)
@@ -276,15 +276,15 @@ bool UnixFileMap::flush(char * data, std::size_t size)
     }
     else if (data < m_map_data || data + size > m_map_data + m_map_size)
     {
-        return (false);
+        return false;
     }
 
     if (::msync(data, size, MS_ASYNC) < 0)
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_END

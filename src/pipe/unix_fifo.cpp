@@ -25,22 +25,22 @@ static bool read_pipe(int file_descriptor, char * buff, size_t buff_size, size_t
     read_len = 0;
     if (-1 == file_descriptor || nullptr == buff || 0 == buff_size)
     {
-        return (false);
+        return false;
     }
     ssize_t read_size = read(file_descriptor, buff, buff_size);
     if (-1 != read_size)
     {
         read_len = static_cast<size_t>(read_size);
-        return (true);
+        return true;
     }
-    return (false);
+    return false;
 }
 
 static bool write_pipe(int file_descriptor, const char * data, size_t data_len)
 {
     if (-1 == file_descriptor || nullptr == data || 0 == data_len)
     {
-        return (false);
+        return false;
     }
     while (data_len > 0)
     {
@@ -52,10 +52,10 @@ static bool write_pipe(int file_descriptor, const char * data, size_t data_len)
         }
         else
         {
-            return (false);
+            return false;
         }
     }
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_BEGIN
@@ -76,7 +76,7 @@ bool UnixNamedPipe::acquire(const std::string & pipe_name, bool is_creator, bool
 {
     if (-1 != m_pipe_reader || -1 != m_pipe_writer || pipe_name.empty() || (!is_reader && !is_writer))
     {
-        return (false);
+        return false;
     }
     const std::string read_pipe_name("/tmp/" + pipe_name + "_reader");
     const std::string write_pipe_name("/tmp/" + pipe_name + "_writer");
@@ -87,13 +87,13 @@ bool UnixNamedPipe::acquire(const std::string & pipe_name, bool is_creator, bool
             if ((0 != mkfifo(read_pipe_name.c_str(), S_IFIFO | S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH | S_IWOTH)) && (EEXIST != errno))
             {
                 release();
-                return (false);
+                return false;
             }
             m_pipe_reader = open(read_pipe_name.c_str(), O_RDONLY, S_IREAD);
             if (-1 == m_pipe_reader)
             {
                 release();
-                return (false);
+                return false;
             }
         }
         if (is_writer)
@@ -101,13 +101,13 @@ bool UnixNamedPipe::acquire(const std::string & pipe_name, bool is_creator, bool
             if ((0 != mkfifo(write_pipe_name.c_str(), S_IFIFO | 0666)) && (EEXIST != errno))
             {
                 release();
-                return (false);
+                return false;
             }
             m_pipe_writer = open(write_pipe_name.c_str(), O_WRONLY | O_TRUNC, S_IWRITE);
             if (-1 == m_pipe_writer)
             {
                 release();
-                return (false);
+                return false;
             }
         }
     }
@@ -119,7 +119,7 @@ bool UnixNamedPipe::acquire(const std::string & pipe_name, bool is_creator, bool
             if (-1 == m_pipe_writer)
             {
                 release();
-                return (false);
+                return false;
             }
         }
         if (is_reader)
@@ -128,11 +128,11 @@ bool UnixNamedPipe::acquire(const std::string & pipe_name, bool is_creator, bool
             if (-1 == m_pipe_reader)
             {
                 release();
-                return (false);
+                return false;
             }
         }
     }
-    return (true);
+    return true;
 }
 
 void UnixNamedPipe::release()
@@ -151,12 +151,12 @@ void UnixNamedPipe::release()
 
 bool UnixNamedPipe::read(char * buff, size_t buff_size, size_t & read_len)
 {
-    return (read_pipe(m_pipe_reader, buff, buff_size, read_len));
+    return read_pipe(m_pipe_reader, buff, buff_size, read_len);
 }
 
 bool UnixNamedPipe::write(const char * data, size_t data_len)
 {
-    return (write_pipe(m_pipe_writer, data, data_len));
+    return write_pipe(m_pipe_writer, data, data_len);
 }
 
 NAMESPACE_GOOFER_END

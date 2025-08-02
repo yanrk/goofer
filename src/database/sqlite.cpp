@@ -35,7 +35,7 @@ bool SQLiteDB::create(const char * path, bool overwrite)
     if (nullptr == path)
     {
         RUN_LOG_ERR("create sqlite failed while path is nullptr");
-        return (false);
+        return false;
     }
 
     close();
@@ -49,7 +49,7 @@ bool SQLiteDB::create(const char * path, bool overwrite)
             if (goofer_access_safe(path))
             {
                 RUN_LOG_ERR("create sqlite failed while remove directory (%s) failed", path);
-                return (false);
+                return false;
             }
         }
         else
@@ -57,7 +57,7 @@ bool SQLiteDB::create(const char * path, bool overwrite)
             if (overwrite && !goofer_unlink_safe(path))
             {
                 RUN_LOG_ERR("create sqlite failed while unlink file (%s) failed", path);
-                return (false);
+                return false;
             }
         }
     }
@@ -68,7 +68,7 @@ bool SQLiteDB::create(const char * path, bool overwrite)
         if (!goofer_access_safe(dirname.c_str()))
         {
             RUN_LOG_ERR("create sqlite failed while create directory (%s) failed", dirname.c_str());
-            return (false);
+            return false;
         }
     }
 
@@ -79,10 +79,10 @@ bool SQLiteDB::create(const char * path, bool overwrite)
     {
         RUN_LOG_ERR("create sqlite failed while sqlite open (%s) failed, error (%d: %s)", path, result, sqlite3_errstr(result));
         close();
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteDB::open(const char * path)
@@ -90,7 +90,7 @@ bool SQLiteDB::open(const char * path)
     if (nullptr == path)
     {
         RUN_LOG_ERR("open sqlite failed while path is nullptr");
-        return (false);
+        return false;
     }
 
     close();
@@ -98,7 +98,7 @@ bool SQLiteDB::open(const char * path)
     if (!goofer_access_safe(path))
     {
         RUN_LOG_ERR("open sqlite failed while path (%s) is not exist", path);
-        return (false);
+        return false;
     }
 
     m_path = path;
@@ -108,10 +108,10 @@ bool SQLiteDB::open(const char * path)
     {
         RUN_LOG_ERR("open sqlite failed while sqlite open (%s) failed, error (%d: %s)", path, result, sqlite3_errstr(result));
         close();
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteDB::close()
@@ -127,22 +127,22 @@ bool SQLiteDB::close()
         m_sqlite = nullptr;
         m_path.clear();
     }
-    return (SQLITE_OK == result);
+    return SQLITE_OK == result;
 }
 
 bool SQLiteDB::is_open() const
 {
-    return (nullptr != m_sqlite);
+    return nullptr != m_sqlite;
 }
 
 int SQLiteDB::error() const
 {
-    return (nullptr != m_sqlite ? sqlite3_errcode(m_sqlite) : 999);
+    return nullptr != m_sqlite ? sqlite3_errcode(m_sqlite) : 999;
 }
 
 const char * SQLiteDB::what() const
 {
-    return (nullptr != m_sqlite ? sqlite3_errmsg(m_sqlite) : "sqlite is closed");
+    return nullptr != m_sqlite ? sqlite3_errmsg(m_sqlite) : "sqlite is closed";
 }
 
 bool SQLiteDB::execute(const char * operate, const char * sql)
@@ -155,13 +155,13 @@ bool SQLiteDB::execute(const char * operate, const char * sql)
     if (nullptr == sql)
     {
         RUN_LOG_ERR("%s failed while sql is nullptr", operate);
-        return (false);
+        return false;
     }
 
     if (nullptr == m_sqlite)
     {
         RUN_LOG_ERR("%s failed while sqlite is closed", operate);
-        return (false);
+        return false;
     }
 
     char * error_message = nullptr;
@@ -176,27 +176,27 @@ bool SQLiteDB::execute(const char * operate, const char * sql)
         error_message = nullptr;
     }
 
-    return (SQLITE_OK == result);
+    return SQLITE_OK == result;
 }
 
 bool SQLiteDB::begin_transaction()
 {
-    return (execute("begin transaction", "BEGIN TRANSACTION;"));
+    return execute("begin transaction", "BEGIN TRANSACTION;");
 }
 
 bool SQLiteDB::end_transaction()
 {
-    return (execute("end transaction", "END TRANSACTION;"));
+    return execute("end transaction", "END TRANSACTION;");
 }
 
 SQLiteReader SQLiteDB::create_reader(const char * sql)
 {
-    return (SQLiteReader(m_sqlite, sql));
+    return SQLiteReader(m_sqlite, sql);
 }
 
 SQLiteWriter SQLiteDB::create_writer(const char * sql)
 {
-    return (SQLiteWriter(m_sqlite, sql));
+    return SQLiteWriter(m_sqlite, sql);
 }
 
 SQLiteStatement::SQLiteStatement()
@@ -264,7 +264,7 @@ SQLiteStatement & SQLiteStatement::operator = (SQLiteStatement && other)
         std::swap(m_field_index, other.m_field_index);
         std::swap(m_column_index, other.m_column_index);
     }
-    return (*this);
+    return *this;
 }
 
 SQLiteStatement::~SQLiteStatement()
@@ -291,7 +291,7 @@ void SQLiteStatement::clear()
 
 bool SQLiteStatement::good() const
 {
-    return (nullptr != m_statement);
+    return nullptr != m_statement;
 }
 
 bool SQLiteStatement::reset()
@@ -299,7 +299,7 @@ bool SQLiteStatement::reset()
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("reset failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     m_field_index = 0;
@@ -308,10 +308,10 @@ bool SQLiteStatement::reset()
     if (SQLITE_OK != result)
     {
         RUN_LOG_ERR("reset failed while sqlite (%s) reset failed, error (%d: %s)", m_sql.c_str(), result, sqlite3_errstr(result));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteStatement::bind(int field_index, int field_value)
@@ -319,17 +319,17 @@ bool SQLiteStatement::bind(int field_index, int field_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("bind failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     int result = sqlite3_bind_int(m_statement, field_index + 1, field_value);
     if (SQLITE_OK != result)
     {
         RUN_LOG_ERR("bind failed while sqlite (%s) bind int failed, error (%d: %s)", m_sql.c_str(), result, sqlite3_errstr(result));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteStatement::bind(int field_index, int64_t field_value)
@@ -337,17 +337,17 @@ bool SQLiteStatement::bind(int field_index, int64_t field_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("bind failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     int result = sqlite3_bind_int64(m_statement, field_index + 1, field_value);
     if (SQLITE_OK != result)
     {
         RUN_LOG_ERR("bind failed while sqlite (%s) bind int64 failed, error (%d: %s)", m_sql.c_str(), result, sqlite3_errstr(result));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteStatement::bind(int field_index, double field_value)
@@ -355,17 +355,17 @@ bool SQLiteStatement::bind(int field_index, double field_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("bind failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     int result = sqlite3_bind_double(m_statement, field_index + 1, field_value);
     if (SQLITE_OK != result)
     {
         RUN_LOG_ERR("bind failed while sqlite (%s) bind double failed, error (%d: %s)", m_sql.c_str(), result, sqlite3_errstr(result));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteStatement::bind(int field_index, const std::string & field_value)
@@ -373,37 +373,37 @@ bool SQLiteStatement::bind(int field_index, const std::string & field_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("bind failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     int result = sqlite3_bind_text(m_statement, field_index + 1, field_value.c_str(), static_cast<int>(field_value.size()), SQLITE_TRANSIENT);
     if (SQLITE_OK != result)
     {
         RUN_LOG_ERR("bind failed while sqlite (%s) bind text failed, error (%d: %s)", m_sql.c_str(), result, sqlite3_errstr(result));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool SQLiteStatement::bind(int field_value)
 {
-    return (bind(m_field_index++, field_value));
+    return bind(m_field_index++, field_value);
 }
 
 bool SQLiteStatement::bind(int64_t field_value)
 {
-    return (bind(m_field_index++, field_value));
+    return bind(m_field_index++, field_value);
 }
 
 bool SQLiteStatement::bind(double field_value)
 {
-    return (bind(m_field_index++, field_value));
+    return bind(m_field_index++, field_value);
 }
 
 bool SQLiteStatement::bind(const std::string & field_value)
 {
-    return (bind(m_field_index++, field_value));
+    return bind(m_field_index++, field_value);
 }
 
 SQLiteReader::SQLiteReader()
@@ -423,7 +423,7 @@ bool SQLiteReader::read()
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("read failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     m_column_index = 0;
@@ -433,7 +433,7 @@ bool SQLiteReader::read()
     {
         RUN_LOG_ERR("read failed while sqlite (%s) step failed, error (%d: %s, %d: %s)", m_sql.c_str(), result, sqlite3_errstr(result), sqlite3_errcode(m_sqlite), sqlite3_errmsg(m_sqlite));
     }
-    return (SQLITE_ROW == result);
+    return SQLITE_ROW == result;
 }
 
 bool SQLiteReader::column(int column_index, int & column_value)
@@ -441,17 +441,17 @@ bool SQLiteReader::column(int column_index, int & column_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("column failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     if (column_index >= sqlite3_column_count(m_statement))
     {
         RUN_LOG_ERR("column failed while sqlite (%s) column index is overflow (%d >= %d)", m_sql.c_str(), column_index, sqlite3_column_count(m_statement));
-        return (false);
+        return false;
     }
 
     column_value = sqlite3_column_int(m_statement, column_index);
-    return (true);
+    return true;
 }
 
 bool SQLiteReader::column(int column_index, int64_t & column_value)
@@ -459,17 +459,17 @@ bool SQLiteReader::column(int column_index, int64_t & column_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("column failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     if (column_index >= sqlite3_column_count(m_statement))
     {
         RUN_LOG_ERR("column failed while sqlite (%s) column index is overflow (%d >= %d)", m_sql.c_str(), column_index, sqlite3_column_count(m_statement));
-        return (false);
+        return false;
     }
 
     column_value = sqlite3_column_int64(m_statement, column_index);
-    return (true);
+    return true;
 }
 
 bool SQLiteReader::column(int column_index, double & column_value)
@@ -477,17 +477,17 @@ bool SQLiteReader::column(int column_index, double & column_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("column failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     if (column_index >= sqlite3_column_count(m_statement))
     {
         RUN_LOG_ERR("column failed while sqlite (%s) column index is overflow (%d >= %d)", m_sql.c_str(), column_index, sqlite3_column_count(m_statement));
-        return (false);
+        return false;
     }
 
     column_value = sqlite3_column_double(m_statement, column_index);
-    return (true);
+    return true;
 }
 
 bool SQLiteReader::column(int column_index, std::string & column_value)
@@ -495,39 +495,39 @@ bool SQLiteReader::column(int column_index, std::string & column_value)
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("column failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     if (column_index >= sqlite3_column_count(m_statement))
     {
         RUN_LOG_ERR("column failed while sqlite (%s) column index is overflow (%d >= %d)", m_sql.c_str(), column_index, sqlite3_column_count(m_statement));
-        return (false);
+        return false;
     }
 
     const char * column_text = reinterpret_cast<const char *>(sqlite3_column_text(m_statement, column_index));
     int column_size = sqlite3_column_bytes(m_statement, column_index);
     column_value.assign(column_text, column_size);
-    return (true);
+    return true;
 }
 
 bool SQLiteReader::column(int & column_value)
 {
-    return (column(m_column_index++, column_value));
+    return column(m_column_index++, column_value);
 }
 
 bool SQLiteReader::column(int64_t & column_value)
 {
-    return (column(m_column_index++, column_value));
+    return column(m_column_index++, column_value);
 }
 
 bool SQLiteReader::column(double & column_value)
 {
-    return (column(m_column_index++, column_value));
+    return column(m_column_index++, column_value);
 }
 
 bool SQLiteReader::column(std::string & column_value)
 {
-    return (column(m_column_index++, column_value));
+    return column(m_column_index++, column_value);
 }
 
 SQLiteWriter::SQLiteWriter()
@@ -547,17 +547,17 @@ bool SQLiteWriter::write()
     if (nullptr == m_statement)
     {
         RUN_LOG_ERR("write failed while statement is nullptr");
-        return (false);
+        return false;
     }
 
     int result = sqlite3_step(m_statement);
     if (SQLITE_ERROR == result || SQLITE_MISUSE == result)
     {
         RUN_LOG_ERR("write failed while sqlite (%s) step failed, error (%d: %s, %d: %s)", m_sql.c_str(), result, sqlite3_errstr(result), sqlite3_errcode(m_sqlite), sqlite3_errmsg(m_sqlite));
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 NAMESPACE_GOOFER_END

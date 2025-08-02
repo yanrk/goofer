@@ -33,7 +33,7 @@ Ini::key_node_t::key_node_t(const std::string & key_name, const std::string & ke
 
 bool Ini::key_node_t::operator == (const std::string & key_name) const
 {
-    return (key_name == m_key_name);
+    return key_name == m_key_name;
 }
 
 Ini::app_node_t::app_node_t(const std::string & app_name)
@@ -45,7 +45,7 @@ Ini::app_node_t::app_node_t(const std::string & app_name)
 
 bool Ini::app_node_t::operator == (const std::string & app_name) const
 {
-    return (app_name == m_app_name);
+    return app_name == m_app_name;
 }
 
 Ini::Ini()
@@ -164,14 +164,14 @@ bool Ini::load(const std::string & file_name, char comment_char, bool support_mo
     std::ifstream ifs(m_file_name.c_str());
     if (!ifs.is_open())
     {
-        return (support_modify);
+        return support_modify;
     }
 
     parse(ifs);
 
     ifs.close();
 
-    return (true);
+    return true;
 }
 
 bool Ini::set_document(const std::string & document, char comment_char, bool support_modify, bool loose)
@@ -191,14 +191,14 @@ bool Ini::set_document(const std::string & document, char comment_char, bool sup
 
     if (document.empty())
     {
-        return (true);
+        return true;
     }
 
     std::istringstream iss(document);
 
     parse(iss);
 
-    return (true);
+    return true;
 }
 
 bool Ini::save(const std::string & file_name)
@@ -210,7 +210,7 @@ bool Ini::save(const std::string & file_name)
     std::ofstream ofs(file_name.c_str(), std::ios::trunc);
     if (!ofs.is_open())
     {
-        return (false);
+        return false;
     }
 
     build(ofs);
@@ -219,22 +219,22 @@ bool Ini::save(const std::string & file_name)
 
     goofer_unlink(tmp_file.c_str());
 
-    return (true);
+    return true;
 }
 
 bool Ini::save()
 {
     if (m_file_name.empty())
     {
-        return (false);
+        return false;
     }
 
     if (!save(m_file_name))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 std::string Ini::get_document() const
@@ -243,25 +243,25 @@ std::string Ini::get_document() const
 
     build(oss);
 
-    return (oss.str());
+    return oss.str();
 }
 
 bool Ini::get_value(const std::string & app_name, const std::string & key_name, std::string & key_value) const
 {
     if (key_name.empty())
     {
-        return (false);
+        return false;
     }
 
     std::map<std::pair<std::string, std::string>, std::string>::const_iterator pair_iter = m_pair_map.find(std::make_pair(app_name, key_name));
     if (m_pair_map.end() != pair_iter)
     {
         key_value = pair_iter->second;
-        return (true);
+        return true;
     }
     else
     {
-        return (false);
+        return false;
     }
 }
 
@@ -270,21 +270,21 @@ bool Ini::get_value(const std::string & app_name, const std::string & key_name, 
     std::string str_key_value;
     if (!get_value(app_name, key_name, str_key_value))
     {
-        return (false);
+        return false;
     }
     if (nullptr == key_value || str_key_value.size() >= key_value_size)
     {
-        return (false);
+        return false;
     }
     strncpy(key_value, str_key_value.c_str(), key_value_size);
-    return (true);
+    return true;
 }
 
 bool Ini::set_value(const std::string & app_name, const std::string & key_name, const std::string & key_value)
 {
     if (key_name.empty())
     {
-        return (false);
+        return false;
     }
 
     std::list<app_node_t>::iterator app_iter = std::find(m_app_list.begin(), m_app_list.end(), app_name);
@@ -307,21 +307,21 @@ bool Ini::set_value(const std::string & app_name, const std::string & key_name, 
 
     m_pair_map[std::make_pair(app_name, key_name)] = key_value;
 
-    return (true);
+    return true;
 }
 
 bool Ini::set_value(const std::string & app_name, const std::string & key_name, const char * key_value)
 {
     if (nullptr == key_value)
     {
-        return (false);
+        return false;
     }
     const std::string str_key_value(key_value);
     if (!set_value(app_name, key_name, str_key_value))
     {
-        return (false);
+        return false;
     }
-    return (true);
+    return true;
 }
 
 void Ini::add_app_node(const std::string & app_name)

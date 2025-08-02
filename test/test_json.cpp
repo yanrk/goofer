@@ -38,31 +38,31 @@ static bool test_read()
     Json json_reader;
     if (!json_reader.load(load_filename))
     {
-        return (false);
+        return false;
     }
 
     upload_t upload;
 
     if (!json_reader.find_element("code"))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("uploadid", upload.uploadid))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("code", upload.code))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("msg", upload.msg))
     {
-        return (false);
+        return false;
     }
 
     if (!json_reader.into_element("files"))
     {
-        return (false);
+        return false;
     }
 
     for (size_t file_index = 0, file_count = json_reader.get_size(); file_index < file_count; ++file_index)
@@ -71,37 +71,37 @@ static bool test_read()
 
         if (!json_reader.into_element(file_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_reader.get_element("code", file.code))
         {
-            return (false);
+            return false;
         }
         if (!json_reader.get_element("msg", file.msg))
         {
-            return (false);
+            return false;
         }
         if (!json_reader.get_element("filename", file.filename))
         {
-            return (false);
+            return false;
         }
         if (!json_reader.get_element("filesize", file.filesize))
         {
-            return (false);
+            return false;
         }
         if (!json_reader.get_element("width", file.width))
         {
-            return (false);
+            return false;
         }
         if (!json_reader.get_element("height", file.height))
         {
-            return (false);
+            return false;
         }
 
         if (!json_reader.into_element("images"))
         {
-            return (false);
+            return false;
         }
 
         for (size_t image_index = 0, image_count = json_reader.get_size(); image_index < image_count; ++image_index)
@@ -110,29 +110,29 @@ static bool test_read()
 
             if (!json_reader.into_element(image_index))
             {
-                return (false);
+                return false;
             }
 
             if (!json_reader.get_element("url", image.url))
             {
-                return (false);
+                return false;
             }
             if (!json_reader.get_element("type", image.type))
             {
-                return (false);
+                return false;
             }
             if (!json_reader.get_element("width", image.width))
             {
-                return (false);
+                return false;
             }
             if (!json_reader.get_element("height", image.height))
             {
-                return (false);
+                return false;
             }
 
             if (!json_reader.outof_element())
             {
-                return (false);
+                return false;
             }
 
             file.images.push_back(image);
@@ -140,12 +140,12 @@ static bool test_read()
 
         if (!json_reader.outof_element())
         {
-            return (false);
+            return false;
         }
 
         if (!json_reader.outof_element())
         {
-            return (false);
+            return false;
         }
 
         upload.files.push_back(file);
@@ -153,10 +153,10 @@ static bool test_read()
 
     if (!json_reader.outof_element())
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 static bool test_write()
@@ -165,136 +165,136 @@ static bool test_write()
 
     if (!json_writer.add_element("uploadid", "UP000000"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.add_element("code", "10"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.add_element("msg", ""))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.add_element("files"))
     {
-        return (false);
+        return false;
     }
 
     if (!json_writer.into_element("files"))
     {
-        return (false);
+        return false;
     }
 
     for (size_t file_index = 0, file_count = 1; file_index < file_count; ++file_index)
     {
         if (!json_writer.add_element(file_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.into_element(file_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.add_element("code", "0"))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("msg", ""))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("filename", "1D_16-35_1.jpg"))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("filesize", "196690"))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("width", "1024"))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("height", "682"))
         {
-            return (false);
+            return false;
         }
         if (!json_writer.add_element("images"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.into_element("images"))
         {
-            return (false);
+            return false;
         }
 
         for (size_t image_index = 0, image_count = 2; image_index < image_count; ++image_index)
         {
             if (!json_writer.add_element(image_index))
             {
-                return (false);
+                return false;
             }
 
             if (!json_writer.into_element(image_index))
             {
-                return (false);
+                return false;
             }
 
             if (!json_writer.set_element("url", 0 == image_index ? "fmn061/20111118" : "fmn061\\20111118"))
             {
-                return (false);
+                return false;
             }
             if (!json_writer.set_element("type", 0 == image_index ? "large" : "main"))
             {
-                return (false);
+                return false;
             }
             if (!json_writer.set_element("width", 0 == image_index ? "720" : "200"))
             {
-                return (false);
+                return false;
             }
             if (!json_writer.set_element("height", 0 == image_index ? "479" : "133"))
             {
-                return (false);
+                return false;
             }
 
             if (!json_writer.outof_element())
             {
-                return (false);
+                return false;
             }
         }
 
         if (!json_writer.outof_element())
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.outof_element())
         {
-            return (false);
+            return false;
         }
     }
 
     if (!json_writer.outof_element())
     {
-        return (false);
+        return false;
     }
 
     std::string document;
     if (!json_writer.get_document(document, true))
     {
-        return (false);
+        return false;
     }
 
     const char * save_filename = "./y.txt";
     if (!json_writer.save(save_filename))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 static bool test_read_and_write()
@@ -304,49 +304,49 @@ static bool test_read_and_write()
     const char * r_filename = "./x.txt";
     if (!json_rw.load(r_filename))
     {
-        return (false);
+        return false;
     }
 
     if (!json_rw.into_element("files"))
     {
-        return (false);
+        return false;
     }
 
     for (size_t file_index = 0, file_count = json_rw.get_size(); file_index < file_count; ++file_index)
     {
         if (!json_rw.into_element(file_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_rw.set_element("code", "200"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.set_element("msg", "test"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.set_element("filename", "abc\\def"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.set_element("filesize", "xxx/xyz"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.set_element("width", "1024"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.set_element("height", "768"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_rw.outof_element())
         {
-            return (false);
+            return false;
         }
     }
 
@@ -356,49 +356,49 @@ static bool test_read_and_write()
 
         if (!json_rw.add_element(element_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_rw.into_element(element_index))
         {
-            return (false);
+            return false;
         }
 
         if (!json_rw.add_element("111", "444"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.add_element("222", "333"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.add_element("333", "222"))
         {
-            return (false);
+            return false;
         }
         if (!json_rw.add_element("444", "111"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_rw.outof_element())
         {
-            return (false);
+            return false;
         }
     }
 
     if (!json_rw.outof_element())
     {
-        return (false);
+        return false;
     }
 
     const char * w_filename = "./z.txt";
     if (!json_rw.save(w_filename, false))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 static bool test_read_all_types()
@@ -407,7 +407,7 @@ static bool test_read_all_types()
     Json json_reader;
     if (!json_reader.load(load_filename))
     {
-        return (false);
+        return false;
     }
 
     bool bool_ele = false;
@@ -421,39 +421,39 @@ static bool test_read_all_types()
     char char_ele[32] = { 0x00 };
     if (!json_reader.get_element("bool", bool_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("int32", int32_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("uint32", uint32_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("int64", int64_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("uint64", uint64_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("float", float_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("double", double_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("string", string_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("char *", char_ele, sizeof(char_ele)))
     {
-        return (false);
+        return false;
     }
 
     std::list<bool> bool_arr;
@@ -466,38 +466,38 @@ static bool test_read_all_types()
     std::list<std::string> string_arr;
     if (!json_reader.get_element("bool array", bool_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("int32 array", int32_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("uint32 array", uint32_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("int64 array", int64_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("uint64 array", uint64_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("float array", float_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("double array", double_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_reader.get_element("string array", string_arr))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 static bool test_write_all_types()
@@ -516,92 +516,92 @@ static bool test_write_all_types()
 
     if (!json_writer.add_element("scalar"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.into_element("scalar"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("bool", bool_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int32", int32_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint32", uint32_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int64", int64_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint64", uint64_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("float", float_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("double", double_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("string", string_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("char *", char_ele))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.outof_element())
     {
-        return (false);
+        return false;
     }
 
     if (!json_writer.add_element("string"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.into_element("string"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("bool", bool_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int32", int32_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint32", uint32_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int64", int64_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint64", uint64_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("float", float_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("double", double_ele, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.outof_element())
     {
-        return (false);
+        return false;
     }
 
     std::list<bool> bool_arr;
@@ -631,97 +631,97 @@ static bool test_write_all_types()
 
     if (!json_writer.add_element("scalar array"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.into_element("scalar array"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("bool array", bool_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int32 array", int32_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint32 array", uint32_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int64 array", int64_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint64 array", uint64_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("float array", float_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("double array", double_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("string array", string_arr))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.outof_element())
     {
-        return (false);
+        return false;
     }
 
     if (!json_writer.add_element("string array"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.into_element("string array"))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("bool array", bool_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int32 array", int32_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint32 array", uint32_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("int64 array", int64_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("uint64 array", uint64_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("float array", float_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.set_element("double array", double_arr, true))
     {
-        return (false);
+        return false;
     }
     if (!json_writer.outof_element())
     {
-        return (false);
+        return false;
     }
 
     const char * save_filename = "./222.txt";
     if (!json_writer.save(save_filename, true))
     {
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 static bool test_sub_document()
@@ -734,27 +734,27 @@ static bool test_sub_document()
 
             if (!json_address_writer.add_element("room", "123"))
             {
-                return (false);
+                return false;
             }
 
             if (!json_address_writer.add_element("road", "nanxin"))
             {
-                return (false);
+                return false;
             }
 
             if (!json_address_writer.add_element("city", "shenzhen"))
             {
-                return (false);
+                return false;
             }
 
             if (!json_address_writer.add_element("provinces", "guangdong"))
             {
-                return (false);
+                return false;
             }
 
             if (!json_address_writer.get_document(address_to, false))
             {
-                return (false);
+                return false;
             }
         }
 
@@ -762,62 +762,62 @@ static bool test_sub_document()
 
         if (!json_writer.add_element("name", "tony"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.set_sub_document("address", address_to.c_str()))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.add_element("age", "7"))
         {
-            return (false);
+            return false;
         }
 
         std::string personal_information;
 
         if (!json_writer.get_document(personal_information))
         {
-            return (false);
+            return false;
         }
 
         Json json_reader;
 
         if (!json_reader.set_document(personal_information.c_str()))
         {
-            return (false);
+            return false;
         }
 
         std::string name;
 
         if (!json_reader.get_element("name", name))
         {
-            return (false);
+            return false;
         }
 
         std::string address_from;
 
         if (!json_reader.get_sub_document("address", address_from, false))
         {
-            return (false);
+            return false;
         }
 
         int age = 0;
 
         if (!json_reader.get_element("age", age))
         {
-            return (false);
+            return false;
         }
 
         if (!json_reader.save_sub_document("address", "./address.txt", true))
         {
-            return (false);
+            return false;
         }
 
         if (address_to != address_from)
         {
-            return (false);
+            return false;
         }
     }
 
@@ -832,78 +832,78 @@ static bool test_sub_document()
 
         if (!json_writer.add_element("class", "2"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.add_element("grade", "3"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.add_array("students"))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.into_element("students"))
         {
-            return (false);
+            return false;
         }
 
         for (size_t index = 0, count = sizeof(students) / sizeof(students[0]); index < count; ++index)
         {
             if (!json_writer.add_element(index))
             {
-                return (false);
+                return false;
             }
 
             if (!json_writer.set_sub_document(index, students[index]))
             {
-                return (false);
+                return false;
             }
         }
 
         if (!json_writer.outof_element())
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.add_element("teacher", "lee"))
         {
-            return (false);
+            return false;
         }
 
         std::string class_information;
 
         if (!json_writer.get_document(class_information))
         {
-            return (false);
+            return false;
         }
 
         Json json_reader;
 
         if (!json_reader.set_document(class_information.c_str()))
         {
-            return (false);
+            return false;
         }
 
         std::string class_id;
 
         if (!json_reader.get_element("class", class_id))
         {
-            return (false);
+            return false;
         }
 
         std::string grade_id;
 
         if (!json_reader.get_element("grade", grade_id))
         {
-            return (false);
+            return false;
         }
 
         if (!json_writer.into_element("students"))
         {
-            return (false);
+            return false;
         }
 
         for (size_t index = 0, count = json_writer.get_size(); index < count; ++index)
@@ -911,7 +911,7 @@ static bool test_sub_document()
             std::string student_from;
             if (!json_writer.get_sub_document(index, student_from, false))
             {
-                return (false);
+                return false;
             }
 
             student_from.erase(std::find(student_from.begin(), student_from.end(), '\n'), student_from.end());
@@ -921,24 +921,24 @@ static bool test_sub_document()
             std::set<char> set_to(student_to.begin(), student_to.end());
             if (set_from != set_to)
             {
-                return (false);
+                return false;
             }
         }
 
         if (!json_writer.outof_element())
         {
-            return (false);
+            return false;
         }
 
         std::string teacher_name;
 
         if (!json_reader.get_element("teacher", teacher_name))
         {
-            return (false);
+            return false;
         }
     }
 
-    return (true);
+    return true;
 }
 
 void test_json(void)

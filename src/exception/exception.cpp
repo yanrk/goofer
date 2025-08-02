@@ -32,7 +32,7 @@ LONG WINAPI unhandled_exception_handler(EXCEPTION_POINTERS * exception)
 {
     if (0 != ::InterlockedCompareExchange(&g_hit_unhandled_exception, 1, 0))
     {
-        return (EXCEPTION_CONTINUE_SEARCH);
+        return EXCEPTION_CONTINUE_SEARCH;
     }
 
     char dump_file_name[1024] = { 0x0 };
@@ -59,7 +59,7 @@ LONG WINAPI unhandled_exception_handler(EXCEPTION_POINTERS * exception)
         RUN_LOG_ERR("unhandled exception! failed to open dump file (%s) with error (%d)", dump_file_name, ::GetLastError());
     }
 
-    return (EXCEPTION_EXECUTE_HANDLER);
+    return EXCEPTION_EXECUTE_HANDLER;
 }
 
 #endif // GOOFER_OS_IS_WIN
@@ -105,7 +105,7 @@ Exception::Exception(const char * file, int line, const char * func, const char 
 
 const std::string & Exception::what() const
 {
-    return (m_message);
+    return m_message;
 }
 
 void goofer_set_dump_directory(const char * store_dir_root, const char * store_file_prefix)

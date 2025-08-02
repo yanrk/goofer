@@ -34,7 +34,7 @@ static thread_return_t GOOFER_STDCALL record_thread(thread_argument_t argument)
         test_service->record_data();
         goofer_ms_sleep(1000 * 5);
     }
-    return (THREAD_DEFAULT_RET);
+    return THREAD_DEFAULT_RET;
 }
 
 TestService::TestService()
@@ -63,14 +63,14 @@ bool TestService::on_start(int argc, char * argv[])
 {
     if (argc <= 0 || nullptr == argv)
     {
-        return (false);
+        return false;
     }
 
     const std::string test_file(goofer_extract_directory(argv[0], false) + "/test_service.log");
     m_fstream.open(test_file.c_str(), std::ios::app | std::ios::binary);
     if (!m_fstream.is_open())
     {
-        return (false);
+        return false;
     }
 
     m_running = true;
@@ -78,10 +78,10 @@ bool TestService::on_start(int argc, char * argv[])
     if (!m_record_thread.acquire())
     {
         m_running = false;
-        return (false);
+        return false;
     }
 
-    return (true);
+    return true;
 }
 
 bool TestService::on_stop()
@@ -89,12 +89,12 @@ bool TestService::on_stop()
     m_running = false;
     m_record_thread.release();
     m_fstream.close();
-    return (true);
+    return true;
 }
 
 bool TestService::running()
 {
-    return (m_running);
+    return m_running;
 }
 
 void test_service(int argc, char * argv[])
